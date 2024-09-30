@@ -1,23 +1,37 @@
-# Python Template
+# IntelliCook Recipe Search
 
-This is a template for Python projects.
+This is the recipe search service of IntelliCook.
 
 ## Environment Setup
 
+### Docker
+
+We use [Docker](https://www.docker.com) and [Docker Compose](https://docs.docker.com/compose) to manage the environment in both development and production.
+
+Before starting anything, you have to define the environment variables in the `.env` file. You can copy the `.env.example` file and fill in the values.
+```bash
+cp .env.example .env
+```
+
+With Docker Compose, you can run the services in the `docker-compose.yml` file:
+```bash
+docker-compose up
+```
+
 ### Python
 
-We use Python \<version>, so make sure you have that installed.
+We use Python 3.12.2, so make sure you have that installed.
 
 You could use [pyenv](https://github.com/pyenv/pyenv) or [pyenv-win](https://github.com/pyenv-win/pyenv-win) (Windows is not recommended to install pyenv because it does not get native support) to manage your Python versions.
 
 Install the Python version you want to use.
 ```bash
-pyenv install <version>
+pyenv install 3.12.2
 ```
 
 Specify the version for this directory.
 ```bash
-pyenv local <version>
+pyenv local 3.12.2
 ```
 
 To check your Python version, run `python --version` in your terminal.
@@ -113,6 +127,28 @@ Then replace the content with the following:
 ```
 
 ## Development
+
+### Database
+
+We use [PostgreSQL](https://www.postgresql.org) as the database for the recipe search service. Since it is managed in Docker, you don't need to install it on your machine.
+
+We use [Alembic](https://alembic.sqlalchemy.org) for database migrations.
+
+When there is a change in the database schema, you need to generate a new migration script:
+```bash
+alembic revision -m "Your migration message"
+```
+
+Then you should be able to see the generated migration script in the `alembic/versions` directory. Take a look at the [Operation Reference](https://alembic.sqlalchemy.org/en/latest/ops.html#ops) for the available operations.
+
+### API Protocol
+
+We use [gRPC](https://grpc.io) and [Protocol Buffers](https://protobuf.dev) for the communication between the services.
+
+When you make changes to the `.proto` files in the `protos` directory, you need to regenerate the Python files in the `grpcs` directory:
+```bash
+python -m grpc_tools.protoc --proto_path=. --python_out=. --grpc_python_out=. --pyi_out=. ./protos/*.proto
+```
 
 ### Clone Repository
 
