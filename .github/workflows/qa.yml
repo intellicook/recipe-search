@@ -16,5 +16,7 @@ jobs:
           cache: 'pip'
       - name: Install dependencies
         run: pip install -r requirements.txt
+      - name: Format
+        run: pre-commit run --all-files
       - name: Test
         run: pytest
