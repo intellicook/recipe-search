@@ -128,28 +128,6 @@ Then replace the content with the following:
 
 ## Development
 
-### Database
-
-We use [PostgreSQL](https://www.postgresql.org) as the database for the recipe search service. Since it is managed in Docker, you don't need to install it on your machine.
-
-We use [Alembic](https://alembic.sqlalchemy.org) for database migrations.
-
-When there is a change in the database schema, you need to generate a new migration script:
-```bash
-alembic revision -m "Your migration message"
-```
-
-Then you should be able to see the generated migration script in the `alembic/versions` directory. Take a look at the [Operation Reference](https://alembic.sqlalchemy.org/en/latest/ops.html#ops) for the available operations.
-
-### API Protocol
-
-We use [gRPC](https://grpc.io) and [Protocol Buffers](https://protobuf.dev) for the communication between the services.
-
-When you make changes to the `.proto` files in the `protos` directory, you need to regenerate the Python files in the `grpcs` directory:
-```bash
-python -m grpc_tools.protoc --proto_path=. --python_out=. --grpc_python_out=. --pyi_out=. ./protos/*.proto
-```
-
 ### Clone Repository
 
 First clone the repository.
@@ -186,4 +164,35 @@ git push -u origin <branch>
 After the first time you set the upstream branch, you can simply push without specifying the branch.
 ```bash
 git push
+```
+
+### Database
+
+We use [PostgreSQL](https://www.postgresql.org) as the database for the recipe search service. Since it is managed in Docker, you don't need to install it on your machine.
+
+We use [Alembic](https://alembic.sqlalchemy.org) for database migrations.
+
+When there is a change in the database schema, you need to generate a new migration script:
+```bash
+alembic revision -m "Your migration message"
+```
+
+Then you should be able to see the generated migration script in the `alembic/versions` directory. Take a look at the [Operation Reference](https://alembic.sqlalchemy.org/en/latest/ops.html#ops) for the available operations.
+
+### API Protocol
+
+We use [gRPC](https://grpc.io) and [Protocol Buffers](https://protobuf.dev) for the communication between the services.
+
+When you make changes to the `.proto` files in the `protos` directory, you need to regenerate the Python files in the `grpcs` directory:
+```bash
+python -m grpc_tools.protoc --proto_path=. --python_out=. --grpc_python_out=. --pyi_out=. ./protos/*.proto
+```
+
+### Testing
+
+We use [Pytest](https://pytest.org) for testing.
+
+To run the tests:
+```bash
+pytest
 ```

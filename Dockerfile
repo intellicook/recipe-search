@@ -4,10 +4,6 @@ FROM python:3.12.2-slim
 # Set work directory
 WORKDIR /usr/app
 
-# Install psycopg2 dependencies
-RUN apt-get update \
-    && apt-get -y install libpq-dev gcc
-
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
