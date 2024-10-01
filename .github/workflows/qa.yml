@@ -1,0 +1,22 @@
+name: Quality Assurance
+
+on: push
+
+jobs:
+  quality_assurance:
+
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.2'
+          cache: 'pip'
+      - name: Install requirements
+        run: pip install -r requirements.txt
+      - name: Format
+        run: pre-commit run --all-files
+      - name: Test
+        run: pytest
