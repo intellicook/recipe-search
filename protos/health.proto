@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package recipesearch;
+
+message HealthRequest {
+
+}
+
+message HealthResponse {
+    HealthStatus status = 1;
+    repeated HealthCheck checks = 2;
+}
+
+message HealthCheck {
+    string name = 1;
+    HealthStatus status = 2;
+}
+
+enum HealthStatus {
+    HEALTHY = 0;
+    DEGRADED = 1;
+    UNHEALTHY = 2;
+}
