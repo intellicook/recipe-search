@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <PackageId>IntelliCook.RecipeSearch.Client</PackageId>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/intellicook/recipe-search</RepositoryUrl>
+        <Version>$([System.DateTime]::UtcNow.ToString("yyyy.MM.dd.HHmm"))</Version>
+        <Authors>IntelliCook</Authors>
+        <PackageDescription>The client for IntelliCook Recipe Search service.</PackageDescription>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Protobuf_NoWarnMissingExpected>true</Protobuf_NoWarnMissingExpected>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Google.Protobuf" Version="3.28.2" />
+      <PackageReference Include="Grpc.Net.Client" Version="2.66.0" />
+      <PackageReference Include="Grpc.Tools" Version="2.66.0">
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PrivateAssets>all</PrivateAssets>
+      </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Protobuf Include="./Protos/*.proto" OutputDir="." CompileOutputs="false" GrpcServices="Client" />
+    </ItemGroup>
+
+</Project>
