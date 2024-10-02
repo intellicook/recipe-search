@@ -2,6 +2,8 @@ syntax = "proto3";
 
 import "protos/health.proto";
 
+option csharp_namespace = "IntelliCook.RecipeSearch.Client";
+
 package recipesearch;
 
 service RecipeSearch {

@@ -1,0 +1,64 @@
+name: C# Client Generation
+
+on:
+  workflow_run:
+    workflows: [Quality Assurance]
+    types: [completed]
+    branches: ["main"]
+
+jobs:
+  csharp_client_generation:
+
+    runs-on: windows-latest
+    
+    defaults:
+      run:
+        working-directory: recipe-search
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        path: recipe-search
+    - name: Checkout C# client branch
+      uses: actions/checkout@v4
+      with:
+        ref: csharp-client
+        path: recipe-search-client
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Remove old files
+      working-directory: recipe-search-client
+      run: git rm -r ./Protos
+    - name: Copy proto files
+      working-directory: recipe-search-client
+      run: cp -r ../recipe-search/protos ./Protos
+    - name: Remove Python files
+      working-directory: recipe-search-client
+      run: ls ./Protos -file -r | where { $_.extension -ne '.proto' } | rm
+    - name: Generate C# client
+      working-directory: recipe-search-client
+      run: dotnet build
+    - name: Build
+      working-directory: recipe-search-client
+      run: dotnet build --configuration Release
+    - name: Pack
+      working-directory: recipe-search-client
+      run: dotnet pack --configuration Release
+    - name: Publish contract
+      working-directory: recipe-search-client
+      run: dotnet nuget push `
+        bin\Release\*.nupkg `
+        --source https://nuget.pkg.github.com/intellicook/index.json `
+        --api-key ${{ secrets.GITHUB_TOKEN }}
+    - name: Commit and push
+      working-directory: recipe-search-client
+      run: |
+        git config --global user.name "C# Client Generation"
+        git config --global user.email "username@users.noreply.github.com"
+        git add .
+        git status
+        git commit --verbose -m "C# client ${{ github.sha }}"
+        git status
+        git push --verbose
