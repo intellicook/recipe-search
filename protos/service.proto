@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+import "protos/health.proto";
+
+package recipesearch;
+
+service RecipeSearch {
+    rpc GetHealth (HealthRequest) returns (HealthResponse) {}
+}
