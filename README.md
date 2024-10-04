@@ -18,6 +18,8 @@ With Docker Compose, you can run the services in the `docker-compose.yml` file:
 docker-compose up
 ```
 
+**Note**: Your configurations may convert the line endings of `entrypoint.sh` to CRLF. You need to convert it back to LF for docker to run the script.
+
 ### Python
 
 We use Python 3.12.2, so make sure you have that installed.
