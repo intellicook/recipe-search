@@ -4,8 +4,6 @@ import "protos/health.proto";
 
 option csharp_namespace = "IntelliCook.RecipeSearch.Client";
 
-package recipesearch;
-
-service RecipeSearch {
+service RecipeSearchService {
     rpc GetHealth (HealthRequest) returns (HealthResponse) {}
 }

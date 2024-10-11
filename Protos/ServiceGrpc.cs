@@ -8,9 +8,9 @@
 using grpc = global::Grpc.Core;
 
 namespace IntelliCook.RecipeSearch.Client {
-  public static partial class RecipeSearch
+  public static partial class RecipeSearchService
   {
-    static readonly string __ServiceName = "recipesearch.RecipeSearch";
+    static readonly string __ServiceName = "RecipeSearchService";
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static void __Helper_SerializeMessage(global::Google.Protobuf.IMessage message, grpc::SerializationContext context)
@@ -46,17 +46,17 @@ namespace IntelliCook.RecipeSearch.Client {
     }
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::IntelliCook.RecipeSearch.Client.HealthRequest> __Marshaller_recipesearch_HealthRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::IntelliCook.RecipeSearch.Client.HealthRequest.Parser));
+    static readonly grpc::Marshaller<global::IntelliCook.RecipeSearch.Client.HealthRequest> __Marshaller_HealthRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::IntelliCook.RecipeSearch.Client.HealthRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::IntelliCook.RecipeSearch.Client.HealthResponse> __Marshaller_recipesearch_HealthResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::IntelliCook.RecipeSearch.Client.HealthResponse.Parser));
+    static readonly grpc::Marshaller<global::IntelliCook.RecipeSearch.Client.HealthResponse> __Marshaller_HealthResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::IntelliCook.RecipeSearch.Client.HealthResponse.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::IntelliCook.RecipeSearch.Client.HealthRequest, global::IntelliCook.RecipeSearch.Client.HealthResponse> __Method_GetHealth = new grpc::Method<global::IntelliCook.RecipeSearch.Client.HealthRequest, global::IntelliCook.RecipeSearch.Client.HealthResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
         "GetHealth",
-        __Marshaller_recipesearch_HealthRequest,
-        __Marshaller_recipesearch_HealthResponse);
+        __Marshaller_HealthRequest,
+        __Marshaller_HealthResponse);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -64,30 +64,30 @@ namespace IntelliCook.RecipeSearch.Client {
       get { return global::IntelliCook.RecipeSearch.Client.ServiceReflection.Descriptor.Services[0]; }
     }
 
-    /// <summary>Client for RecipeSearch</summary>
-    public partial class RecipeSearchClient : grpc::ClientBase<RecipeSearchClient>
+    /// <summary>Client for RecipeSearchService</summary>
+    public partial class RecipeSearchServiceClient : grpc::ClientBase<RecipeSearchServiceClient>
     {
-      /// <summary>Creates a new client for RecipeSearch</summary>
+      /// <summary>Creates a new client for RecipeSearchService</summary>
       /// <param name="channel">The channel to use to make remote calls.</param>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public RecipeSearchClient(grpc::ChannelBase channel) : base(channel)
+      public RecipeSearchServiceClient(grpc::ChannelBase channel) : base(channel)
       {
       }
-      /// <summary>Creates a new client for RecipeSearch that uses a custom <c>CallInvoker</c>.</summary>
+      /// <summary>Creates a new client for RecipeSearchService that uses a custom <c>CallInvoker</c>.</summary>
       /// <param name="callInvoker">The callInvoker to use to make remote calls.</param>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public RecipeSearchClient(grpc::CallInvoker callInvoker) : base(callInvoker)
+      public RecipeSearchServiceClient(grpc::CallInvoker callInvoker) : base(callInvoker)
       {
       }
       /// <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      protected RecipeSearchClient() : base()
+      protected RecipeSearchServiceClient() : base()
       {
       }
       /// <summary>Protected constructor to allow creation of configured clients.</summary>
       /// <param name="configuration">The client configuration.</param>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      protected RecipeSearchClient(ClientBaseConfiguration configuration) : base(configuration)
+      protected RecipeSearchServiceClient(ClientBaseConfiguration configuration) : base(configuration)
       {
       }
 
@@ -113,9 +113,9 @@ namespace IntelliCook.RecipeSearch.Client {
       }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      protected override RecipeSearchClient NewInstance(ClientBaseConfiguration configuration)
+      protected override RecipeSearchServiceClient NewInstance(ClientBaseConfiguration configuration)
       {
-        return new RecipeSearchClient(configuration);
+        return new RecipeSearchServiceClient(configuration);
       }
     }
 

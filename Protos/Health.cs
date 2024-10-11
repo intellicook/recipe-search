@@ -24,14 +24,13 @@ namespace IntelliCook.RecipeSearch.Client {
     static HealthReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChNQcm90b3MvaGVhbHRoLnByb3RvEgxyZWNpcGVzZWFyY2giDwoNSGVhbHRo",
-            "UmVxdWVzdCJnCg5IZWFsdGhSZXNwb25zZRIqCgZzdGF0dXMYASABKA4yGi5y",
-            "ZWNpcGVzZWFyY2guSGVhbHRoU3RhdHVzEikKBmNoZWNrcxgCIAMoCzIZLnJl",
-            "Y2lwZXNlYXJjaC5IZWFsdGhDaGVjayJHCgtIZWFsdGhDaGVjaxIMCgRuYW1l",
-            "GAEgASgJEioKBnN0YXR1cxgCIAEoDjIaLnJlY2lwZXNlYXJjaC5IZWFsdGhT",
-            "dGF0dXMqOAoMSGVhbHRoU3RhdHVzEgsKB0hFQUxUSFkQABIMCghERUdSQURF",
-            "RBABEg0KCVVOSEVBTFRIWRACQiKqAh9JbnRlbGxpQ29vay5SZWNpcGVTZWFy",
-            "Y2guQ2xpZW50YgZwcm90bzM="));
+            "ChNQcm90b3MvaGVhbHRoLnByb3RvIg8KDUhlYWx0aFJlcXVlc3QiTQoOSGVh",
+            "bHRoUmVzcG9uc2USHQoGc3RhdHVzGAEgASgOMg0uSGVhbHRoU3RhdHVzEhwK",
+            "BmNoZWNrcxgCIAMoCzIMLkhlYWx0aENoZWNrIjoKC0hlYWx0aENoZWNrEgwK",
+            "BG5hbWUYASABKAkSHQoGc3RhdHVzGAIgASgOMg0uSGVhbHRoU3RhdHVzKjgK",
+            "DEhlYWx0aFN0YXR1cxILCgdIRUFMVEhZEAASDAoIREVHUkFERUQQARINCglV",
+            "TkhFQUxUSFkQAkIiqgIfSW50ZWxsaUNvb2suUmVjaXBlU2VhcmNoLkNsaWVu",
+            "dGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::IntelliCook.RecipeSearch.Client.HealthStatus), }, null, new pbr::GeneratedClrTypeInfo[] {

@@ -24,11 +24,10 @@ namespace IntelliCook.RecipeSearch.Client {
     static ServiceReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChRQcm90b3Mvc2VydmljZS5wcm90bxIMcmVjaXBlc2VhcmNoGhNwcm90b3Mv",
-            "aGVhbHRoLnByb3RvMlgKDFJlY2lwZVNlYXJjaBJICglHZXRIZWFsdGgSGy5y",
-            "ZWNpcGVzZWFyY2guSGVhbHRoUmVxdWVzdBocLnJlY2lwZXNlYXJjaC5IZWFs",
-            "dGhSZXNwb25zZSIAQiKqAh9JbnRlbGxpQ29vay5SZWNpcGVTZWFyY2guQ2xp",
-            "ZW50YgZwcm90bzM="));
+            "ChRQcm90b3Mvc2VydmljZS5wcm90bxoTcHJvdG9zL2hlYWx0aC5wcm90bzJF",
+            "ChNSZWNpcGVTZWFyY2hTZXJ2aWNlEi4KCUdldEhlYWx0aBIOLkhlYWx0aFJl",
+            "cXVlc3QaDy5IZWFsdGhSZXNwb25zZSIAQiKqAh9JbnRlbGxpQ29vay5SZWNp",
+            "cGVTZWFyY2guQ2xpZW50YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::IntelliCook.RecipeSearch.Client.HealthReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, null));
