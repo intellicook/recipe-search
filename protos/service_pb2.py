@@ -9,7 +9,6 @@ from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import runtime_version as _runtime_version
 from google.protobuf import symbol_database as _symbol_database
 from google.protobuf.internal import builder as _builder
-
 _runtime_version.ValidateProtobufRuntimeVersion(
     _runtime_version.Domain.PUBLIC,
     5,
@@ -25,13 +24,15 @@ _sym_db = _symbol_database.Default()
 
 from protos import health_pb2 as protos_dot_health__pb2
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14protos/service.proto\x12\x0crecipesearch\x1a\x13protos/health.proto2X\n\x0cRecipeSearch\x12H\n\tGetHealth\x12\x1b.recipesearch.HealthRequest\x1a\x1c.recipesearch.HealthResponse\"\x00\x62\x06proto3')
+
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14protos/service.proto\x1a\x13protos/health.proto2E\n\x13RecipeSearchService\x12.\n\tGetHealth\x12\x0e.HealthRequest\x1a\x0f.HealthResponse\"\x00\x42\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'protos.service_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
-  DESCRIPTOR._loaded_options = None
-  _globals['_RECIPESEARCH']._serialized_start=59
-  _globals['_RECIPESEARCH']._serialized_end=147
+  _globals['DESCRIPTOR']._loaded_options = None
+  _globals['DESCRIPTOR']._serialized_options = b'\252\002\037IntelliCook.RecipeSearch.Client'
+  _globals['_RECIPESEARCHSERVICE']._serialized_start=45
+  _globals['_RECIPESEARCHSERVICE']._serialized_end=114
 # @@protoc_insertion_point(module_scope)

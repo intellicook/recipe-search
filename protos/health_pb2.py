@@ -9,7 +9,6 @@ from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import runtime_version as _runtime_version
 from google.protobuf import symbol_database as _symbol_database
 from google.protobuf.internal import builder as _builder
-
 _runtime_version.ValidateProtobufRuntimeVersion(
     _runtime_version.Domain.PUBLIC,
     5,
@@ -25,19 +24,20 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13protos/health.proto\x12\x0crecipesearch\"\x0f\n\rHealthRequest\"g\n\x0eHealthResponse\x12*\n\x06status\x18\x01 \x01(\x0e\x32\x1a.recipesearch.HealthStatus\x12)\n\x06\x63hecks\x18\x02 \x03(\x0b\x32\x19.recipesearch.HealthCheck\"G\n\x0bHealthCheck\x12\x0c\n\x04name\x18\x01 \x01(\t\x12*\n\x06status\x18\x02 \x01(\x0e\x32\x1a.recipesearch.HealthStatus*8\n\x0cHealthStatus\x12\x0b\n\x07HEALTHY\x10\x00\x12\x0c\n\x08\x44\x45GRADED\x10\x01\x12\r\n\tUNHEALTHY\x10\x02\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13protos/health.proto\"\x0f\n\rHealthRequest\"M\n\x0eHealthResponse\x12\x1d\n\x06status\x18\x01 \x01(\x0e\x32\r.HealthStatus\x12\x1c\n\x06\x63hecks\x18\x02 \x03(\x0b\x32\x0c.HealthCheck\":\n\x0bHealthCheck\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x1d\n\x06status\x18\x02 \x01(\x0e\x32\r.HealthStatus*8\n\x0cHealthStatus\x12\x0b\n\x07HEALTHY\x10\x00\x12\x0c\n\x08\x44\x45GRADED\x10\x01\x12\r\n\tUNHEALTHY\x10\x02\x42\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'protos.health_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
-  DESCRIPTOR._loaded_options = None
-  _globals['_HEALTHSTATUS']._serialized_start=232
-  _globals['_HEALTHSTATUS']._serialized_end=288
-  _globals['_HEALTHREQUEST']._serialized_start=37
-  _globals['_HEALTHREQUEST']._serialized_end=52
-  _globals['_HEALTHRESPONSE']._serialized_start=54
-  _globals['_HEALTHRESPONSE']._serialized_end=157
-  _globals['_HEALTHCHECK']._serialized_start=159
-  _globals['_HEALTHCHECK']._serialized_end=230
+  _globals['DESCRIPTOR']._loaded_options = None
+  _globals['DESCRIPTOR']._serialized_options = b'\252\002\037IntelliCook.RecipeSearch.Client'
+  _globals['_HEALTHSTATUS']._serialized_start=179
+  _globals['_HEALTHSTATUS']._serialized_end=235
+  _globals['_HEALTHREQUEST']._serialized_start=23
+  _globals['_HEALTHREQUEST']._serialized_end=38
+  _globals['_HEALTHRESPONSE']._serialized_start=40
+  _globals['_HEALTHRESPONSE']._serialized_end=117
+  _globals['_HEALTHCHECK']._serialized_start=119
+  _globals['_HEALTHCHECK']._serialized_end=177
 # @@protoc_insertion_point(module_scope)
