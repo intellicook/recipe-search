@@ -7,10 +7,10 @@ from protos.health_pb2 import (
     HealthResponse,
     HealthStatus,
 )
-from protos.service_pb2_grpc import RecipeSearchServicer
+from protos.service_pb2_grpc import RecipeSearchServiceServicer
 
 
-class RecipeSearchServicer(RecipeSearchServicer):
+class RecipeSearchServicer(RecipeSearchServiceServicer):
     """Service class to implement the recipe search service"""
 
     def GetHealth(
