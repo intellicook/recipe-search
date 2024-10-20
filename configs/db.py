@@ -1,6 +1,7 @@
 from typing import Optional
 
 from pydantic import Field
+from pydantic_settings import SettingsConfigDict
 
 from configs.base import BaseConfigs
 
@@ -24,10 +25,11 @@ class DBConfigs(BaseConfigs):
             f"@{self.host}:{self.port}/{self.name}"
         )
 
-    class Config:
-        env_prefix = "DB_"
-        env_file = ".env"
-        extra = "ignore"
+    model_config = SettingsConfigDict(
+        env_prefix="DB_",
+        env_file=".env",
+        extra="ignore",
+    )
 
 
 configs = DBConfigs()

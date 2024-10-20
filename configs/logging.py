@@ -1,4 +1,5 @@
 from pydantic import Field
+from pydantic_settings import SettingsConfigDict
 
 from configs.base import BaseConfigs
 
@@ -8,10 +9,11 @@ class LoggingConfigs(BaseConfigs):
 
     level: str = Field("INFO")
 
-    class Config:
-        env_prefix = "LOGGING_"
-        env_file = ".env"
-        extra = "ignore"
+    model_config = SettingsConfigDict(
+        env_prefix="LOGGING_",
+        env_file=".env",
+        extra="ignore",
+    )
 
 
 configs = LoggingConfigs()
