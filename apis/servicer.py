@@ -1,3 +1,5 @@
+from typing import List
+
 import grpc
 
 from infra import db
@@ -20,15 +22,7 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
     ) -> HealthResponse:
         """Get the health status of the service"""
         status = HealthStatus.HEALTHY
-        checks = []
-
-        # Service
-        checks.append(
-            HealthCheck(
-                name="RecipeSearch",
-                status=HealthStatus.HEALTHY,
-            )
-        )
+        checks: List[HealthCheck] = []
 
         # Database
         checks.append(

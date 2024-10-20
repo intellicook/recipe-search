@@ -4,7 +4,7 @@ from concurrent import futures
 import grpc
 from grpc_reflection.v1alpha import reflection
 
-from apis.servicer import RecipeSearchServiceServicer
+from apis.servicer import RecipeSearchServicer
 from configs import api
 from protos import service_pb2, service_pb2_grpc
 
@@ -16,7 +16,7 @@ def start():
     port = api.configs.port
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     service_pb2_grpc.add_RecipeSearchServiceServicer_to_server(
-        RecipeSearchServiceServicer(), server
+        RecipeSearchServicer(), server
     )
 
     # Reflection

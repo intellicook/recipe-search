@@ -1,3 +1,5 @@
+from pydantic_settings import SettingsConfigDict
+
 from configs.base import BaseConfigs
 
 
@@ -6,10 +8,11 @@ class APIConfigs(BaseConfigs):
 
     port: str
 
-    class Config:
-        env_prefix = "API_"
-        env_file = ".env"
-        extra = "ignore"
+    model_config = SettingsConfigDict(
+        env_prefix="API_",
+        env_file=".env",
+        extra="ignore",
+    )
 
 
 configs = APIConfigs()
