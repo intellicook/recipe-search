@@ -29,6 +29,5 @@ repos:
 exclude: |
     (?x)(
         ^protos/|
-        ^alembic/|
         requirements.txt
     )

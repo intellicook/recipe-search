@@ -156,6 +156,8 @@ git commit -m "Your commit message"
 
 Make any changes and stage your files again according to the pre-commit hooks.
 
+**Important**: Do not commit the index file! It is recommended to name the index file with extension `.faiss` because it is set in `.gitignore`.
+
 ### Pushing Changes
 
 Set your branch's upstream branch to be the same branch on the remote repository on GitHub.
@@ -179,6 +181,17 @@ When there is a change in the database schema, you need to generate a new migrat
 alembic revision -m "Your migration message"
 ```
 
+Implement the `upgrade` and `downgrade` functions in the generated migration script, you may reference the output from:
+```py
+from sqlalchemy.schema import CreateTable
+print(CreateTable(YourModel.__table__))
+```
+
+Alternatively, you can use the `--autogenerate` flag to automatically generate the script, but the database need to be running and you may need to change the `DB_HOST` in the `.env` file to `host.docker.internal`:
+```bash
+alembic revision --autogenerate -m "Your migration message"
+```
+
 Then you should be able to see the generated migration script in the `alembic/versions` directory. Take a look at the [Operation Reference](https://alembic.sqlalchemy.org/en/latest/ops.html#ops) for the available operations.
 
 ### API Protocol
@@ -190,9 +203,26 @@ When you make changes to the `.proto` files in the `protos` directory, you need 
 python -m grpc_tools.protoc --proto_path=. --python_out=. --grpc_python_out=. --pyi_out=. ./protos/*.proto
 ```
 
+### GPU Acceleration
+
+Although we can use CPU for the service, we also allows [CUDA](https://developer.nvidia.com/cuda-toolkit) for GPU acceleration.
+
+If you already have CUDA installed on your machine, you can check the version with:
+```bash
+nvcc --version
+```
+
+You may need to install different versions for specific packages, including [PyTorch](https://pytorch.org) and [Faiss](https://github.com/facebookresearch/faiss). Please refer to the official documentations for [PyTorch](https://pytorch.org/get-started/locally/) and [Faiss](https://github.com/facebookresearch/faiss/blob/main/INSTALL.md).
+
+Alternatively, if you don't want to or cannot use CUDA, you may install their CPU versions. The CPU versions are by default installed in the `requirements.txt` file.
+
 ### Testing
 
 We use [Pytest](https://pytest.org) for testing.
+
+The requirements for testing is different, it is in the `test-requirements.txt` file.
+
+The test requirements is a subset of the main requirements without the AI related packages, the imports of them are mocked in `tests/conftest.py`.
 
 To run the tests:
 ```bash

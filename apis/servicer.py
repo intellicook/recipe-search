@@ -2,12 +2,18 @@ from typing import List
 
 import grpc
 
+from domain import controllers
 from infra import db
 from protos.health_pb2 import (
     HealthCheck,
     HealthRequest,
     HealthResponse,
     HealthStatus,
+)
+from protos.search_recipes_by_ingredients_pb2 import (
+    SearchRecipesByIngredientsRecipe,
+    SearchRecipesByIngredientsRequest,
+    SearchRecipesByIngredientsResponse,
 )
 from protos.service_pb2_grpc import RecipeSearchServiceServicer
 
@@ -43,3 +49,35 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
             status = HealthStatus.DEGRADED
 
         return HealthResponse(status=status, checks=checks)
+
+    def SearchRecipesByIngredients(
+        self,
+        request: SearchRecipesByIngredientsRequest,
+        context: grpc.ServicerContext,
+    ) -> SearchRecipesByIngredientsResponse:
+        """Search for recipes given the ingredients"""
+        if not request.ingredients:
+            context.abort(
+                grpc.StatusCode.INVALID_ARGUMENT,
+                "Ingredients cannot be empty",
+            )
+
+        if not request.HasField("limit"):
+            request.limit = 1
+
+        if request.limit <= 0:
+            context.abort(
+                grpc.StatusCode.INVALID_ARGUMENT,
+                "Limit must be a positive integer",
+            )
+
+        recipes = controllers.search_recipes_by_ingredients(
+            ingredients=request.ingredients,
+            limit=request.limit,
+        )
+
+        return SearchRecipesByIngredientsResponse(
+            recipes=[
+                SearchRecipesByIngredientsRecipe(id=id) for id in recipes
+            ],
+        )
