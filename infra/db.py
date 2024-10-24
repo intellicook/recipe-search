@@ -1,17 +1,22 @@
 import logging
 
-from sqlalchemy import create_engine, text
+from sqlalchemy import Engine, create_engine, text
 from sqlalchemy_utils import create_database, database_exists
 
 from configs import db
 
 logger = logging.getLogger(__name__)
 
-engine = create_engine(db.configs.connection_string)
 
-if not database_exists(engine.url):
-    create_database(engine.url)
-    logger.info("Database created")
+def init_engine() -> Engine:
+    """Initialize the database engine"""
+    engine = create_engine(db.configs.connection_string)
+
+    if not database_exists(engine.url):
+        create_database(engine.url)
+        logger.info("Database created")
+
+    return engine
 
 
 def check_health() -> bool:
@@ -23,3 +28,6 @@ def check_health() -> bool:
     except Exception as e:
         logger.error(f"Database health check failed: {e}")
         return False
+
+
+engine = init_engine()

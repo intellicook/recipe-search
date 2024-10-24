@@ -15,7 +15,7 @@ jobs:
           python-version: '3.12.2'
           cache: 'pip'
       - name: Install requirements
-        run: pip install -r requirements.txt
+        run: pip install -r test-requirements.txt
       - name: Format
         run: pre-commit run --all-files
       - name: Test

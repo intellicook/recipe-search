@@ -4,10 +4,13 @@ from sqlalchemy import engine_from_config, pool
 
 from alembic import context
 from configs import db
+from infra import models
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
+
+config.set_main_option("sqlalchemy.url", db.configs.connection_string)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -18,7 +21,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+target_metadata = models.Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -38,12 +41,11 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = db.configs.connection_string
+    url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
-        dialect_opts={"paramstyle": "named"},
     )
 
     with context.begin_transaction():
@@ -58,20 +60,24 @@ def run_migrations_online() -> None:
 
     """
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {})
-        | {
-            "sqlalchemy.url": db.configs.connection_string,
-        },
+        config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
 
     with connectable.connect() as connection:
         context.configure(
-            connection=connection, target_metadata=target_metadata
+            connection=connection,
+            target_metadata=target_metadata,
+            version_table_schema=target_metadata.schema,
+            include_schemas=True,
         )
 
         with context.begin_transaction():
+            context.execute(
+                f"CREATE schema IF NOT EXISTS {target_metadata.schema};"
+            )
+            context.execute(f"SET search_path TO {target_metadata.schema}")
             context.run_migrations()
 
 
