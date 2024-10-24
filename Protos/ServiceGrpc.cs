@@ -49,6 +49,10 @@ namespace IntelliCook.RecipeSearch.Client {
     static readonly grpc::Marshaller<global::IntelliCook.RecipeSearch.Client.HealthRequest> __Marshaller_HealthRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::IntelliCook.RecipeSearch.Client.HealthRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::IntelliCook.RecipeSearch.Client.HealthResponse> __Marshaller_HealthResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::IntelliCook.RecipeSearch.Client.HealthResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsRequest> __Marshaller_SearchRecipesByIngredientsRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsResponse> __Marshaller_SearchRecipesByIngredientsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsResponse.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::IntelliCook.RecipeSearch.Client.HealthRequest, global::IntelliCook.RecipeSearch.Client.HealthResponse> __Method_GetHealth = new grpc::Method<global::IntelliCook.RecipeSearch.Client.HealthRequest, global::IntelliCook.RecipeSearch.Client.HealthResponse>(
@@ -57,6 +61,14 @@ namespace IntelliCook.RecipeSearch.Client {
         "GetHealth",
         __Marshaller_HealthRequest,
         __Marshaller_HealthResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsRequest, global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsResponse> __Method_SearchRecipesByIngredients = new grpc::Method<global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsRequest, global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "SearchRecipesByIngredients",
+        __Marshaller_SearchRecipesByIngredientsRequest,
+        __Marshaller_SearchRecipesByIngredientsResponse);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -110,6 +122,26 @@ namespace IntelliCook.RecipeSearch.Client {
       public virtual grpc::AsyncUnaryCall<global::IntelliCook.RecipeSearch.Client.HealthResponse> GetHealthAsync(global::IntelliCook.RecipeSearch.Client.HealthRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_GetHealth, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsResponse SearchRecipesByIngredients(global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return SearchRecipesByIngredients(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsResponse SearchRecipesByIngredients(global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_SearchRecipesByIngredients, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsResponse> SearchRecipesByIngredientsAsync(global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return SearchRecipesByIngredientsAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsResponse> SearchRecipesByIngredientsAsync(global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_SearchRecipesByIngredients, null, options, request);
       }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]

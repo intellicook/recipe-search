@@ -24,12 +24,15 @@ namespace IntelliCook.RecipeSearch.Client {
     static ServiceReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChRQcm90b3Mvc2VydmljZS5wcm90bxoTcHJvdG9zL2hlYWx0aC5wcm90bzJF",
+            "ChRQcm90b3Mvc2VydmljZS5wcm90bxoTcHJvdG9zL2hlYWx0aC5wcm90bxoq",
+            "cHJvdG9zL3NlYXJjaF9yZWNpcGVzX2J5X2luZ3JlZGllbnRzLnByb3RvMq4B",
             "ChNSZWNpcGVTZWFyY2hTZXJ2aWNlEi4KCUdldEhlYWx0aBIOLkhlYWx0aFJl",
-            "cXVlc3QaDy5IZWFsdGhSZXNwb25zZSIAQiKqAh9JbnRlbGxpQ29vay5SZWNp",
-            "cGVTZWFyY2guQ2xpZW50YgZwcm90bzM="));
+            "cXVlc3QaDy5IZWFsdGhSZXNwb25zZSIAEmcKGlNlYXJjaFJlY2lwZXNCeUlu",
+            "Z3JlZGllbnRzEiIuU2VhcmNoUmVjaXBlc0J5SW5ncmVkaWVudHNSZXF1ZXN0",
+            "GiMuU2VhcmNoUmVjaXBlc0J5SW5ncmVkaWVudHNSZXNwb25zZSIAQiKqAh9J",
+            "bnRlbGxpQ29vay5SZWNpcGVTZWFyY2guQ2xpZW50YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::IntelliCook.RecipeSearch.Client.HealthReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::IntelliCook.RecipeSearch.Client.HealthReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, null));
     }
     #endregion
