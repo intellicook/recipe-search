@@ -2,6 +2,7 @@ from typing import List
 
 import grpc
 
+from configs.domain import configs as domain_configs
 from domain import controllers
 from infra import db
 from protos.health_pb2 import (
@@ -63,7 +64,7 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
             )
 
         if not request.HasField("limit"):
-            request.limit = 1
+            request.limit = domain_configs.default_search_limit
 
         if request.limit <= 0:
             context.abort(

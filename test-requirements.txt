@@ -1,6 +1,7 @@
 alembic==1.13.3
 annotated-types==0.7.0
 asgiref==3.8.1
+callee==0.3.1
 cfgv==3.4.0
 colorama==0.4.6
 distlib==0.3.8
