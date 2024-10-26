@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n*protos/search_recipes_by_ingredients.proto\"h\n!SearchRecipesByIngredientsRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x13\n\x0bingredients\x18\x02 \x03(\t\x12\x12\n\x05limit\x18\x03 \x01(\rH\x00\x88\x01\x01\x42\x08\n\x06_limit\"X\n\"SearchRecipesByIngredientsResponse\x12\x32\n\x07recipes\x18\x01 \x03(\x0b\x32!.SearchRecipesByIngredientsRecipe\".\n SearchRecipesByIngredientsRecipe\x12\n\n\x02id\x18\x01 \x01(\x05\x42\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n*protos/search_recipes_by_ingredients.proto\"h\n!SearchRecipesByIngredientsRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x13\n\x0bingredients\x18\x02 \x03(\t\x12\x12\n\x05limit\x18\x03 \x01(\rH\x00\x88\x01\x01\x42\x08\n\x06_limit\"X\n\"SearchRecipesByIngredientsResponse\x12\x32\n\x07recipes\x18\x01 \x03(\x0b\x32!.SearchRecipesByIngredientsRecipe\"N\n SearchRecipesByIngredientsRecipe\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x10\n\x08\x64istance\x18\x02 \x01(\x02\x12\x0c\n\x04name\x18\x03 \x01(\tB\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -37,5 +37,5 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_SEARCHRECIPESBYINGREDIENTSRESPONSE']._serialized_start=152
   _globals['_SEARCHRECIPESBYINGREDIENTSRESPONSE']._serialized_end=240
   _globals['_SEARCHRECIPESBYINGREDIENTSRECIPE']._serialized_start=242
-  _globals['_SEARCHRECIPESBYINGREDIENTSRECIPE']._serialized_end=288
+  _globals['_SEARCHRECIPESBYINGREDIENTSRECIPE']._serialized_end=320
 # @@protoc_insertion_point(module_scope)

@@ -1,5 +1,5 @@
 import logging
-from typing import Iterable, List
+from typing import Iterable, List, Tuple
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -48,10 +48,42 @@ def init_stella() -> Stella:
     return stella
 
 
+def get_recipe(id: int) -> models.RecipeModel:
+    """Get the recipe details.
+
+    Arguments:
+        id (int): The ID of the recipe.
+
+    Returns:
+        models.RecipeModel: The recipe details.
+    """
+    with Session(engine) as session:
+        stmt = select(models.RecipeModel).where(models.RecipeModel.id == id)
+        recipe = session.execute(stmt).scalar_one()
+
+    return recipe
+
+
+def get_recipes(ids: Iterable[int]) -> List[models.RecipeModel]:
+    """Get the recipe details.
+
+    Arguments:
+        ids (Iterable[int]): The IDs of the recipes.
+
+    Returns:
+        List[models.RecipeModel]: The recipe details.
+    """
+    with Session(engine) as session:
+        stmt = select(models.RecipeModel).where(models.RecipeModel.id.in_(ids))
+        recipes = session.execute(stmt).scalars().all()
+
+    return recipes
+
+
 def search_recipes_by_ingredients(
     ingredients: Iterable[str],
     limit: int = configs.default_search_limit,
-) -> List[int]:
+) -> List[Tuple[int, float]]:
     """Search recipes by ingredients.
 
     Arguments:
@@ -60,11 +92,12 @@ def search_recipes_by_ingredients(
             Defaults to configs.domain.configs.default_search_limit.
 
     Returns:
-        List[int]: The list of recipe IDs that match the ingredients.
+        List[Tuple[int, float]]: A series of recipe IDs and their
+            corresponding similarity scores.
     """
-    _, indices = stella.search(ingredients, limit=limit)
+    distances, indices = stella.search(ingredients, limit=limit)
 
-    return indices.tolist()
+    return sorted(list(zip(indices, distances)), key=lambda x: x[1])
 
 
 stella = init_stella()
