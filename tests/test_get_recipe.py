@@ -1,0 +1,36 @@
+import pytest_mock
+
+from apis.servicer import RecipeSearchServicer
+from infra import models
+from protos.recipe_pb2 import RecipeRequest
+
+
+def test_get_recipe_success(
+    mocker: pytest_mock.MockerFixture,
+):
+    id = 1
+    recipe = models.RecipeModel(
+        id=id, name="Recipe 1", ingredients=[], instructions=[]
+    )
+    request = RecipeRequest(
+        id=id,
+    )
+
+    mock_get_recipe = mocker.patch(
+        "domain.controllers.get_recipe",
+        return_value=recipe,
+    )
+
+    context = mocker.MagicMock()
+
+    servicer = RecipeSearchServicer()
+    response = servicer.GetRecipe(request, context)
+
+    mock_get_recipe.assert_called_once_with(id)
+    assert response.name == recipe.name
+    assert all(
+        x == y for x, y in zip(response.ingredients, recipe.ingredients)
+    )
+    assert all(
+        x == y for x, y in zip(response.instructions, recipe.instructions)
+    )
