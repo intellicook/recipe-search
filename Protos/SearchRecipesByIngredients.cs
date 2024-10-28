@@ -29,15 +29,16 @@ namespace IntelliCook.RecipeSearch.Client {
             "YW1lGAEgASgJEhMKC2luZ3JlZGllbnRzGAIgAygJEhIKBWxpbWl0GAMgASgN",
             "SACIAQFCCAoGX2xpbWl0IlgKIlNlYXJjaFJlY2lwZXNCeUluZ3JlZGllbnRz",
             "UmVzcG9uc2USMgoHcmVjaXBlcxgBIAMoCzIhLlNlYXJjaFJlY2lwZXNCeUlu",
-            "Z3JlZGllbnRzUmVjaXBlIi4KIFNlYXJjaFJlY2lwZXNCeUluZ3JlZGllbnRz",
-            "UmVjaXBlEgoKAmlkGAEgASgFQiKqAh9JbnRlbGxpQ29vay5SZWNpcGVTZWFy",
-            "Y2guQ2xpZW50YgZwcm90bzM="));
+            "Z3JlZGllbnRzUmVjaXBlIk4KIFNlYXJjaFJlY2lwZXNCeUluZ3JlZGllbnRz",
+            "UmVjaXBlEgoKAmlkGAEgASgFEhAKCGRpc3RhbmNlGAIgASgCEgwKBG5hbWUY",
+            "AyABKAlCIqoCH0ludGVsbGlDb29rLlJlY2lwZVNlYXJjaC5DbGllbnRiBnBy",
+            "b3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsRequest), global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsRequest.Parser, new[]{ "Username", "Ingredients", "Limit" }, new[]{ "Limit" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsResponse), global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsResponse.Parser, new[]{ "Recipes" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsRecipe), global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsRecipe.Parser, new[]{ "Id" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsRecipe), global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsRecipe.Parser, new[]{ "Id", "Distance", "Name" }, null, null, null, null)
           }));
     }
     #endregion
@@ -545,6 +546,8 @@ namespace IntelliCook.RecipeSearch.Client {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public SearchRecipesByIngredientsRecipe(SearchRecipesByIngredientsRecipe other) : this() {
       id_ = other.id_;
+      distance_ = other.distance_;
+      name_ = other.name_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -566,6 +569,30 @@ namespace IntelliCook.RecipeSearch.Client {
       }
     }
 
+    /// <summary>Field number for the "distance" field.</summary>
+    public const int DistanceFieldNumber = 2;
+    private float distance_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public float Distance {
+      get { return distance_; }
+      set {
+        distance_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "name" field.</summary>
+    public const int NameFieldNumber = 3;
+    private string name_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Name {
+      get { return name_; }
+      set {
+        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -582,6 +609,8 @@ namespace IntelliCook.RecipeSearch.Client {
         return true;
       }
       if (Id != other.Id) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Distance, other.Distance)) return false;
+      if (Name != other.Name) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -590,6 +619,8 @@ namespace IntelliCook.RecipeSearch.Client {
     public override int GetHashCode() {
       int hash = 1;
       if (Id != 0) hash ^= Id.GetHashCode();
+      if (Distance != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Distance);
+      if (Name.Length != 0) hash ^= Name.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -612,6 +643,14 @@ namespace IntelliCook.RecipeSearch.Client {
         output.WriteRawTag(8);
         output.WriteInt32(Id);
       }
+      if (Distance != 0F) {
+        output.WriteRawTag(21);
+        output.WriteFloat(Distance);
+      }
+      if (Name.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Name);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -626,6 +665,14 @@ namespace IntelliCook.RecipeSearch.Client {
         output.WriteRawTag(8);
         output.WriteInt32(Id);
       }
+      if (Distance != 0F) {
+        output.WriteRawTag(21);
+        output.WriteFloat(Distance);
+      }
+      if (Name.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Name);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -638,6 +685,12 @@ namespace IntelliCook.RecipeSearch.Client {
       int size = 0;
       if (Id != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Id);
+      }
+      if (Distance != 0F) {
+        size += 1 + 4;
+      }
+      if (Name.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -653,6 +706,12 @@ namespace IntelliCook.RecipeSearch.Client {
       }
       if (other.Id != 0) {
         Id = other.Id;
+      }
+      if (other.Distance != 0F) {
+        Distance = other.Distance;
+      }
+      if (other.Name.Length != 0) {
+        Name = other.Name;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -677,6 +736,14 @@ namespace IntelliCook.RecipeSearch.Client {
             Id = input.ReadInt32();
             break;
           }
+          case 21: {
+            Distance = input.ReadFloat();
+            break;
+          }
+          case 26: {
+            Name = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -698,6 +765,14 @@ namespace IntelliCook.RecipeSearch.Client {
             break;
           case 8: {
             Id = input.ReadInt32();
+            break;
+          }
+          case 21: {
+            Distance = input.ReadFloat();
+            break;
+          }
+          case 26: {
+            Name = input.ReadString();
             break;
           }
         }

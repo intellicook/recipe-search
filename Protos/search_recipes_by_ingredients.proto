@@ -14,4 +14,6 @@ message SearchRecipesByIngredientsResponse {
 
 message SearchRecipesByIngredientsRecipe {
     int32 id = 1;
+    float distance = 2;
+    string name = 3;
 }
