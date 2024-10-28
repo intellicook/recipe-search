@@ -22,7 +22,11 @@ class SearchRecipesByIngredientsResponse(_message.Message):
     def __init__(self, recipes: _Optional[_Iterable[_Union[SearchRecipesByIngredientsRecipe, _Mapping]]] = ...) -> None: ...
 
 class SearchRecipesByIngredientsRecipe(_message.Message):
-    __slots__ = ("id",)
+    __slots__ = ("id", "distance", "name")
     ID_FIELD_NUMBER: _ClassVar[int]
+    DISTANCE_FIELD_NUMBER: _ClassVar[int]
+    NAME_FIELD_NUMBER: _ClassVar[int]
     id: int
-    def __init__(self, id: _Optional[int] = ...) -> None: ...
+    distance: float
+    name: str
+    def __init__(self, id: _Optional[int] = ..., distance: _Optional[float] = ..., name: _Optional[str] = ...) -> None: ...

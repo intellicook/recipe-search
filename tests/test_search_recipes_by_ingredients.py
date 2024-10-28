@@ -6,6 +6,7 @@ import pytest_mock
 
 from apis.servicer import RecipeSearchServicer
 from configs.domain import configs
+from infra import models
 from protos.search_recipes_by_ingredients_pb2 import (
     SearchRecipesByIngredientsRecipe,
     SearchRecipesByIngredientsRequest,
@@ -23,13 +24,33 @@ def test_search_recipes_by_ingredients_success(
     username = "test_username"
     ingredients = ["apple", "banana"]
     limit = 3
-    recipes = [1, 2, 3]
+    results = [
+        (1, 0.5),
+        (2, 0.4),
+        (3, 0.3),
+    ]
+    recipes = [
+        models.RecipeModel(
+            id=1, name="Recipe 1", ingredients=[], instructions=[]
+        ),
+        models.RecipeModel(
+            id=2, name="Recipe 2", ingredients=[], instructions=[]
+        ),
+        models.RecipeModel(
+            id=3, name="Recipe 3", ingredients=[], instructions=[]
+        ),
+    ]
     request = SearchRecipesByIngredientsRequest(
         username=username, ingredients=ingredients, limit=limit
     )
 
     mock_search = mocker.patch(
         "domain.controllers.search_recipes_by_ingredients",
+        return_value=results,
+    )
+
+    mock_get_recipes = mocker.patch(
+        "domain.controllers.get_recipes",
         return_value=recipes,
     )
 
@@ -39,8 +60,19 @@ def test_search_recipes_by_ingredients_success(
     response = servicer.SearchRecipesByIngredients(request, context)
 
     mock_search.assert_called_once_with(ingredients=ingredients, limit=limit)
+    mock_get_recipes.assert_called_once_with(mock.ANY)
+    assert all(
+        recipe.id in mock_get_recipes.call_args.args[0] for recipe in recipes
+    )
     assert response == SearchRecipesByIngredientsResponse(
-        recipes=[SearchRecipesByIngredientsRecipe(id=id) for id in recipes]
+        recipes=[
+            SearchRecipesByIngredientsRecipe(
+                id=id,
+                distance=distance,
+                name=recipe.name,
+            )
+            for (id, distance), recipe in zip(results, recipes)
+        ]
     )
 
 
@@ -73,13 +105,33 @@ def test_search_recipes_by_ingredients_limit_null(
     username = "test_username"
     ingredients = ["apple", "banana"]
     limit = None
-    recipes = [1, 2, 3]
+    results = [
+        (1, 0.5),
+        (2, 0.4),
+        (3, 0.3),
+    ]
+    recipes = [
+        models.RecipeModel(
+            id=1, name="Recipe 1", ingredients=[], instructions=[]
+        ),
+        models.RecipeModel(
+            id=2, name="Recipe 2", ingredients=[], instructions=[]
+        ),
+        models.RecipeModel(
+            id=3, name="Recipe 3", ingredients=[], instructions=[]
+        ),
+    ]
     request = SearchRecipesByIngredientsRequest(
         username=username, ingredients=ingredients, limit=limit
     )
 
     mock_search = mocker.patch(
         "domain.controllers.search_recipes_by_ingredients",
+        return_value=results,
+    )
+
+    mock_get_recipes = mocker.patch(
+        "domain.controllers.get_recipes",
         return_value=recipes,
     )
 
@@ -91,8 +143,16 @@ def test_search_recipes_by_ingredients_limit_null(
     mock_search.assert_called_once_with(
         ingredients=ingredients, limit=configs.default_search_limit
     )
+    mock_get_recipes.assert_called_once_with(mock.ANY)
     assert response == SearchRecipesByIngredientsResponse(
-        recipes=[SearchRecipesByIngredientsRecipe(id=id) for id in recipes]
+        recipes=[
+            SearchRecipesByIngredientsRecipe(
+                id=id,
+                distance=distance,
+                name=recipe.name,
+            )
+            for (id, distance), recipe in zip(results, recipes)
+        ]
     )
 
 

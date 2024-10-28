@@ -23,10 +23,11 @@ _sym_db = _symbol_database.Default()
 
 
 from protos import health_pb2 as protos_dot_health__pb2
+from protos import recipe_pb2 as protos_dot_recipe__pb2
 from protos import search_recipes_by_ingredients_pb2 as protos_dot_search__recipes__by__ingredients__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14protos/service.proto\x1a\x13protos/health.proto\x1a*protos/search_recipes_by_ingredients.proto2\xae\x01\n\x13RecipeSearchService\x12.\n\tGetHealth\x12\x0e.HealthRequest\x1a\x0f.HealthResponse\"\x00\x12g\n\x1aSearchRecipesByIngredients\x12\".SearchRecipesByIngredientsRequest\x1a#.SearchRecipesByIngredientsResponse\"\x00\x42\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14protos/service.proto\x1a\x13protos/health.proto\x1a\x13protos/recipe.proto\x1a*protos/search_recipes_by_ingredients.proto2\xde\x01\n\x13RecipeSearchService\x12.\n\tGetHealth\x12\x0e.HealthRequest\x1a\x0f.HealthResponse\"\x00\x12.\n\tGetRecipe\x12\x0e.RecipeRequest\x1a\x0f.RecipeResponse\"\x00\x12g\n\x1aSearchRecipesByIngredients\x12\".SearchRecipesByIngredientsRequest\x1a#.SearchRecipesByIngredientsResponse\"\x00\x42\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -34,6 +35,6 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'protos.service_pb2', _globa
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\252\002\037IntelliCook.RecipeSearch.Client'
-  _globals['_RECIPESEARCHSERVICE']._serialized_start=90
-  _globals['_RECIPESEARCHSERVICE']._serialized_end=264
+  _globals['_RECIPESEARCHSERVICE']._serialized_start=111
+  _globals['_RECIPESEARCHSERVICE']._serialized_end=333
 # @@protoc_insertion_point(module_scope)

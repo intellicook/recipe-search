@@ -11,6 +11,7 @@ from protos.health_pb2 import (
     HealthResponse,
     HealthStatus,
 )
+from protos.recipe_pb2 import RecipeRequest, RecipeResponse
 from protos.search_recipes_by_ingredients_pb2 import (
     SearchRecipesByIngredientsRecipe,
     SearchRecipesByIngredientsRequest,
@@ -51,6 +52,20 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
 
         return HealthResponse(status=status, checks=checks)
 
+    def GetRecipe(
+        self,
+        request: RecipeRequest,
+        context: grpc.ServicerContext,
+    ) -> RecipeResponse:
+        """Get the recipe details"""
+        recipe = controllers.get_recipe(request.id)
+
+        return RecipeResponse(
+            name=recipe.name,
+            ingredients=recipe.ingredients,
+            instructions=recipe.instructions,
+        )
+
     def SearchRecipesByIngredients(
         self,
         request: SearchRecipesByIngredientsRequest,
@@ -72,13 +87,20 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
                 "Limit must be a positive integer",
             )
 
-        recipes = controllers.search_recipes_by_ingredients(
+        results = controllers.search_recipes_by_ingredients(
             ingredients=request.ingredients,
             limit=request.limit,
         )
 
+        recipes = controllers.get_recipes(id for id, _ in results)
+
         return SearchRecipesByIngredientsResponse(
             recipes=[
-                SearchRecipesByIngredientsRecipe(id=id) for id in recipes
+                SearchRecipesByIngredientsRecipe(
+                    id=id,
+                    distance=distance,
+                    name=recipe.name,
+                )
+                for (id, distance), recipe in zip(results, recipes)
             ],
         )

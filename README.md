@@ -224,6 +224,11 @@ The requirements for testing is different, it is in the `test-requirements.txt` 
 
 The test requirements is a subset of the main requirements without the AI related packages, the imports of them are mocked in `tests/conftest.py`.
 
+If you want to change the test requirements, you should add entries in `test-excluded-requirements.txt` then geneerate the `test-requirements.txt` file:
+```bash
+.\generate-test-requirements.ps
+```
+
 To run the tests:
 ```bash
 pytest

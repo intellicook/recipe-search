@@ -4,6 +4,7 @@ import grpc
 import warnings
 
 from protos import health_pb2 as protos_dot_health__pb2
+from protos import recipe_pb2 as protos_dot_recipe__pb2
 from protos import search_recipes_by_ingredients_pb2 as protos_dot_search__recipes__by__ingredients__pb2
 
 GRPC_GENERATED_VERSION = '1.66.2'
@@ -40,6 +41,11 @@ class RecipeSearchServiceStub(object):
                 request_serializer=protos_dot_health__pb2.HealthRequest.SerializeToString,
                 response_deserializer=protos_dot_health__pb2.HealthResponse.FromString,
                 _registered_method=True)
+        self.GetRecipe = channel.unary_unary(
+                '/RecipeSearchService/GetRecipe',
+                request_serializer=protos_dot_recipe__pb2.RecipeRequest.SerializeToString,
+                response_deserializer=protos_dot_recipe__pb2.RecipeResponse.FromString,
+                _registered_method=True)
         self.SearchRecipesByIngredients = channel.unary_unary(
                 '/RecipeSearchService/SearchRecipesByIngredients',
                 request_serializer=protos_dot_search__recipes__by__ingredients__pb2.SearchRecipesByIngredientsRequest.SerializeToString,
@@ -51,6 +57,12 @@ class RecipeSearchServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def GetHealth(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetRecipe(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -69,6 +81,11 @@ def add_RecipeSearchServiceServicer_to_server(servicer, server):
                     servicer.GetHealth,
                     request_deserializer=protos_dot_health__pb2.HealthRequest.FromString,
                     response_serializer=protos_dot_health__pb2.HealthResponse.SerializeToString,
+            ),
+            'GetRecipe': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetRecipe,
+                    request_deserializer=protos_dot_recipe__pb2.RecipeRequest.FromString,
+                    response_serializer=protos_dot_recipe__pb2.RecipeResponse.SerializeToString,
             ),
             'SearchRecipesByIngredients': grpc.unary_unary_rpc_method_handler(
                     servicer.SearchRecipesByIngredients,
@@ -103,6 +120,33 @@ class RecipeSearchService(object):
             '/RecipeSearchService/GetHealth',
             protos_dot_health__pb2.HealthRequest.SerializeToString,
             protos_dot_health__pb2.HealthResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetRecipe(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/RecipeSearchService/GetRecipe',
+            protos_dot_recipe__pb2.RecipeRequest.SerializeToString,
+            protos_dot_recipe__pb2.RecipeResponse.FromString,
             options,
             channel_credentials,
             insecure,
