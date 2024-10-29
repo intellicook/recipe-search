@@ -1,6 +1,7 @@
 from typing import List
 
 import grpc
+from sqlalchemy.exc import NoResultFound
 
 from configs.domain import configs as domain_configs
 from domain import controllers
@@ -58,7 +59,13 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
         context: grpc.ServicerContext,
     ) -> RecipeResponse:
         """Get the recipe details"""
-        recipe = controllers.get_recipe(request.id)
+        try:
+            recipe = controllers.get_recipe(request.id)
+        except NoResultFound:
+            context.abort(
+                grpc.StatusCode.NOT_FOUND,
+                f"Recipe with ID {request.id} not found",
+            )
 
         return RecipeResponse(
             name=recipe.name,

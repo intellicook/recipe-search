@@ -14,10 +14,6 @@ from protos.search_recipes_by_ingredients_pb2 import (
 )
 
 
-def context_abort_mock(code: grpc.StatusCode, message: str):
-    raise grpc.RpcError(code, message)
-
-
 def test_search_recipes_by_ingredients_success(
     mocker: pytest_mock.MockerFixture,
 ):
@@ -87,7 +83,7 @@ def test_search_recipes_by_ingredients_empty_ingredients(
     )
 
     context = mocker.MagicMock()
-    context.abort = mock.MagicMock(side_effect=context_abort_mock)
+    context.abort = mock.MagicMock(side_effect=grpc.RpcError)
 
     servicer = RecipeSearchServicer()
     with pytest.raises(grpc.RpcError):
@@ -167,7 +163,7 @@ def test_search_recipes_by_ingredients_limit_zero(
     )
 
     context = mocker.MagicMock()
-    context.abort = mock.MagicMock(side_effect=context_abort_mock)
+    context.abort = mock.MagicMock(side_effect=grpc.RpcError)
 
     servicer = RecipeSearchServicer()
     with pytest.raises(grpc.RpcError):
