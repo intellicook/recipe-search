@@ -1,4 +1,5 @@
 import logging
+from dataclasses import dataclass
 from typing import Iterable, Optional, Tuple
 
 import faiss
@@ -7,45 +8,61 @@ import numpy.typing as npt
 import torch
 from sentence_transformers import SentenceTransformer
 
+from domain.embeddings.base import BaseEmbedding
 from infra import models
 
 
-class Stella:
-    """Wrapper for the stella_en_1.5B_v5 with Faiss index"""
+class SentenceTransformerEmbedding(BaseEmbedding):
+    """Embedding class for sentence transformer with Faiss index"""
 
-    MODEL = "dunzhang/stella_en_1.5B_v5"
-    PROMPT = (
-        "Instruct: Retrieve semantically similar food ingredient"
-        " text.\nQuery: "
-    )
-    DIMENSION = 1024
+    @dataclass
+    class Configs:
+        """Initial configuration for the embedding model"""
+
+        model: str
+        prompt: str
 
     logger: logging.Logger
+    init_configs: Configs
     model: SentenceTransformer
     index: faiss.IndexIDMap
 
-    def __init__(self, index: Optional[faiss.IndexIDMap] = None):
+    def __init__(
+        self,
+        init_configs: Configs,
+        index: Optional[faiss.IndexIDMap] = None,
+    ):
         self.logger = logging.getLogger(__name__)
-        self.model = SentenceTransformer(self.MODEL, trust_remote_code=True)
+        self.init_configs = init_configs
+        self.model = SentenceTransformer(
+            self.init_configs.model, trust_remote_code=True
+        )
 
         if torch.cuda.is_available():
             self.model = self.model.cuda()
 
         self.index = index or faiss.IndexIDMap(
-            faiss.IndexFlatIP(self.DIMENSION)
+            faiss.IndexFlatIP(self.model.get_sentence_embedding_dimension())
         )
 
-        self.logger.info("Stella initialized")
+        self.logger.info(f"{self.init_configs.model} initialized")
 
     @classmethod
-    def load_from_file(cls, path: str) -> "Stella":
+    def load_from_file(
+        cls, init_configs: Configs, path: str
+    ) -> "SentenceTransformerEmbedding":
         """Load the index from a file.
 
         Arguments:
+            init_configs (InitConfigs): The initial configuration for the
+                embedding model.
             path (str): The path to load the index from.
+
+        Returns:
+            SentenceTransformerEmbedding: The loaded embedding model.
         """
         index = faiss.read_index(path)
-        return Stella(index)
+        return SentenceTransformerEmbedding(init_configs, index)
 
     def save_to_file(self, path: str):
         """Save the index to a file.
@@ -66,33 +83,29 @@ class Stella:
             is_query (bool): Whether the ingredients are a query or not.
 
         Returns:
-            npt.NDArray[np.float32]: The encoded vector of shape
-                (self.DIMENSION,).
+            npt.NDArray[np.float32]: The encoded vector.
         """
         test = self.model.encode(
             ", ".join(ingredients),
-            prompt=self.PROMPT if is_query else None,
+            prompt=self.init_configs.prompt if is_query else None,
             normalize_embeddings=True,
         )
         return test
 
-    def add_recipe(
-        self, recipe: models.RecipeModel
-    ) -> npt.NDArray[np.float32]:
+    def add(self, recipe: models.RecipeModel) -> npt.NDArray[np.float32]:
         """Add a recipe entry to the index.
 
         Arguments:
             recipe (models.RecipeModel): The recipe to add.
 
         Returns:
-            npt.NDArray[np.float32]: The encoded vector of shape
-                (self.DIMENSION,).
+            npt.NDArray[np.float32]: The encoded vector.
         """
         vec: npt.NDArray[np.float32] = self.encode(recipe.ingredients)
         self.index.add_with_ids(vec.reshape(1, -1), recipe.id)
         return vec
 
-    def remove_entry(self, id: int):
+    def remove(self, id: int):
         """Remove a recipe entry from the index.
 
         Arguments:

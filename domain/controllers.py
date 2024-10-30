@@ -1,22 +1,26 @@
 import logging
-from typing import Iterable, List, Tuple
+from typing import Iterable, List, Tuple, Type
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from configs.domain import configs
-from domain.stella import Stella
+from domain import embeddings
+from domain.embeddings.base import BaseEmbedding
 from infra import models
 from infra.db import engine
 
 logger = logging.getLogger(__name__)
 
 
-def init_stella() -> Stella:
-    """Initialize the Stella model.
+def init_embedding(cls: Type[BaseEmbedding]) -> BaseEmbedding:
+    """Initialize the embedding model.
+
+    Arguments:
+        cls (Type[BaseEmbedding]): The embedding class to initialize.
 
     Returns:
-        Stella: The Stella model.
+        BaseEmbedding: The initialized embedding model.
     """
     with Session(engine) as session:
         stmt = select(func.count()).select_from(models.IndexFileModel)
@@ -38,14 +42,16 @@ def init_stella() -> Stella:
         index_file = session.execute(stmt).scalar_one()
 
     try:
-        stella = Stella.load_from_file(index_file.path)
+        model = cls.load_from_file(index_file.path)
     except FileNotFoundError:
         logger.error(
             f"Index file at {index_file.path} not found, database is out of"
             " sync with file system"
         )
 
-    return stella
+    logger.info(f"{cls.__name__} initialized")
+
+    return model
 
 
 def get_recipe(id: int) -> models.RecipeModel:
@@ -95,9 +101,9 @@ def search_recipes_by_ingredients(
         List[Tuple[int, float]]: A series of recipe IDs and their
             corresponding similarity scores.
     """
-    distances, indices = stella.search(ingredients, limit=limit)
+    distances, indices = embedding.search(ingredients, limit=limit)
 
     return sorted(list(zip(indices, distances)), key=lambda x: x[1])
 
 
-stella = init_stella()
+embedding = init_embedding(embeddings.model)
