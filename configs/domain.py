@@ -8,6 +8,7 @@ class DomainConfigs(BaseConfigs):
     """Domain configuration"""
 
     default_search_limit: int = Field(10)
+    embedding_model: str
 
     model_config = SettingsConfigDict(
         env_prefix="DOMAIN_",
