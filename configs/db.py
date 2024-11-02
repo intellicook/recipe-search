@@ -10,7 +10,6 @@ class DBConfigs(BaseConfigs):
     """Database configuration"""
 
     host: Optional[str] = Field(None)
-    port: Optional[str] = Field(None)
     name: Optional[str] = Field(None)
     user: Optional[str] = Field(None)
     password: Optional[str] = Field(None)
@@ -22,7 +21,7 @@ class DBConfigs(BaseConfigs):
             return "sqlite+pysqlite:///:memory:"
         return (
             f"postgresql+psycopg://{self.user}:{self.password}"
-            f"@{self.host}:{self.port}/{self.name}"
+            f"@{self.host}:5432/{self.name}"
         )
 
     model_config = SettingsConfigDict(
