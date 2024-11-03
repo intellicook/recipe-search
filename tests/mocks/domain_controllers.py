@@ -1,7 +1,6 @@
-from typing import Iterable, List
+from typing import Any, Iterable, List
 
 from configs.domain import configs
-from domain.embeddings import faiss
 from infra import models
 
 
@@ -31,5 +30,5 @@ def init_faiss_index(
     pass
 
 
-def get_faiss_index_thread() -> faiss.IndexThread:
+def get_faiss_index_thread() -> Any:  # faiss.IndexThread
     pass
