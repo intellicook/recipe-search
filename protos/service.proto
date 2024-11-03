@@ -3,11 +3,19 @@ syntax = "proto3";
 import "protos/health.proto";
 import "protos/recipe.proto";
 import "protos/search_recipes_by_ingredients.proto";
+import "protos/add_recipes.proto";
 
 option csharp_namespace = "IntelliCook.RecipeSearch.Client";
 
 service RecipeSearchService {
+    
+    // Core services
+
     rpc GetHealth (HealthRequest) returns (HealthResponse) {}
     rpc GetRecipe (RecipeRequest) returns (RecipeResponse) {}
     rpc SearchRecipesByIngredients (SearchRecipesByIngredientsRequest) returns (SearchRecipesByIngredientsResponse) {}
+
+    // Admin services
+
+    rpc AddRecipes (AddRecipesRequest) returns (AddRecipesResponse) {}
 }
