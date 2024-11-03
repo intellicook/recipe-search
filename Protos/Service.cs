@@ -26,15 +26,21 @@ namespace IntelliCook.RecipeSearch.Client {
           string.Concat(
             "ChRQcm90b3Mvc2VydmljZS5wcm90bxoTcHJvdG9zL2hlYWx0aC5wcm90bxoT",
             "cHJvdG9zL3JlY2lwZS5wcm90bxoqcHJvdG9zL3NlYXJjaF9yZWNpcGVzX2J5",
-            "X2luZ3JlZGllbnRzLnByb3RvMt4BChNSZWNpcGVTZWFyY2hTZXJ2aWNlEi4K",
+            "X2luZ3JlZGllbnRzLnByb3RvGhhwcm90b3MvYWRkX3JlY2lwZXMucHJvdG8a",
+            "HXByb3Rvcy9pbml0X2ZhaXNzX2luZGV4LnByb3RvGh9wcm90b3MvZmFpc3Nf",
+            "aW5kZXhfdGhyZWFkLnByb3RvMqoDChNSZWNpcGVTZWFyY2hTZXJ2aWNlEi4K",
             "CUdldEhlYWx0aBIOLkhlYWx0aFJlcXVlc3QaDy5IZWFsdGhSZXNwb25zZSIA",
             "Ei4KCUdldFJlY2lwZRIOLlJlY2lwZVJlcXVlc3QaDy5SZWNpcGVSZXNwb25z",
             "ZSIAEmcKGlNlYXJjaFJlY2lwZXNCeUluZ3JlZGllbnRzEiIuU2VhcmNoUmVj",
             "aXBlc0J5SW5ncmVkaWVudHNSZXF1ZXN0GiMuU2VhcmNoUmVjaXBlc0J5SW5n",
-            "cmVkaWVudHNSZXNwb25zZSIAQiKqAh9JbnRlbGxpQ29vay5SZWNpcGVTZWFy",
-            "Y2guQ2xpZW50YgZwcm90bzM="));
+            "cmVkaWVudHNSZXNwb25zZSIAEjcKCkFkZFJlY2lwZXMSEi5BZGRSZWNpcGVz",
+            "UmVxdWVzdBoTLkFkZFJlY2lwZXNSZXNwb25zZSIAEkMKDkluaXRGYWlzc0lu",
+            "ZGV4EhYuSW5pdEZhaXNzSW5kZXhSZXF1ZXN0GhcuSW5pdEZhaXNzSW5kZXhS",
+            "ZXNwb25zZSIAEkwKE0dldEZhaXNzSW5kZXhUaHJlYWQSGC5GYWlzc0luZGV4",
+            "VGhyZWFkUmVxdWVzdBoZLkZhaXNzSW5kZXhUaHJlYWRSZXNwb25zZSIAQiKq",
+            "Ah9JbnRlbGxpQ29vay5SZWNpcGVTZWFyY2guQ2xpZW50YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::IntelliCook.RecipeSearch.Client.HealthReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.RecipeReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::IntelliCook.RecipeSearch.Client.HealthReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.RecipeReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.AddRecipesReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.InitFaissIndexReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.FaissIndexThreadReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, null));
     }
     #endregion
