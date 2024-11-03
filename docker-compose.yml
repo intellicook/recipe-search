@@ -4,11 +4,13 @@ services:
     build: .
     volumes:
       - .:/usr/app
-      - /var/run/docker.sock:/var/run/docker.sock
+      - data:/usr/data
     ports:
       - 2505:${API_PORT}
     env_file:
       - .env
+    environment:
+      - DOMAIN_DEFAULT_FAISS_INDEX_PATH=/usr/data/faiss.index
     depends_on:
       db:
         condition: service_healthy
@@ -29,5 +31,7 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
 
 volumes:
+  data:
+    name: recipesearch_data
   postgres_data:
     name: postgres_data

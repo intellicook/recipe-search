@@ -7,6 +7,7 @@ from configs.base import BaseConfigs
 class DomainConfigs(BaseConfigs):
     """Domain configuration"""
 
+    default_faiss_index_path: str = Field("index.faiss")
     default_search_limit: int = Field(10)
     embedding_model: str
 

@@ -7,11 +7,20 @@ from configs.domain import configs as domain_configs
 from domain import controllers
 from infra import db, models
 from protos.add_recipes_pb2 import AddRecipesRequest, AddRecipesResponse
+from protos.faiss_index_thread_pb2 import (
+    FaissIndexThreadArgs,
+    FaissIndexThreadRequest,
+    FaissIndexThreadResponse,
+)
 from protos.health_pb2 import (
     HealthCheck,
     HealthRequest,
     HealthResponse,
     HealthStatus,
+)
+from protos.init_faiss_index_pb2 import (
+    InitFaissIndexRequest,
+    InitFaissIndexResponse,
 )
 from protos.recipe_pb2 import RecipeRequest, RecipeResponse
 from protos.search_recipes_by_ingredients_pb2 import (
@@ -100,6 +109,12 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
             limit=request.limit,
         )
 
+        if results is None:
+            context.abort(
+                grpc.StatusCode.FAILED_PRECONDITION,
+                "Embedding model is not initialized",
+            )
+
         recipes = controllers.get_recipes(id for id, _ in results)
 
         return SearchRecipesByIngredientsResponse(
@@ -136,3 +151,53 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
         )
 
         return AddRecipesResponse()
+
+    def InitFaissIndex(
+        self,
+        request: InitFaissIndexRequest,
+        context: grpc.ServicerContext,
+    ) -> InitFaissIndexResponse:
+        """Initialize the Faiss index"""
+        if controllers.get_faiss_index_thread().is_in_progress:
+            context.abort(
+                grpc.StatusCode.FAILED_PRECONDITION,
+                "Faiss index thread is already in progress",
+            )
+
+        count = request.count
+        if not request.HasField("count"):
+            count = None
+
+        path = request.path
+        if not request.HasField("path"):
+            path = domain_configs.default_faiss_index_path
+
+        controllers.init_faiss_index(
+            count=count,
+            path=path,
+        )
+
+        return InitFaissIndexResponse()
+
+    def GetFaissIndexThread(
+        self,
+        request: FaissIndexThreadRequest,
+        context: grpc.ServicerContext,
+    ) -> FaissIndexThreadResponse:
+        """Get the Faiss index thread status"""
+        thread = controllers.get_faiss_index_thread()
+
+        args = None
+        if thread.is_in_progress or thread.is_complete:
+            args = FaissIndexThreadArgs(
+                count=thread.count,
+                model=thread.model,
+                path=thread.path,
+            )
+
+        return FaissIndexThreadResponse(
+            args=args,
+            is_in_progress=thread.is_in_progress,
+            is_complete=thread.is_complete,
+            is_successful=thread.is_successful,
+        )

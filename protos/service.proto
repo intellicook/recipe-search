@@ -4,6 +4,8 @@ import "protos/health.proto";
 import "protos/recipe.proto";
 import "protos/search_recipes_by_ingredients.proto";
 import "protos/add_recipes.proto";
+import "protos/init_faiss_index.proto";
+import "protos/faiss_index_thread.proto";
 
 option csharp_namespace = "IntelliCook.RecipeSearch.Client";
 
@@ -18,4 +20,6 @@ service RecipeSearchService {
     // Admin services
 
     rpc AddRecipes (AddRecipesRequest) returns (AddRecipesResponse) {}
+    rpc InitFaissIndex (InitFaissIndexRequest) returns (InitFaissIndexResponse) {}
+    rpc GetFaissIndexThread (FaissIndexThreadRequest) returns (FaissIndexThreadResponse) {}
 }

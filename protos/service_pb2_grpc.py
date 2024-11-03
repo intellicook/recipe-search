@@ -4,7 +4,9 @@ import grpc
 import warnings
 
 from protos import add_recipes_pb2 as protos_dot_add__recipes__pb2
+from protos import faiss_index_thread_pb2 as protos_dot_faiss__index__thread__pb2
 from protos import health_pb2 as protos_dot_health__pb2
+from protos import init_faiss_index_pb2 as protos_dot_init__faiss__index__pb2
 from protos import recipe_pb2 as protos_dot_recipe__pb2
 from protos import search_recipes_by_ingredients_pb2 as protos_dot_search__recipes__by__ingredients__pb2
 
@@ -57,6 +59,16 @@ class RecipeSearchServiceStub(object):
                 request_serializer=protos_dot_add__recipes__pb2.AddRecipesRequest.SerializeToString,
                 response_deserializer=protos_dot_add__recipes__pb2.AddRecipesResponse.FromString,
                 _registered_method=True)
+        self.InitFaissIndex = channel.unary_unary(
+                '/RecipeSearchService/InitFaissIndex',
+                request_serializer=protos_dot_init__faiss__index__pb2.InitFaissIndexRequest.SerializeToString,
+                response_deserializer=protos_dot_init__faiss__index__pb2.InitFaissIndexResponse.FromString,
+                _registered_method=True)
+        self.GetFaissIndexThread = channel.unary_unary(
+                '/RecipeSearchService/GetFaissIndexThread',
+                request_serializer=protos_dot_faiss__index__thread__pb2.FaissIndexThreadRequest.SerializeToString,
+                response_deserializer=protos_dot_faiss__index__thread__pb2.FaissIndexThreadResponse.FromString,
+                _registered_method=True)
 
 
 class RecipeSearchServiceServicer(object):
@@ -90,6 +102,18 @@ class RecipeSearchServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def InitFaissIndex(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetFaissIndexThread(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_RecipeSearchServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -112,6 +136,16 @@ def add_RecipeSearchServiceServicer_to_server(servicer, server):
                     servicer.AddRecipes,
                     request_deserializer=protos_dot_add__recipes__pb2.AddRecipesRequest.FromString,
                     response_serializer=protos_dot_add__recipes__pb2.AddRecipesResponse.SerializeToString,
+            ),
+            'InitFaissIndex': grpc.unary_unary_rpc_method_handler(
+                    servicer.InitFaissIndex,
+                    request_deserializer=protos_dot_init__faiss__index__pb2.InitFaissIndexRequest.FromString,
+                    response_serializer=protos_dot_init__faiss__index__pb2.InitFaissIndexResponse.SerializeToString,
+            ),
+            'GetFaissIndexThread': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetFaissIndexThread,
+                    request_deserializer=protos_dot_faiss__index__thread__pb2.FaissIndexThreadRequest.FromString,
+                    response_serializer=protos_dot_faiss__index__thread__pb2.FaissIndexThreadResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -222,6 +256,60 @@ class RecipeSearchService(object):
             '/RecipeSearchService/AddRecipes',
             protos_dot_add__recipes__pb2.AddRecipesRequest.SerializeToString,
             protos_dot_add__recipes__pb2.AddRecipesResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def InitFaissIndex(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/RecipeSearchService/InitFaissIndex',
+            protos_dot_init__faiss__index__pb2.InitFaissIndexRequest.SerializeToString,
+            protos_dot_init__faiss__index__pb2.InitFaissIndexResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetFaissIndexThread(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/RecipeSearchService/GetFaissIndexThread',
+            protos_dot_faiss__index__thread__pb2.FaissIndexThreadRequest.SerializeToString,
+            protos_dot_faiss__index__thread__pb2.FaissIndexThreadResponse.FromString,
             options,
             channel_credentials,
             insecure,
