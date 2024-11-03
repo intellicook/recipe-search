@@ -2,6 +2,8 @@ from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
 
+# Import the database module to ensure the database is created
+import infra.db  # noqa: F401
 from alembic import context
 from configs import db
 from infra import models
