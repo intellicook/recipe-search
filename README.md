@@ -115,6 +115,7 @@ Then replace the content with the following:
 ```json
 {
     "editor.formatOnSave": true,
+    "python.envFile": "",
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter",
     },
@@ -127,6 +128,8 @@ Then replace the content with the following:
     ],
 }
 ```
+
+**Important**: The `python.envFile` option is quite important, because it will set the environment variables from the `.env` file automatically in the terminal, but when we run the tests, we want to use the `.env.test` file instead. So we need to set it to an empty string.
 
 ## Development
 

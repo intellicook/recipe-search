@@ -86,6 +86,17 @@ def get_recipes(ids: Iterable[int]) -> List[models.RecipeModel]:
     return recipes
 
 
+def add_recipes(recipes: Iterable[models.RecipeModel]):
+    """Add the recipes to the database.
+
+    Arguments:
+        recipes (Iterable[models.RecipeModel]): The recipes to add.
+    """
+    with Session(engine) as session:
+        session.add_all(recipes)
+        session.commit()
+
+
 def search_recipes_by_ingredients(
     ingredients: Iterable[str],
     limit: int = configs.default_search_limit,

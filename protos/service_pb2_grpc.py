@@ -3,6 +3,7 @@
 import grpc
 import warnings
 
+from protos import add_recipes_pb2 as protos_dot_add__recipes__pb2
 from protos import health_pb2 as protos_dot_health__pb2
 from protos import recipe_pb2 as protos_dot_recipe__pb2
 from protos import search_recipes_by_ingredients_pb2 as protos_dot_search__recipes__by__ingredients__pb2
@@ -51,13 +52,20 @@ class RecipeSearchServiceStub(object):
                 request_serializer=protos_dot_search__recipes__by__ingredients__pb2.SearchRecipesByIngredientsRequest.SerializeToString,
                 response_deserializer=protos_dot_search__recipes__by__ingredients__pb2.SearchRecipesByIngredientsResponse.FromString,
                 _registered_method=True)
+        self.AddRecipes = channel.unary_unary(
+                '/RecipeSearchService/AddRecipes',
+                request_serializer=protos_dot_add__recipes__pb2.AddRecipesRequest.SerializeToString,
+                response_deserializer=protos_dot_add__recipes__pb2.AddRecipesResponse.FromString,
+                _registered_method=True)
 
 
 class RecipeSearchServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def GetHealth(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Core services
+
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -70,6 +78,14 @@ class RecipeSearchServiceServicer(object):
 
     def SearchRecipesByIngredients(self, request, context):
         """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def AddRecipes(self, request, context):
+        """Admin services
+
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -91,6 +107,11 @@ def add_RecipeSearchServiceServicer_to_server(servicer, server):
                     servicer.SearchRecipesByIngredients,
                     request_deserializer=protos_dot_search__recipes__by__ingredients__pb2.SearchRecipesByIngredientsRequest.FromString,
                     response_serializer=protos_dot_search__recipes__by__ingredients__pb2.SearchRecipesByIngredientsResponse.SerializeToString,
+            ),
+            'AddRecipes': grpc.unary_unary_rpc_method_handler(
+                    servicer.AddRecipes,
+                    request_deserializer=protos_dot_add__recipes__pb2.AddRecipesRequest.FromString,
+                    response_serializer=protos_dot_add__recipes__pb2.AddRecipesResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -174,6 +195,33 @@ class RecipeSearchService(object):
             '/RecipeSearchService/SearchRecipesByIngredients',
             protos_dot_search__recipes__by__ingredients__pb2.SearchRecipesByIngredientsRequest.SerializeToString,
             protos_dot_search__recipes__by__ingredients__pb2.SearchRecipesByIngredientsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def AddRecipes(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/RecipeSearchService/AddRecipes',
+            protos_dot_add__recipes__pb2.AddRecipesRequest.SerializeToString,
+            protos_dot_add__recipes__pb2.AddRecipesResponse.FromString,
             options,
             channel_credentials,
             insecure,

@@ -1,5 +1,3 @@
-from unittest import mock
-
 import grpc
 import pytest
 import pytest_mock
@@ -56,7 +54,7 @@ def test_search_recipes_by_ingredients_success(
     response = servicer.SearchRecipesByIngredients(request, context)
 
     mock_search.assert_called_once_with(ingredients=ingredients, limit=limit)
-    mock_get_recipes.assert_called_once_with(mock.ANY)
+    mock_get_recipes.assert_called_once_with(mocker.ANY)
     assert all(
         recipe.id in mock_get_recipes.call_args.args[0] for recipe in recipes
     )
@@ -83,7 +81,7 @@ def test_search_recipes_by_ingredients_empty_ingredients(
     )
 
     context = mocker.MagicMock()
-    context.abort = mock.MagicMock(side_effect=grpc.RpcError)
+    context.abort = mocker.MagicMock(side_effect=grpc.RpcError)
 
     servicer = RecipeSearchServicer()
     with pytest.raises(grpc.RpcError):
@@ -139,7 +137,7 @@ def test_search_recipes_by_ingredients_limit_null(
     mock_search.assert_called_once_with(
         ingredients=ingredients, limit=configs.default_search_limit
     )
-    mock_get_recipes.assert_called_once_with(mock.ANY)
+    mock_get_recipes.assert_called_once_with(mocker.ANY)
     assert response == SearchRecipesByIngredientsResponse(
         recipes=[
             SearchRecipesByIngredientsRecipe(
@@ -163,7 +161,7 @@ def test_search_recipes_by_ingredients_limit_zero(
     )
 
     context = mocker.MagicMock()
-    context.abort = mock.MagicMock(side_effect=grpc.RpcError)
+    context.abort = mocker.MagicMock(side_effect=grpc.RpcError)
 
     servicer = RecipeSearchServicer()
     with pytest.raises(grpc.RpcError):

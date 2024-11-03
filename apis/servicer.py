@@ -5,7 +5,8 @@ from sqlalchemy.exc import NoResultFound
 
 from configs.domain import configs as domain_configs
 from domain import controllers
-from infra import db
+from infra import db, models
+from protos.add_recipes_pb2 import AddRecipesRequest, AddRecipesResponse
 from protos.health_pb2 import (
     HealthCheck,
     HealthRequest,
@@ -111,3 +112,27 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
                 for (id, distance), recipe in zip(results, recipes)
             ],
         )
+
+    def AddRecipes(
+        self,
+        request: AddRecipesRequest,
+        context: grpc.ServicerContext,
+    ) -> AddRecipesResponse:
+        """Add the recipes to the database"""
+        if not request.recipes:
+            context.abort(
+                grpc.StatusCode.INVALID_ARGUMENT,
+                "Recipes cannot be empty",
+            )
+
+        controllers.add_recipes(
+            models.RecipeModel(
+                name=recipe.name,
+                ingredients=recipe.ingredients,
+                instructions=recipe.instructions,
+                raw=recipe.raw,
+            )
+            for recipe in request.recipes
+        )
+
+        return AddRecipesResponse()
