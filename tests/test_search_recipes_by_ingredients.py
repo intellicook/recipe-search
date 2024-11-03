@@ -171,3 +171,32 @@ def test_search_recipes_by_ingredients_limit_zero(
         grpc.StatusCode.INVALID_ARGUMENT,
         "Limit must be a positive integer",
     )
+
+
+def test_search_recipes_by_ingredients_embedding_not_initialized(
+    mocker: pytest_mock.MockerFixture,
+):
+    username = "test_username"
+    ingredients = ["apple", "banana"]
+    limit = 3
+    request = SearchRecipesByIngredientsRequest(
+        username=username, ingredients=ingredients, limit=limit
+    )
+
+    mock_search = mocker.patch(
+        "domain.controllers.search_recipes_by_ingredients",
+        return_value=None,
+    )
+
+    context = mocker.MagicMock()
+    context.abort = mocker.MagicMock(side_effect=grpc.RpcError)
+
+    servicer = RecipeSearchServicer()
+    with pytest.raises(grpc.RpcError):
+        servicer.SearchRecipesByIngredients(request, context)
+
+    mock_search.assert_called_once_with(ingredients=ingredients, limit=limit)
+    context.abort.assert_called_once_with(
+        grpc.StatusCode.FAILED_PRECONDITION,
+        "Embedding model is not initialized",
+    )

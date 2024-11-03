@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option csharp_namespace = "IntelliCook.RecipeSearch.Client";
+
+message FaissIndexThreadRequest {
+
+}
+
+message FaissIndexThreadResponse {
+    optional FaissIndexThreadArgs args = 1;
+    bool is_in_progress = 2;
+    bool is_complete = 3;
+    bool is_successful = 4;
+}
+
+message FaissIndexThreadArgs {
+    uint32 count = 1;
+    string model = 2;
+    string path = 3;
+}

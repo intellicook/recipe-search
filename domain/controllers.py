@@ -1,11 +1,12 @@
 import logging
-from typing import Iterable, List, Tuple, Type
+from typing import Iterable, List, Optional, Tuple, Type
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from configs.domain import configs
 from domain import embeddings
+from domain.embeddings import faiss
 from domain.embeddings.base import BaseEmbedding
 from infra import models
 from infra.db import engine
@@ -13,14 +14,14 @@ from infra.db import engine
 logger = logging.getLogger(__name__)
 
 
-def init_embedding(cls: Type[BaseEmbedding]) -> BaseEmbedding:
+def init_embedding(cls: Type[BaseEmbedding]) -> Optional[BaseEmbedding]:
     """Initialize the embedding model.
 
     Arguments:
         cls (Type[BaseEmbedding]): The embedding class to initialize.
 
     Returns:
-        BaseEmbedding: The initialized embedding model.
+        Optional[BaseEmbedding]: The initialized embedding model.
     """
     with Session(engine) as session:
         stmt = select(func.count()).select_from(models.IndexFileModel)
@@ -28,10 +29,9 @@ def init_embedding(cls: Type[BaseEmbedding]) -> BaseEmbedding:
 
         if count == 0:
             logger.error(
-                "Index file not found, please initialize an index file by"
-                " running `python -m domain.init_index <path> [<count>]`"
+                "Index file not found, please initialize an index first"
             )
-            raise FileNotFoundError
+            return None
         if count > 1:
             logger.warning(
                 "Multiple index files currently not supported, using the"
@@ -46,12 +46,19 @@ def init_embedding(cls: Type[BaseEmbedding]) -> BaseEmbedding:
     except FileNotFoundError:
         logger.error(
             f"Index file at {index_file.path} not found, database is out of"
-            " sync with file system"
+            " sync with file system, please reinitialize the index"
         )
+        return None
 
     logger.info(f"{cls.__name__} initialized")
 
     return model
+
+
+def reinit_embedding():
+    """Reinitialize the embedding model in place."""
+    global embedding
+    embedding = init_embedding(embeddings.model)
 
 
 def get_recipe(id: int) -> models.RecipeModel:
@@ -100,7 +107,7 @@ def add_recipes(recipes: Iterable[models.RecipeModel]):
 def search_recipes_by_ingredients(
     ingredients: Iterable[str],
     limit: int = configs.default_search_limit,
-) -> List[Tuple[int, float]]:
+) -> Optional[List[Tuple[int, float]]]:
     """Search recipes by ingredients.
 
     Arguments:
@@ -109,12 +116,38 @@ def search_recipes_by_ingredients(
             Defaults to configs.domain.configs.default_search_limit.
 
     Returns:
-        List[Tuple[int, float]]: A series of recipe IDs and their
+        Optional[List[Tuple[int, float]]]: A series of recipe IDs and their
             corresponding similarity scores.
     """
+    if embedding is None:
+        return None
+
     distances, indices = embedding.search(ingredients, limit=limit)
 
     return sorted(list(zip(indices, distances)), key=lambda x: x[1])
+
+
+def init_faiss_index(
+    count: int = None,
+    path: str = configs.default_faiss_index_path,
+):
+    """Initialize the Faiss index.
+
+    Arguments:
+        count (int): The number of recipes to index. Defaults to None.
+        path (str): The path to save the index. Defaults to
+            configs.domain.configs.default_faiss_index_path.
+    """
+    faiss.init_index(count, configs.embedding_model, path, reinit_embedding)
+
+
+def get_faiss_index_thread() -> faiss.IndexThread:
+    """Get the Faiss index thread.
+
+    Returns:
+        faiss.FaissIndexThread: The Faiss index thread.
+    """
+    return faiss.index_thread
 
 
 embedding = init_embedding(embeddings.model)
