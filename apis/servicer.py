@@ -7,6 +7,7 @@ from configs.domain import configs as domain_configs
 from domain import controllers
 from infra import db, models
 from protos.add_recipes_pb2 import AddRecipesRequest, AddRecipesResponse
+from protos.chat_by_recipe_pb2 import ChatByRecipeRequest, ChatByRecipeResponse
 from protos.faiss_index_thread_pb2 import (
     FaissIndexThreadArgs,
     FaissIndexThreadRequest,
@@ -200,4 +201,31 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
             is_in_progress=thread.is_in_progress,
             is_complete=thread.is_complete,
             is_successful=thread.is_successful,
+        )
+
+    def ChatByRecipe(
+        self,
+        request: ChatByRecipeRequest,
+        context: grpc.ServicerContext,
+    ) -> ChatByRecipeResponse:
+        """Chat with the model by recipe"""
+        try:
+            recipe = controllers.get_recipe(request.id)
+        except NoResultFound:
+            context.abort(
+                grpc.StatusCode.NOT_FOUND,
+                f"Recipe with ID {request.id} not found",
+            )
+
+        messages = [
+            controllers.get_chat_type().get_message_type().from_proto(message)
+            for message in request.messages
+        ]
+
+        message = controllers.chat_by_recipe(request.name, recipe, messages)
+
+        response_message = message.to_proto()
+
+        return ChatByRecipeResponse(
+            message=response_message,
         )

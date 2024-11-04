@@ -25,12 +25,13 @@ _sym_db = _symbol_database.Default()
 from protos import health_pb2 as protos_dot_health__pb2
 from protos import recipe_pb2 as protos_dot_recipe__pb2
 from protos import search_recipes_by_ingredients_pb2 as protos_dot_search__recipes__by__ingredients__pb2
+from protos import chat_by_recipe_pb2 as protos_dot_chat__by__recipe__pb2
 from protos import add_recipes_pb2 as protos_dot_add__recipes__pb2
 from protos import init_faiss_index_pb2 as protos_dot_init__faiss__index__pb2
 from protos import faiss_index_thread_pb2 as protos_dot_faiss__index__thread__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14protos/service.proto\x1a\x13protos/health.proto\x1a\x13protos/recipe.proto\x1a*protos/search_recipes_by_ingredients.proto\x1a\x18protos/add_recipes.proto\x1a\x1dprotos/init_faiss_index.proto\x1a\x1fprotos/faiss_index_thread.proto2\xaa\x03\n\x13RecipeSearchService\x12.\n\tGetHealth\x12\x0e.HealthRequest\x1a\x0f.HealthResponse\"\x00\x12.\n\tGetRecipe\x12\x0e.RecipeRequest\x1a\x0f.RecipeResponse\"\x00\x12g\n\x1aSearchRecipesByIngredients\x12\".SearchRecipesByIngredientsRequest\x1a#.SearchRecipesByIngredientsResponse\"\x00\x12\x37\n\nAddRecipes\x12\x12.AddRecipesRequest\x1a\x13.AddRecipesResponse\"\x00\x12\x43\n\x0eInitFaissIndex\x12\x16.InitFaissIndexRequest\x1a\x17.InitFaissIndexResponse\"\x00\x12L\n\x13GetFaissIndexThread\x12\x18.FaissIndexThreadRequest\x1a\x19.FaissIndexThreadResponse\"\x00\x42\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14protos/service.proto\x1a\x13protos/health.proto\x1a\x13protos/recipe.proto\x1a*protos/search_recipes_by_ingredients.proto\x1a\x1bprotos/chat_by_recipe.proto\x1a\x18protos/add_recipes.proto\x1a\x1dprotos/init_faiss_index.proto\x1a\x1fprotos/faiss_index_thread.proto2\xe9\x03\n\x13RecipeSearchService\x12.\n\tGetHealth\x12\x0e.HealthRequest\x1a\x0f.HealthResponse\"\x00\x12.\n\tGetRecipe\x12\x0e.RecipeRequest\x1a\x0f.RecipeResponse\"\x00\x12g\n\x1aSearchRecipesByIngredients\x12\".SearchRecipesByIngredientsRequest\x1a#.SearchRecipesByIngredientsResponse\"\x00\x12=\n\x0c\x43hatByRecipe\x12\x14.ChatByRecipeRequest\x1a\x15.ChatByRecipeResponse\"\x00\x12\x37\n\nAddRecipes\x12\x12.AddRecipesRequest\x1a\x13.AddRecipesResponse\"\x00\x12\x43\n\x0eInitFaissIndex\x12\x16.InitFaissIndexRequest\x1a\x17.InitFaissIndexResponse\"\x00\x12L\n\x13GetFaissIndexThread\x12\x18.FaissIndexThreadRequest\x1a\x19.FaissIndexThreadResponse\"\x00\x42\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -38,6 +39,6 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'protos.service_pb2', _globa
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\252\002\037IntelliCook.RecipeSearch.Client'
-  _globals['_RECIPESEARCHSERVICE']._serialized_start=201
-  _globals['_RECIPESEARCHSERVICE']._serialized_end=627
+  _globals['_RECIPESEARCHSERVICE']._serialized_start=230
+  _globals['_RECIPESEARCHSERVICE']._serialized_end=719
 # @@protoc_insertion_point(module_scope)

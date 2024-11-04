@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option csharp_namespace = "IntelliCook.RecipeSearch.Client";
+
+message ChatByRecipeRequest {
+    int32 id = 1;
+    string username = 2;
+    string name = 3;
+    repeated ChatByRecipeMessage messages = 4;
+}
+
+message ChatByRecipeResponse {
+    ChatByRecipeMessage message = 1;
+}
+
+enum ChatByRecipeRole {
+    SYSTEM = 0;
+    USER = 1;
+    ASSISTANT = 2;
+}
+
+message ChatByRecipeMessage {
+    ChatByRecipeRole role = 1;
+    string text = 2;
+}

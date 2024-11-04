@@ -5,7 +5,8 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from configs.domain import configs
-from domain import embeddings
+from domain import chats, embeddings
+from domain.chats.base import BaseChat, BaseChatMessage
 from domain.embeddings import faiss
 from domain.embeddings.base import BaseEmbedding
 from infra import models
@@ -53,12 +54,6 @@ def init_embedding(cls: Type[BaseEmbedding]) -> Optional[BaseEmbedding]:
     logger.info(f"{cls.__name__} initialized")
 
     return model
-
-
-def reinit_embedding():
-    """Reinitialize the embedding model in place."""
-    global embedding
-    embedding = init_embedding(embeddings.model)
 
 
 def get_recipe(id: int) -> models.RecipeModel:
@@ -119,7 +114,13 @@ def search_recipes_by_ingredients(
         Optional[List[Tuple[int, float]]]: A series of recipe IDs and their
             corresponding similarity scores.
     """
+    logger.debug(
+        f"Searching for recipes by ingredients {ingredients} with limit"
+        f" {limit}"
+    )
+
     if embedding is None:
+        logger.debug("Embedding model is not initialized")
         return None
 
     distances, indices = embedding.search(ingredients, limit=limit)
@@ -138,7 +139,15 @@ def init_faiss_index(
         path (str): The path to save the index. Defaults to
             configs.domain.configs.default_faiss_index_path.
     """
-    faiss.init_index(count, configs.embedding_model, path, reinit_embedding)
+    logger.debug(
+        f"Initializing Faiss index with count {count} and path {path}"
+    )
+
+    def _reinit_embedding():
+        global embedding
+        embedding = init_embedding(embeddings.model)
+
+    faiss.init_index(count, configs.embedding_model, path, _reinit_embedding)
 
 
 def get_faiss_index_thread() -> faiss.IndexThread:
@@ -148,6 +157,41 @@ def get_faiss_index_thread() -> faiss.IndexThread:
         faiss.FaissIndexThread: The Faiss index thread.
     """
     return faiss.index_thread
+
+
+def get_chat_type() -> Type[BaseChat]:
+    """Get the chat model.
+
+    Returns:
+        Type[BaseChat]: The chat model.
+    """
+    return chats.model
+
+
+def chat_by_recipe(
+    name: str,
+    recipe: models.RecipeModel,
+    messages: Iterable[BaseChatMessage],
+) -> BaseChatMessage:
+    """Chat with the model by recipe.
+
+    Arguments:
+        name (str): The name of the user.
+        recipe (models.RecipeModel): The recipe to chat with.
+        messages (Iterable[BaseChatMessage]): The messages to chat with.
+
+    Returns:
+        BaseChatMessage: The response message.
+    """
+    logger.debug(f"Chatting with {name} by recipe {recipe.name}")
+
+    chat = chats.model()
+    chat.set_user(name)
+    chat.set_recipe(recipe)
+
+    logger.debug(f"Messages: {messages}")
+
+    return chat.chat(messages)
 
 
 embedding = init_embedding(embeddings.model)
