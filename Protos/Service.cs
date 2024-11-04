@@ -26,21 +26,23 @@ namespace IntelliCook.RecipeSearch.Client {
           string.Concat(
             "ChRQcm90b3Mvc2VydmljZS5wcm90bxoTcHJvdG9zL2hlYWx0aC5wcm90bxoT",
             "cHJvdG9zL3JlY2lwZS5wcm90bxoqcHJvdG9zL3NlYXJjaF9yZWNpcGVzX2J5",
-            "X2luZ3JlZGllbnRzLnByb3RvGhhwcm90b3MvYWRkX3JlY2lwZXMucHJvdG8a",
-            "HXByb3Rvcy9pbml0X2ZhaXNzX2luZGV4LnByb3RvGh9wcm90b3MvZmFpc3Nf",
-            "aW5kZXhfdGhyZWFkLnByb3RvMqoDChNSZWNpcGVTZWFyY2hTZXJ2aWNlEi4K",
-            "CUdldEhlYWx0aBIOLkhlYWx0aFJlcXVlc3QaDy5IZWFsdGhSZXNwb25zZSIA",
-            "Ei4KCUdldFJlY2lwZRIOLlJlY2lwZVJlcXVlc3QaDy5SZWNpcGVSZXNwb25z",
-            "ZSIAEmcKGlNlYXJjaFJlY2lwZXNCeUluZ3JlZGllbnRzEiIuU2VhcmNoUmVj",
-            "aXBlc0J5SW5ncmVkaWVudHNSZXF1ZXN0GiMuU2VhcmNoUmVjaXBlc0J5SW5n",
-            "cmVkaWVudHNSZXNwb25zZSIAEjcKCkFkZFJlY2lwZXMSEi5BZGRSZWNpcGVz",
-            "UmVxdWVzdBoTLkFkZFJlY2lwZXNSZXNwb25zZSIAEkMKDkluaXRGYWlzc0lu",
-            "ZGV4EhYuSW5pdEZhaXNzSW5kZXhSZXF1ZXN0GhcuSW5pdEZhaXNzSW5kZXhS",
-            "ZXNwb25zZSIAEkwKE0dldEZhaXNzSW5kZXhUaHJlYWQSGC5GYWlzc0luZGV4",
-            "VGhyZWFkUmVxdWVzdBoZLkZhaXNzSW5kZXhUaHJlYWRSZXNwb25zZSIAQiKq",
-            "Ah9JbnRlbGxpQ29vay5SZWNpcGVTZWFyY2guQ2xpZW50YgZwcm90bzM="));
+            "X2luZ3JlZGllbnRzLnByb3RvGhtwcm90b3MvY2hhdF9ieV9yZWNpcGUucHJv",
+            "dG8aGHByb3Rvcy9hZGRfcmVjaXBlcy5wcm90bxodcHJvdG9zL2luaXRfZmFp",
+            "c3NfaW5kZXgucHJvdG8aH3Byb3Rvcy9mYWlzc19pbmRleF90aHJlYWQucHJv",
+            "dG8y6QMKE1JlY2lwZVNlYXJjaFNlcnZpY2USLgoJR2V0SGVhbHRoEg4uSGVh",
+            "bHRoUmVxdWVzdBoPLkhlYWx0aFJlc3BvbnNlIgASLgoJR2V0UmVjaXBlEg4u",
+            "UmVjaXBlUmVxdWVzdBoPLlJlY2lwZVJlc3BvbnNlIgASZwoaU2VhcmNoUmVj",
+            "aXBlc0J5SW5ncmVkaWVudHMSIi5TZWFyY2hSZWNpcGVzQnlJbmdyZWRpZW50",
+            "c1JlcXVlc3QaIy5TZWFyY2hSZWNpcGVzQnlJbmdyZWRpZW50c1Jlc3BvbnNl",
+            "IgASPQoMQ2hhdEJ5UmVjaXBlEhQuQ2hhdEJ5UmVjaXBlUmVxdWVzdBoVLkNo",
+            "YXRCeVJlY2lwZVJlc3BvbnNlIgASNwoKQWRkUmVjaXBlcxISLkFkZFJlY2lw",
+            "ZXNSZXF1ZXN0GhMuQWRkUmVjaXBlc1Jlc3BvbnNlIgASQwoOSW5pdEZhaXNz",
+            "SW5kZXgSFi5Jbml0RmFpc3NJbmRleFJlcXVlc3QaFy5Jbml0RmFpc3NJbmRl",
+            "eFJlc3BvbnNlIgASTAoTR2V0RmFpc3NJbmRleFRocmVhZBIYLkZhaXNzSW5k",
+            "ZXhUaHJlYWRSZXF1ZXN0GhkuRmFpc3NJbmRleFRocmVhZFJlc3BvbnNlIgBC",
+            "IqoCH0ludGVsbGlDb29rLlJlY2lwZVNlYXJjaC5DbGllbnRiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::IntelliCook.RecipeSearch.Client.HealthReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.RecipeReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.AddRecipesReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.InitFaissIndexReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.FaissIndexThreadReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::IntelliCook.RecipeSearch.Client.HealthReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.RecipeReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.SearchRecipesByIngredientsReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.ChatByRecipeReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.AddRecipesReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.InitFaissIndexReflection.Descriptor, global::IntelliCook.RecipeSearch.Client.FaissIndexThreadReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, null));
     }
     #endregion
