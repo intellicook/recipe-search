@@ -23,7 +23,7 @@ class SentenceTransformerEmbedding(BaseEmbedding):
         prompt: str
 
     logger: logging.Logger
-    init_configs: Configs
+    configs: Configs
     model: SentenceTransformer
     index: faiss.IndexIDMap
 
@@ -33,9 +33,9 @@ class SentenceTransformerEmbedding(BaseEmbedding):
         index: Optional[faiss.IndexIDMap] = None,
     ):
         self.logger = logging.getLogger(__name__)
-        self.init_configs = init_configs
+        self.configs = init_configs
         self.model = SentenceTransformer(
-            self.init_configs.model, trust_remote_code=True
+            self.configs.model, trust_remote_code=True
         )
 
         if torch.cuda.is_available():
@@ -45,7 +45,7 @@ class SentenceTransformerEmbedding(BaseEmbedding):
             faiss.IndexFlatIP(self.model.get_sentence_embedding_dimension())
         )
 
-        self.logger.info(f"{self.init_configs.model} initialized")
+        self.logger.info(f"{self.configs.model} initialized")
 
     @classmethod
     def load_from_file(
@@ -87,7 +87,7 @@ class SentenceTransformerEmbedding(BaseEmbedding):
         """
         test = self.model.encode(
             ", ".join(ingredients),
-            prompt=self.init_configs.prompt if is_query else None,
+            prompt=self.configs.prompt if is_query else None,
             normalize_embeddings=True,
         )
         return test

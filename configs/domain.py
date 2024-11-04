@@ -10,6 +10,7 @@ class DomainConfigs(BaseConfigs):
     default_faiss_index_path: str = Field("index.faiss")
     default_search_limit: int = Field(10)
     embedding_model: str
+    chat_model: str
 
     model_config = SettingsConfigDict(
         env_prefix="DOMAIN_",

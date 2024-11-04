@@ -1,4 +1,4 @@
-from typing import Any, Iterable, List
+from typing import Any, Iterable, List, Type
 
 from configs.domain import configs
 from infra import models
@@ -31,4 +31,16 @@ def init_faiss_index(
 
 
 def get_faiss_index_thread() -> Any:  # faiss.IndexThread
+    pass
+
+
+def get_chat_type() -> Type[Any]:  # Type[BaseChat]
+    pass
+
+
+def chat_by_recipe(
+    name: str,
+    recipe: models.RecipeModel,
+    messages: Iterable[Any],  # Iterablep[BaseChatMessage]
+) -> Any:  # BaseChatMessage
     pass
