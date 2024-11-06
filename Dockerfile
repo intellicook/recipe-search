@@ -9,9 +9,13 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # Install dependencies
-RUN pip install --upgrade pip
+RUN pip install --no-compile --no-cache-dir --upgrade pip
+RUN pip install --no-compile --no-cache-dir numpy==2.1.2 pillow==11.0.0 Jinja2==3.1.4
+RUN pip install --no-compile --no-cache-dir \
+    torch==2.5.1+cpu torchaudio==2.5.1+cpu torchvision==0.20.1+cpu \
+    -i https://download.pytorch.org/whl/cpu
 COPY ./requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-compile --no-cache-dir -r requirements.txt
 
 # Copy entrypoint.sh
 COPY ./entrypoint.sh .

@@ -74,6 +74,14 @@ source .venv/bin/activate.csh
 
 Install the dependencies.
 ```bash
+# Install the dependencies of PyTorch
+pip install numpy==2.1.2 pillow==11.0.0 Jinja2==3.1.4
+
+# Install the CPU version of PyTorch if you want to use it
+pip install torch==2.5.1+cpu torchaudio==2.5.1+cpu torchvision==0.20.1+cpu \
+    -i https://download.pytorch.org/whl/cpu
+
+# Install the main requirements
 pip install -r requirements.txt
 ```
 
