@@ -6,7 +6,7 @@ services:
       - .:/usr/app
       - data:/usr/data
     ports:
-      - 2505:${API_PORT}
+      - 2505:2505
     env_file:
       - .env
     environment:
