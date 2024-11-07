@@ -1,5 +1,4 @@
-from dataclasses import Field
-
+from pydantic import Field
 from pydantic_settings import SettingsConfigDict
 
 from configs.base import BaseConfigs
