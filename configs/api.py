@@ -1,3 +1,5 @@
+from dataclasses import Field
+
 from pydantic_settings import SettingsConfigDict
 
 from configs.base import BaseConfigs
@@ -6,7 +8,7 @@ from configs.base import BaseConfigs
 class APIConfigs(BaseConfigs):
     """API server configuration"""
 
-    port: str
+    port: str = Field("2505")
 
     model_config = SettingsConfigDict(
         env_prefix="API_",
