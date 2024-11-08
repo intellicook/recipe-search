@@ -6,7 +6,11 @@ from sqlalchemy.exc import NoResultFound
 from configs.domain import configs as domain_configs
 from domain import controllers
 from infra import db, models
-from protos.add_recipes_pb2 import AddRecipesRequest, AddRecipesResponse
+from protos.add_recipes_pb2 import (
+    AddRecipesRequest,
+    AddRecipesResponse,
+    AddRecipesResponseRecipe,
+)
 from protos.chat_by_recipe_pb2 import ChatByRecipeRequest, ChatByRecipeResponse
 from protos.faiss_index_thread_pb2 import (
     FaissIndexThreadArgs,
@@ -79,9 +83,11 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
             )
 
         return RecipeResponse(
+            id=recipe.id,
             name=recipe.name,
             ingredients=recipe.ingredients,
             instructions=recipe.instructions,
+            raw=recipe.raw,
         )
 
     def SearchRecipesByIngredients(
@@ -141,17 +147,30 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
                 "Recipes cannot be empty",
             )
 
-        controllers.add_recipes(
-            models.RecipeModel(
-                name=recipe.name,
-                ingredients=recipe.ingredients,
-                instructions=recipe.instructions,
-                raw=recipe.raw,
-            )
-            for recipe in request.recipes
+        recipes = controllers.add_recipes(
+            [
+                models.RecipeModel(
+                    name=recipe.name,
+                    ingredients=list(recipe.ingredients),
+                    instructions=list(recipe.instructions),
+                    raw=recipe.raw,
+                )
+                for recipe in request.recipes
+            ],
         )
 
-        return AddRecipesResponse()
+        return AddRecipesResponse(
+            recipes=[
+                AddRecipesResponseRecipe(
+                    id=recipe.id,
+                    name=recipe.name,
+                    ingredients=recipe.ingredients,
+                    instructions=recipe.instructions,
+                    raw=recipe.raw,
+                )
+                for recipe in recipes
+            ],
+        )
 
     def InitFaissIndex(
         self,

@@ -3,41 +3,73 @@ import pytest
 import pytest_mock
 
 from apis.servicer import RecipeSearchServicer
-from protos.add_recipes_pb2 import AddRecipesRecipe, AddRecipesRequest
+from infra.models import RecipeModel
+from protos.add_recipes_pb2 import (
+    AddRecipesRequest,
+    AddRecipesRequestRecipe,
+    AddRecipesResponse,
+    AddRecipesResponseRecipe,
+)
 
 
 def test_add_recipes_success(
     mocker: pytest_mock.MockerFixture,
 ):
     recipes = [
-        AddRecipesRecipe(
-            name="Recipe 1",
-            ingredients=["Ingredient 1", "Ingredient 2"],
-            instructions=["Instruction 1", "Instruction 2"],
-            raw="Raw 1",
+        RecipeModel(
+            id=1,
+            name="test_name",
+            ingredients=["apple", "banana"],
+            instructions=["step 1", "step 2"],
+            raw="raw recipe",
         ),
-        AddRecipesRecipe(
-            name="Recipe 2",
-            ingredients=["Ingredient 3", "Ingredient 4"],
-            instructions=["Instruction 3", "Instruction 4"],
-            raw="Raw 2",
+        RecipeModel(
+            id=2,
+            name="test_name",
+            ingredients=["apple", "banana"],
+            instructions=["step 1", "step 2"],
+            raw="raw recipe",
         ),
     ]
+    request_recipes = [
+        AddRecipesRequestRecipe(
+            name=recipe.name,
+            ingredients=recipe.ingredients,
+            instructions=recipe.instructions,
+            raw=recipe.raw,
+        )
+        for recipe in recipes
+    ]
+    response_recipes = [
+        AddRecipesResponseRecipe(
+            id=recipe.id,
+            name=recipe.name,
+            ingredients=recipe.ingredients,
+            instructions=recipe.instructions,
+            raw=recipe.raw,
+        )
+        for recipe in recipes
+    ]
     request = AddRecipesRequest(
-        recipes=recipes,
+        recipes=request_recipes,
+    )
+    expected_response = AddRecipesResponse(
+        recipes=response_recipes,
     )
 
     mock_add_recipes = mocker.patch(
         "domain.controllers.add_recipes",
+        return_value=recipes,
     )
 
     context = mocker.MagicMock()
 
     servicer = RecipeSearchServicer()
-    servicer.AddRecipes(request, context)
+    response = servicer.AddRecipes(request, context)
 
     mock_add_recipes.assert_called_once_with(mocker.ANY)
     assert (recipe in mock_add_recipes.call_args.args[0] for recipe in recipes)
+    assert response == expected_response
 
 
 def test_add_recipes_empty_recipes(
@@ -50,6 +82,7 @@ def test_add_recipes_empty_recipes(
 
     mock_add_recipes = mocker.patch(
         "domain.controllers.add_recipes",
+        return_value=recipes,
     )
 
     context = mocker.MagicMock()

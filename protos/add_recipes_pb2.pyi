@@ -8,14 +8,16 @@ DESCRIPTOR: _descriptor.FileDescriptor
 class AddRecipesRequest(_message.Message):
     __slots__ = ("recipes",)
     RECIPES_FIELD_NUMBER: _ClassVar[int]
-    recipes: _containers.RepeatedCompositeFieldContainer[AddRecipesRecipe]
-    def __init__(self, recipes: _Optional[_Iterable[_Union[AddRecipesRecipe, _Mapping]]] = ...) -> None: ...
+    recipes: _containers.RepeatedCompositeFieldContainer[AddRecipesRequestRecipe]
+    def __init__(self, recipes: _Optional[_Iterable[_Union[AddRecipesRequestRecipe, _Mapping]]] = ...) -> None: ...
 
 class AddRecipesResponse(_message.Message):
-    __slots__ = ()
-    def __init__(self) -> None: ...
+    __slots__ = ("recipes",)
+    RECIPES_FIELD_NUMBER: _ClassVar[int]
+    recipes: _containers.RepeatedCompositeFieldContainer[AddRecipesResponseRecipe]
+    def __init__(self, recipes: _Optional[_Iterable[_Union[AddRecipesResponseRecipe, _Mapping]]] = ...) -> None: ...
 
-class AddRecipesRecipe(_message.Message):
+class AddRecipesRequestRecipe(_message.Message):
     __slots__ = ("name", "ingredients", "instructions", "raw")
     NAME_FIELD_NUMBER: _ClassVar[int]
     INGREDIENTS_FIELD_NUMBER: _ClassVar[int]
@@ -26,3 +28,17 @@ class AddRecipesRecipe(_message.Message):
     instructions: _containers.RepeatedScalarFieldContainer[str]
     raw: str
     def __init__(self, name: _Optional[str] = ..., ingredients: _Optional[_Iterable[str]] = ..., instructions: _Optional[_Iterable[str]] = ..., raw: _Optional[str] = ...) -> None: ...
+
+class AddRecipesResponseRecipe(_message.Message):
+    __slots__ = ("id", "name", "ingredients", "instructions", "raw")
+    ID_FIELD_NUMBER: _ClassVar[int]
+    NAME_FIELD_NUMBER: _ClassVar[int]
+    INGREDIENTS_FIELD_NUMBER: _ClassVar[int]
+    INSTRUCTIONS_FIELD_NUMBER: _ClassVar[int]
+    RAW_FIELD_NUMBER: _ClassVar[int]
+    id: int
+    name: str
+    ingredients: _containers.RepeatedScalarFieldContainer[str]
+    instructions: _containers.RepeatedScalarFieldContainer[str]
+    raw: str
+    def __init__(self, id: _Optional[int] = ..., name: _Optional[str] = ..., ingredients: _Optional[_Iterable[str]] = ..., instructions: _Optional[_Iterable[str]] = ..., raw: _Optional[str] = ...) -> None: ...

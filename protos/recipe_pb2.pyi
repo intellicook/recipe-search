@@ -12,11 +12,15 @@ class RecipeRequest(_message.Message):
     def __init__(self, id: _Optional[int] = ...) -> None: ...
 
 class RecipeResponse(_message.Message):
-    __slots__ = ("name", "ingredients", "instructions")
+    __slots__ = ("id", "name", "ingredients", "instructions", "raw")
+    ID_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
     INGREDIENTS_FIELD_NUMBER: _ClassVar[int]
     INSTRUCTIONS_FIELD_NUMBER: _ClassVar[int]
+    RAW_FIELD_NUMBER: _ClassVar[int]
+    id: int
     name: str
     ingredients: _containers.RepeatedScalarFieldContainer[str]
     instructions: _containers.RepeatedScalarFieldContainer[str]
-    def __init__(self, name: _Optional[str] = ..., ingredients: _Optional[_Iterable[str]] = ..., instructions: _Optional[_Iterable[str]] = ...) -> None: ...
+    raw: str
+    def __init__(self, id: _Optional[int] = ..., name: _Optional[str] = ..., ingredients: _Optional[_Iterable[str]] = ..., instructions: _Optional[_Iterable[str]] = ..., raw: _Optional[str] = ...) -> None: ...

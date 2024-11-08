@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13protos/recipe.proto\"\x1b\n\rRecipeRequest\x12\n\n\x02id\x18\x01 \x01(\x05\"I\n\x0eRecipeResponse\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x13\n\x0bingredients\x18\x02 \x03(\t\x12\x14\n\x0cinstructions\x18\x03 \x03(\tB\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x13protos/recipe.proto\"\x1b\n\rRecipeRequest\x12\n\n\x02id\x18\x01 \x01(\x05\"b\n\x0eRecipeResponse\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0bingredients\x18\x03 \x03(\t\x12\x14\n\x0cinstructions\x18\x04 \x03(\t\x12\x0b\n\x03raw\x18\x05 \x01(\tB\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -35,5 +35,5 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_RECIPEREQUEST']._serialized_start=23
   _globals['_RECIPEREQUEST']._serialized_end=50
   _globals['_RECIPERESPONSE']._serialized_start=52
-  _globals['_RECIPERESPONSE']._serialized_end=125
+  _globals['_RECIPERESPONSE']._serialized_end=150
 # @@protoc_insertion_point(module_scope)

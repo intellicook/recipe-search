@@ -88,15 +88,22 @@ def get_recipes(ids: Iterable[int]) -> List[models.RecipeModel]:
     return recipes
 
 
-def add_recipes(recipes: Iterable[models.RecipeModel]):
+def add_recipes(
+    recipes: List[models.RecipeModel],
+) -> List[models.RecipeModel]:
     """Add the recipes to the database.
 
     Arguments:
-        recipes (Iterable[models.RecipeModel]): The recipes to add.
+        recipes (List[models.RecipeModel]): The recipes to add.
+
+    Returns:
+        List[models.RecipeModel]: The added recipes.
     """
-    with Session(engine) as session:
+    with Session(engine, expire_on_commit=False) as session:
         session.add_all(recipes)
         session.commit()
+
+    return recipes
 
 
 def search_recipes_by_ingredients(
