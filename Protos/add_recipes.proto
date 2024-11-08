@@ -3,15 +3,24 @@ syntax = "proto3";
 option csharp_namespace = "IntelliCook.RecipeSearch.Client";
 
 message AddRecipesRequest {
-    repeated AddRecipesRecipe recipes = 1;
+    repeated AddRecipesRequestRecipe recipes = 1;
 }
 
 message AddRecipesResponse {
+    repeated AddRecipesResponseRecipe recipes = 1;
 }
 
-message AddRecipesRecipe {
+message AddRecipesRequestRecipe {
     string name = 1;
     repeated string ingredients = 2;
     repeated string instructions = 3;
     string raw = 4;
+}
+
+message AddRecipesResponseRecipe {
+    int32 id = 1;
+    string name = 2;
+    repeated string ingredients = 3;
+    repeated string instructions = 4;
+    string raw = 5;
 }

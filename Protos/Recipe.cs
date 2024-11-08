@@ -25,14 +25,15 @@ namespace IntelliCook.RecipeSearch.Client {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChNQcm90b3MvcmVjaXBlLnByb3RvIhsKDVJlY2lwZVJlcXVlc3QSCgoCaWQY",
-            "ASABKAUiSQoOUmVjaXBlUmVzcG9uc2USDAoEbmFtZRgBIAEoCRITCgtpbmdy",
-            "ZWRpZW50cxgCIAMoCRIUCgxpbnN0cnVjdGlvbnMYAyADKAlCIqoCH0ludGVs",
-            "bGlDb29rLlJlY2lwZVNlYXJjaC5DbGllbnRiBnByb3RvMw=="));
+            "ASABKAUiYgoOUmVjaXBlUmVzcG9uc2USCgoCaWQYASABKAUSDAoEbmFtZRgC",
+            "IAEoCRITCgtpbmdyZWRpZW50cxgDIAMoCRIUCgxpbnN0cnVjdGlvbnMYBCAD",
+            "KAkSCwoDcmF3GAUgASgJQiKqAh9JbnRlbGxpQ29vay5SZWNpcGVTZWFyY2gu",
+            "Q2xpZW50YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.RecipeRequest), global::IntelliCook.RecipeSearch.Client.RecipeRequest.Parser, new[]{ "Id" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.RecipeResponse), global::IntelliCook.RecipeSearch.Client.RecipeResponse.Parser, new[]{ "Name", "Ingredients", "Instructions" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.RecipeResponse), global::IntelliCook.RecipeSearch.Client.RecipeResponse.Parser, new[]{ "Id", "Name", "Ingredients", "Instructions", "Raw" }, null, null, null, null)
           }));
     }
     #endregion
@@ -272,9 +273,11 @@ namespace IntelliCook.RecipeSearch.Client {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public RecipeResponse(RecipeResponse other) : this() {
+      id_ = other.id_;
       name_ = other.name_;
       ingredients_ = other.ingredients_.Clone();
       instructions_ = other.instructions_.Clone();
+      raw_ = other.raw_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -284,8 +287,20 @@ namespace IntelliCook.RecipeSearch.Client {
       return new RecipeResponse(this);
     }
 
+    /// <summary>Field number for the "id" field.</summary>
+    public const int IdFieldNumber = 1;
+    private int id_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Id {
+      get { return id_; }
+      set {
+        id_ = value;
+      }
+    }
+
     /// <summary>Field number for the "name" field.</summary>
-    public const int NameFieldNumber = 1;
+    public const int NameFieldNumber = 2;
     private string name_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -297,9 +312,9 @@ namespace IntelliCook.RecipeSearch.Client {
     }
 
     /// <summary>Field number for the "ingredients" field.</summary>
-    public const int IngredientsFieldNumber = 2;
+    public const int IngredientsFieldNumber = 3;
     private static readonly pb::FieldCodec<string> _repeated_ingredients_codec
-        = pb::FieldCodec.ForString(18);
+        = pb::FieldCodec.ForString(26);
     private readonly pbc::RepeatedField<string> ingredients_ = new pbc::RepeatedField<string>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -308,14 +323,26 @@ namespace IntelliCook.RecipeSearch.Client {
     }
 
     /// <summary>Field number for the "instructions" field.</summary>
-    public const int InstructionsFieldNumber = 3;
+    public const int InstructionsFieldNumber = 4;
     private static readonly pb::FieldCodec<string> _repeated_instructions_codec
-        = pb::FieldCodec.ForString(26);
+        = pb::FieldCodec.ForString(34);
     private readonly pbc::RepeatedField<string> instructions_ = new pbc::RepeatedField<string>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public pbc::RepeatedField<string> Instructions {
       get { return instructions_; }
+    }
+
+    /// <summary>Field number for the "raw" field.</summary>
+    public const int RawFieldNumber = 5;
+    private string raw_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Raw {
+      get { return raw_; }
+      set {
+        raw_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -333,9 +360,11 @@ namespace IntelliCook.RecipeSearch.Client {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (Id != other.Id) return false;
       if (Name != other.Name) return false;
       if(!ingredients_.Equals(other.ingredients_)) return false;
       if(!instructions_.Equals(other.instructions_)) return false;
+      if (Raw != other.Raw) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -343,9 +372,11 @@ namespace IntelliCook.RecipeSearch.Client {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
+      if (Id != 0) hash ^= Id.GetHashCode();
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       hash ^= ingredients_.GetHashCode();
       hash ^= instructions_.GetHashCode();
+      if (Raw.Length != 0) hash ^= Raw.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -364,12 +395,20 @@ namespace IntelliCook.RecipeSearch.Client {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
+      if (Id != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Id);
+      }
       if (Name.Length != 0) {
-        output.WriteRawTag(10);
+        output.WriteRawTag(18);
         output.WriteString(Name);
       }
       ingredients_.WriteTo(output, _repeated_ingredients_codec);
       instructions_.WriteTo(output, _repeated_instructions_codec);
+      if (Raw.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(Raw);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -380,12 +419,20 @@ namespace IntelliCook.RecipeSearch.Client {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Id != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Id);
+      }
       if (Name.Length != 0) {
-        output.WriteRawTag(10);
+        output.WriteRawTag(18);
         output.WriteString(Name);
       }
       ingredients_.WriteTo(ref output, _repeated_ingredients_codec);
       instructions_.WriteTo(ref output, _repeated_instructions_codec);
+      if (Raw.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(Raw);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -396,11 +443,17 @@ namespace IntelliCook.RecipeSearch.Client {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
+      if (Id != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Id);
+      }
       if (Name.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
       }
       size += ingredients_.CalculateSize(_repeated_ingredients_codec);
       size += instructions_.CalculateSize(_repeated_instructions_codec);
+      if (Raw.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Raw);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -413,11 +466,17 @@ namespace IntelliCook.RecipeSearch.Client {
       if (other == null) {
         return;
       }
+      if (other.Id != 0) {
+        Id = other.Id;
+      }
       if (other.Name.Length != 0) {
         Name = other.Name;
       }
       ingredients_.Add(other.ingredients_);
       instructions_.Add(other.instructions_);
+      if (other.Raw.Length != 0) {
+        Raw = other.Raw;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -437,16 +496,24 @@ namespace IntelliCook.RecipeSearch.Client {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 10: {
-            Name = input.ReadString();
+          case 8: {
+            Id = input.ReadInt32();
             break;
           }
           case 18: {
-            ingredients_.AddEntriesFrom(input, _repeated_ingredients_codec);
+            Name = input.ReadString();
             break;
           }
           case 26: {
+            ingredients_.AddEntriesFrom(input, _repeated_ingredients_codec);
+            break;
+          }
+          case 34: {
             instructions_.AddEntriesFrom(input, _repeated_instructions_codec);
+            break;
+          }
+          case 42: {
+            Raw = input.ReadString();
             break;
           }
         }
@@ -468,16 +535,24 @@ namespace IntelliCook.RecipeSearch.Client {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 10: {
-            Name = input.ReadString();
+          case 8: {
+            Id = input.ReadInt32();
             break;
           }
           case 18: {
-            ingredients_.AddEntriesFrom(ref input, _repeated_ingredients_codec);
+            Name = input.ReadString();
             break;
           }
           case 26: {
+            ingredients_.AddEntriesFrom(ref input, _repeated_ingredients_codec);
+            break;
+          }
+          case 34: {
             instructions_.AddEntriesFrom(ref input, _repeated_instructions_codec);
+            break;
+          }
+          case 42: {
+            Raw = input.ReadString();
             break;
           }
         }
