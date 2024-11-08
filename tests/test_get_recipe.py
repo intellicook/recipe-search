@@ -13,7 +13,11 @@ def test_get_recipe_success(
 ):
     id = 1
     recipe = models.RecipeModel(
-        id=id, name="Recipe 1", ingredients=[], instructions=[]
+        id=id,
+        name="Recipe 1",
+        ingredients=["apple", "banana"],
+        instructions=["step 1", "step 2"],
+        raw="raw recipe",
     )
     request = RecipeRequest(
         id=id,
@@ -37,6 +41,7 @@ def test_get_recipe_success(
     assert all(
         x == y for x, y in zip(response.instructions, recipe.instructions)
     )
+    assert response.raw == recipe.raw
 
 
 def test_get_recipe_not_found(

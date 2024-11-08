@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x18protos/add_recipes.proto\"7\n\x11\x41\x64\x64RecipesRequest\x12\"\n\x07recipes\x18\x01 \x03(\x0b\x32\x11.AddRecipesRecipe\"\x14\n\x12\x41\x64\x64RecipesResponse\"X\n\x10\x41\x64\x64RecipesRecipe\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x13\n\x0bingredients\x18\x02 \x03(\t\x12\x14\n\x0cinstructions\x18\x03 \x03(\t\x12\x0b\n\x03raw\x18\x04 \x01(\tB\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x18protos/add_recipes.proto\">\n\x11\x41\x64\x64RecipesRequest\x12)\n\x07recipes\x18\x01 \x03(\x0b\x32\x18.AddRecipesRequestRecipe\"@\n\x12\x41\x64\x64RecipesResponse\x12*\n\x07recipes\x18\x01 \x03(\x0b\x32\x19.AddRecipesResponseRecipe\"_\n\x17\x41\x64\x64RecipesRequestRecipe\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x13\n\x0bingredients\x18\x02 \x03(\t\x12\x14\n\x0cinstructions\x18\x03 \x03(\t\x12\x0b\n\x03raw\x18\x04 \x01(\t\"l\n\x18\x41\x64\x64RecipesResponseRecipe\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0bingredients\x18\x03 \x03(\t\x12\x14\n\x0cinstructions\x18\x04 \x03(\t\x12\x0b\n\x03raw\x18\x05 \x01(\tB\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -33,9 +33,11 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\252\002\037IntelliCook.RecipeSearch.Client'
   _globals['_ADDRECIPESREQUEST']._serialized_start=28
-  _globals['_ADDRECIPESREQUEST']._serialized_end=83
-  _globals['_ADDRECIPESRESPONSE']._serialized_start=85
-  _globals['_ADDRECIPESRESPONSE']._serialized_end=105
-  _globals['_ADDRECIPESRECIPE']._serialized_start=107
-  _globals['_ADDRECIPESRECIPE']._serialized_end=195
+  _globals['_ADDRECIPESREQUEST']._serialized_end=90
+  _globals['_ADDRECIPESRESPONSE']._serialized_start=92
+  _globals['_ADDRECIPESRESPONSE']._serialized_end=156
+  _globals['_ADDRECIPESREQUESTRECIPE']._serialized_start=158
+  _globals['_ADDRECIPESREQUESTRECIPE']._serialized_end=253
+  _globals['_ADDRECIPESRESPONSERECIPE']._serialized_start=255
+  _globals['_ADDRECIPESRESPONSERECIPE']._serialized_end=363
 # @@protoc_insertion_point(module_scope)
