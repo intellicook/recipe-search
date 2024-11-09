@@ -35,6 +35,8 @@ class IndexFileModel(Base):
     __tablename__ = "index_file"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    count: Mapped[int] = mapped_column()
+    model: Mapped[str] = mapped_column()
     path: Mapped[str] = mapped_column()
 
     def __repr__(self) -> str:

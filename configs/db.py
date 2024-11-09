@@ -13,10 +13,14 @@ class DBConfigs(BaseConfigs):
     name: Optional[str] = Field(None)
     user: Optional[str] = Field(None)
     password: Optional[str] = Field(None)
+    override_connection_string: Optional[str] = Field(None)
 
     @property
     def connection_string(self) -> str:
         """Get the connection string"""
+        if self.override_connection_string:
+            return self.override_connection_string
+
         if all(v is None for v in self.model_dump().values()):
             return "sqlite+pysqlite:///:memory:"
         return (

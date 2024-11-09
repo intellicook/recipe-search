@@ -42,8 +42,26 @@ def init_embedding(cls: Type[BaseEmbedding]) -> Optional[BaseEmbedding]:
         stmt = select(models.IndexFileModel)
         index_file = session.execute(stmt).scalar_one()
 
+    if index_file.model not in embeddings.mapping:
+        logger.info(
+            f"Embedding model not found, using {configs.embedding_model} from"
+            " configs"
+        )
+    else:
+        logger.info(
+            f"Using the {index_file.model} embedding model, as specified in"
+            " the 'model' field of the index file"
+        )
+        cls = embeddings.mapping[index_file.model]
+
+        if index_file.model != configs.embedding_model:
+            logger.warning(
+                f"Using the {index_file.model} embedding model, which is"
+                f" different from {configs.embedding_model} in configs"
+            )
+
     try:
-        model = cls.load_from_file(index_file.path)
+        embedding = cls.load_from_file(index_file.path)
     except FileNotFoundError:
         logger.error(
             f"Index file at {index_file.path} not found, database is out of"
@@ -51,9 +69,17 @@ def init_embedding(cls: Type[BaseEmbedding]) -> Optional[BaseEmbedding]:
         )
         return None
 
+    faiss.index_thread = faiss.IndexThread(
+        count=index_file.count,
+        model=index_file.model,
+        path=index_file.path,
+        exception=None,
+        thread="Database",
+    )
+
     logger.info(f"{cls.__name__} initialized")
 
-    return model
+    return embedding
 
 
 def get_recipe(id: int) -> models.RecipeModel:

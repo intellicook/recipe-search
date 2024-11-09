@@ -198,9 +198,16 @@ from sqlalchemy.schema import CreateTable
 print(CreateTable(YourModel.__table__))
 ```
 
-Alternatively, you can use the `--autogenerate` flag to automatically generate the script, but the database need to be running and you may need to change the `DB_HOST` in the `.env` file to `host.docker.internal`:
+Alternatively, you can use the `--autogenerate` flag to automatically generate the script:
 ```bash
 alembic revision --autogenerate -m "Your migration message"
+```
+
+**Important**: For some reason, autogenerate always tries to remove the `alembic_version` table, you should remove the line that drops the table in the `upgrade` function and the line that creates the table in the `downgrade` function. If you know how to fix that, please let me know.
+
+**Important**: If you are calling these commands from the host machine, you may want to assign a value to the `DB_OVERRIDE_CONNECTION_STRING` environment variable to something like:
+```bash
+postgresql+psycopg://postgres:postgres@host.docker.internal:2605/recipe_search
 ```
 
 Then you should be able to see the generated migration script in the `alembic/versions` directory. Take a look at the [Operation Reference](https://alembic.sqlalchemy.org/en/latest/ops.html#ops) for the available operations.
