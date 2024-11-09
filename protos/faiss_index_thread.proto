@@ -7,10 +7,15 @@ message FaissIndexThreadRequest {
 }
 
 message FaissIndexThreadResponse {
-    optional FaissIndexThreadArgs args = 1;
-    bool is_in_progress = 2;
-    bool is_complete = 3;
-    bool is_successful = 4;
+    FaissIndexThreadStatus status = 1;
+    optional FaissIndexThreadArgs args = 2;
+}
+
+enum FaissIndexThreadStatus {
+    UNINITIALIZED = 0;
+    IN_PROGRESS = 1;
+    FAILED = 2;
+    COMPLETED = 3;
 }
 
 message FaissIndexThreadArgs {

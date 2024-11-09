@@ -71,15 +71,13 @@ def run_migrations_online() -> None:
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
-            version_table_schema=target_metadata.schema,
+            version_table_schema="public",
             include_schemas=True,
         )
 
         with context.begin_transaction():
-            context.execute(
-                f"CREATE schema IF NOT EXISTS {target_metadata.schema};"
-            )
-            context.execute(f"SET search_path TO {target_metadata.schema}")
+            context.execute("CREATE schema IF NOT EXISTS public;")
+            context.execute("SET search_path TO public;")
             context.run_migrations()
 
 

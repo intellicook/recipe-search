@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1fprotos/faiss_index_thread.proto\"\x19\n\x17\x46\x61issIndexThreadRequest\"\x91\x01\n\x18\x46\x61issIndexThreadResponse\x12(\n\x04\x61rgs\x18\x01 \x01(\x0b\x32\x15.FaissIndexThreadArgsH\x00\x88\x01\x01\x12\x16\n\x0eis_in_progress\x18\x02 \x01(\x08\x12\x13\n\x0bis_complete\x18\x03 \x01(\x08\x12\x15\n\ris_successful\x18\x04 \x01(\x08\x42\x07\n\x05_args\"B\n\x14\x46\x61issIndexThreadArgs\x12\r\n\x05\x63ount\x18\x01 \x01(\r\x12\r\n\x05model\x18\x02 \x01(\t\x12\x0c\n\x04path\x18\x03 \x01(\tB\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1fprotos/faiss_index_thread.proto\"\x19\n\x17\x46\x61issIndexThreadRequest\"v\n\x18\x46\x61issIndexThreadResponse\x12\'\n\x06status\x18\x01 \x01(\x0e\x32\x17.FaissIndexThreadStatus\x12(\n\x04\x61rgs\x18\x02 \x01(\x0b\x32\x15.FaissIndexThreadArgsH\x00\x88\x01\x01\x42\x07\n\x05_args\"B\n\x14\x46\x61issIndexThreadArgs\x12\r\n\x05\x63ount\x18\x01 \x01(\r\x12\r\n\x05model\x18\x02 \x01(\t\x12\x0c\n\x04path\x18\x03 \x01(\t*W\n\x16\x46\x61issIndexThreadStatus\x12\x11\n\rUNINITIALIZED\x10\x00\x12\x0f\n\x0bIN_PROGRESS\x10\x01\x12\n\n\x06\x46\x41ILED\x10\x02\x12\r\n\tCOMPLETED\x10\x03\x42\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,10 +32,12 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'protos.faiss_index_thread_p
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\252\002\037IntelliCook.RecipeSearch.Client'
+  _globals['_FAISSINDEXTHREADSTATUS']._serialized_start=250
+  _globals['_FAISSINDEXTHREADSTATUS']._serialized_end=337
   _globals['_FAISSINDEXTHREADREQUEST']._serialized_start=35
   _globals['_FAISSINDEXTHREADREQUEST']._serialized_end=60
-  _globals['_FAISSINDEXTHREADRESPONSE']._serialized_start=63
-  _globals['_FAISSINDEXTHREADRESPONSE']._serialized_end=208
-  _globals['_FAISSINDEXTHREADARGS']._serialized_start=210
-  _globals['_FAISSINDEXTHREADARGS']._serialized_end=276
+  _globals['_FAISSINDEXTHREADRESPONSE']._serialized_start=62
+  _globals['_FAISSINDEXTHREADRESPONSE']._serialized_end=180
+  _globals['_FAISSINDEXTHREADARGS']._serialized_start=182
+  _globals['_FAISSINDEXTHREADARGS']._serialized_end=248
 # @@protoc_insertion_point(module_scope)

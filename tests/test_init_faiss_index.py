@@ -4,6 +4,7 @@ import pytest_mock
 
 from apis.servicer import RecipeSearchServicer
 from configs.domain import configs
+from protos.faiss_index_thread_pb2 import FaissIndexThreadStatus
 from protos.init_faiss_index_pb2 import InitFaissIndexRequest
 
 
@@ -93,7 +94,13 @@ def test_init_faiss_index_thread_in_progress(
 
     mocker.patch(
         "domain.controllers.get_faiss_index_thread",
-        return_value=mocker.MagicMock(is_in_progress=True),
+        return_value=mocker.MagicMock(
+            to_proto=mocker.MagicMock(
+                return_value=mocker.MagicMock(
+                    status=FaissIndexThreadStatus.IN_PROGRESS,
+                ),
+            ),
+        ),
     )
 
     context = mocker.MagicMock()

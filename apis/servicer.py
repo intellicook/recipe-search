@@ -13,9 +13,9 @@ from protos.add_recipes_pb2 import (
 )
 from protos.chat_by_recipe_pb2 import ChatByRecipeRequest, ChatByRecipeResponse
 from protos.faiss_index_thread_pb2 import (
-    FaissIndexThreadArgs,
     FaissIndexThreadRequest,
     FaissIndexThreadResponse,
+    FaissIndexThreadStatus,
 )
 from protos.health_pb2 import (
     HealthCheck,
@@ -178,7 +178,10 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
         context: grpc.ServicerContext,
     ) -> InitFaissIndexResponse:
         """Initialize the Faiss index"""
-        if controllers.get_faiss_index_thread().is_in_progress:
+        if (
+            controllers.get_faiss_index_thread().to_proto().status
+            == FaissIndexThreadStatus.IN_PROGRESS
+        ):
             context.abort(
                 grpc.StatusCode.FAILED_PRECONDITION,
                 "Faiss index thread is already in progress",
@@ -207,20 +210,7 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
         """Get the Faiss index thread status"""
         thread = controllers.get_faiss_index_thread()
 
-        args = None
-        if thread.is_in_progress or thread.is_complete:
-            args = FaissIndexThreadArgs(
-                count=thread.count,
-                model=thread.model,
-                path=thread.path,
-            )
-
-        return FaissIndexThreadResponse(
-            args=args,
-            is_in_progress=thread.is_in_progress,
-            is_complete=thread.is_complete,
-            is_successful=thread.is_successful,
-        )
+        return thread.to_proto()
 
     def ChatByRecipe(
         self,

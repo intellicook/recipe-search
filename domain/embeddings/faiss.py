@@ -2,9 +2,10 @@ import logging
 import os
 import threading
 from dataclasses import dataclass
-from typing import Callable, Optional
+from enum import Enum, auto
+from typing import Callable, Literal, Optional
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 from tqdm import tqdm
 
@@ -13,44 +14,75 @@ from domain import embeddings
 from domain.embeddings.base import BaseEmbedding
 from infra import models
 from infra.db import engine
+from protos.faiss_index_thread_pb2 import (
+    FaissIndexThreadArgs,
+    FaissIndexThreadResponse,
+    FaissIndexThreadStatus,
+)
 
 
 @dataclass
 class IndexThread:
     """Indexing thread"""
 
-    count: Optional[int] = None
+    class Status(Enum):
+        """Indexing status"""
+
+        UNINITIALIZED = auto()
+        IN_PROGRESS = auto()
+        FAILED = auto()
+        COMPLETED = auto()
+
+        def to_proto(self) -> FaissIndexThreadStatus:
+            """Convert the status to a protobuf message.
+
+            Returns:
+                FaissIndexThreadStatus: The protobuf message.
+            """
+            return FaissIndexThreadStatus.Value(self.name)
+
+    count: int = 0
     model: str = ""
     path: str = ""
     exception: Optional[Exception] = None
-    thread: Optional[threading.Thread] = None
+    thread: Optional[threading.Thread | Literal["Database"]] = None
 
     @property
-    def is_in_progress(self) -> bool:
-        """Check if the indexing is in progress.
+    def status(self) -> Status:
+        """Get the indexing status.
 
         Returns:
-            bool: True if the indexing is in progress, False otherwise.
+            IndexThread.Status: The indexing status.
         """
-        return self.thread and self.thread.is_alive()
+        if not self.thread:
+            return IndexThread.Status.UNINITIALIZED
+        elif (
+            isinstance(self.thread, threading.Thread)
+            and self.thread.is_alive()
+        ):
+            return IndexThread.Status.IN_PROGRESS
+        elif self.exception:
+            return IndexThread.Status.FAILED
+        else:
+            return IndexThread.Status.COMPLETED
 
-    @property
-    def is_complete(self) -> bool:
-        """Check if the indexing is complete.
+    def to_proto(self) -> FaissIndexThreadResponse:
+        """Convert the indexing thread to a protobuf message.
 
         Returns:
-            bool: True if the indexing is complete, False otherwise.
+            FaissIndexThreadResponse: The protobuf message.
         """
-        return self.thread and not self.is_in_progress
+        args = None
+        if self.status != IndexThread.Status.UNINITIALIZED:
+            args = FaissIndexThreadArgs(
+                count=self.count,
+                model=self.model,
+                path=self.path,
+            )
 
-    @property
-    def is_successful(self) -> bool:
-        """Check if the indexing was successful.
-
-        Returns:
-            bool: True if the indexing was successful, False otherwise.
-        """
-        return self.is_complete and not self.exception
+        return FaissIndexThreadResponse(
+            status=self.status.to_proto(), args=args
+        )
 
 
 logger = logging.getLogger(__name__)
@@ -81,9 +113,15 @@ def init_index(
     """
     global index_thread
 
-    if index_thread.is_in_progress:
+    if index_thread.status == IndexThread.Status.IN_PROGRESS:
         logger.error("Indexing already in progress")
         return False
+
+    # Get number of recipes in database if count is None
+    if count is None:
+        with Session(engine) as session:
+            stmt = select(func.count()).select_from(models.RecipeModel)
+            count = session.execute(stmt).scalar()
 
     # Create a new thread for indexing
     index_thread = IndexThread(
@@ -105,7 +143,7 @@ def init_index(
 
 
 def _init_index(
-    count: Optional[int] = None,
+    count: int,
     model: str = configs.embedding_model,
     path: str = configs.default_faiss_index_path,
     on_complete: Optional[Callable[[], None]] = None,
@@ -127,24 +165,24 @@ def _init_index(
             session.commit()
 
             # Get the recipes
-            stmt = select(models.RecipeModel)
-
-            if count:
-                stmt = stmt.limit(count)
-
+            stmt = select(models.RecipeModel).limit(count)
             recipes = session.execute(stmt).scalars().all()
 
         # Create the index
-        model: BaseEmbedding = model_cls()
+        embedding: BaseEmbedding = model_cls()
 
         for recipe in tqdm(recipes, desc="Indexing recipes"):
-            model.add(recipe)
+            embedding.add(recipe)
 
         # Save the index to file
-        model.save_to_file(path)
+        embedding.save_to_file(path)
 
         # Initialize the index file model
-        index_file = models.IndexFileModel(path=path)
+        index_file = models.IndexFileModel(
+            count=count,
+            model=model,
+            path=path,
+        )
 
         # Commit the index file model to the database
         with Session(engine) as session:
