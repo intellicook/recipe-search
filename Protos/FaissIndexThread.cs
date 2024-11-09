@@ -25,24 +25,35 @@ namespace IntelliCook.RecipeSearch.Client {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Ch9Qcm90b3MvZmFpc3NfaW5kZXhfdGhyZWFkLnByb3RvIhkKF0ZhaXNzSW5k",
-            "ZXhUaHJlYWRSZXF1ZXN0IpEBChhGYWlzc0luZGV4VGhyZWFkUmVzcG9uc2US",
-            "KAoEYXJncxgBIAEoCzIVLkZhaXNzSW5kZXhUaHJlYWRBcmdzSACIAQESFgoO",
-            "aXNfaW5fcHJvZ3Jlc3MYAiABKAgSEwoLaXNfY29tcGxldGUYAyABKAgSFQoN",
-            "aXNfc3VjY2Vzc2Z1bBgEIAEoCEIHCgVfYXJncyJCChRGYWlzc0luZGV4VGhy",
-            "ZWFkQXJncxINCgVjb3VudBgBIAEoDRINCgVtb2RlbBgCIAEoCRIMCgRwYXRo",
-            "GAMgASgJQiKqAh9JbnRlbGxpQ29vay5SZWNpcGVTZWFyY2guQ2xpZW50YgZw",
-            "cm90bzM="));
+            "ZXhUaHJlYWRSZXF1ZXN0InYKGEZhaXNzSW5kZXhUaHJlYWRSZXNwb25zZRIn",
+            "CgZzdGF0dXMYASABKA4yFy5GYWlzc0luZGV4VGhyZWFkU3RhdHVzEigKBGFy",
+            "Z3MYAiABKAsyFS5GYWlzc0luZGV4VGhyZWFkQXJnc0gAiAEBQgcKBV9hcmdz",
+            "IkIKFEZhaXNzSW5kZXhUaHJlYWRBcmdzEg0KBWNvdW50GAEgASgNEg0KBW1v",
+            "ZGVsGAIgASgJEgwKBHBhdGgYAyABKAkqVwoWRmFpc3NJbmRleFRocmVhZFN0",
+            "YXR1cxIRCg1VTklOSVRJQUxJWkVEEAASDwoLSU5fUFJPR1JFU1MQARIKCgZG",
+            "QUlMRUQQAhINCglDT01QTEVURUQQA0IiqgIfSW50ZWxsaUNvb2suUmVjaXBl",
+            "U2VhcmNoLkNsaWVudGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::IntelliCook.RecipeSearch.Client.FaissIndexThreadStatus), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.FaissIndexThreadRequest), global::IntelliCook.RecipeSearch.Client.FaissIndexThreadRequest.Parser, null, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.FaissIndexThreadResponse), global::IntelliCook.RecipeSearch.Client.FaissIndexThreadResponse.Parser, new[]{ "Args", "IsInProgress", "IsComplete", "IsSuccessful" }, new[]{ "Args" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.FaissIndexThreadResponse), global::IntelliCook.RecipeSearch.Client.FaissIndexThreadResponse.Parser, new[]{ "Status", "Args" }, new[]{ "Args" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.FaissIndexThreadArgs), global::IntelliCook.RecipeSearch.Client.FaissIndexThreadArgs.Parser, new[]{ "Count", "Model", "Path" }, null, null, null, null)
           }));
     }
     #endregion
 
   }
+  #region Enums
+  public enum FaissIndexThreadStatus {
+    [pbr::OriginalName("UNINITIALIZED")] Uninitialized = 0,
+    [pbr::OriginalName("IN_PROGRESS")] InProgress = 1,
+    [pbr::OriginalName("FAILED")] Failed = 2,
+    [pbr::OriginalName("COMPLETED")] Completed = 3,
+  }
+
+  #endregion
+
   #region Messages
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class FaissIndexThreadRequest : pb::IMessage<FaissIndexThreadRequest>
@@ -240,10 +251,8 @@ namespace IntelliCook.RecipeSearch.Client {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public FaissIndexThreadResponse(FaissIndexThreadResponse other) : this() {
+      status_ = other.status_;
       args_ = other.args_ != null ? other.args_.Clone() : null;
-      isInProgress_ = other.isInProgress_;
-      isComplete_ = other.isComplete_;
-      isSuccessful_ = other.isSuccessful_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -253,8 +262,20 @@ namespace IntelliCook.RecipeSearch.Client {
       return new FaissIndexThreadResponse(this);
     }
 
+    /// <summary>Field number for the "status" field.</summary>
+    public const int StatusFieldNumber = 1;
+    private global::IntelliCook.RecipeSearch.Client.FaissIndexThreadStatus status_ = global::IntelliCook.RecipeSearch.Client.FaissIndexThreadStatus.Uninitialized;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::IntelliCook.RecipeSearch.Client.FaissIndexThreadStatus Status {
+      get { return status_; }
+      set {
+        status_ = value;
+      }
+    }
+
     /// <summary>Field number for the "args" field.</summary>
-    public const int ArgsFieldNumber = 1;
+    public const int ArgsFieldNumber = 2;
     private global::IntelliCook.RecipeSearch.Client.FaissIndexThreadArgs args_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -262,42 +283,6 @@ namespace IntelliCook.RecipeSearch.Client {
       get { return args_; }
       set {
         args_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "is_in_progress" field.</summary>
-    public const int IsInProgressFieldNumber = 2;
-    private bool isInProgress_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool IsInProgress {
-      get { return isInProgress_; }
-      set {
-        isInProgress_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "is_complete" field.</summary>
-    public const int IsCompleteFieldNumber = 3;
-    private bool isComplete_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool IsComplete {
-      get { return isComplete_; }
-      set {
-        isComplete_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "is_successful" field.</summary>
-    public const int IsSuccessfulFieldNumber = 4;
-    private bool isSuccessful_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool IsSuccessful {
-      get { return isSuccessful_; }
-      set {
-        isSuccessful_ = value;
       }
     }
 
@@ -316,10 +301,8 @@ namespace IntelliCook.RecipeSearch.Client {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (Status != other.Status) return false;
       if (!object.Equals(Args, other.Args)) return false;
-      if (IsInProgress != other.IsInProgress) return false;
-      if (IsComplete != other.IsComplete) return false;
-      if (IsSuccessful != other.IsSuccessful) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -327,10 +310,8 @@ namespace IntelliCook.RecipeSearch.Client {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
+      if (Status != global::IntelliCook.RecipeSearch.Client.FaissIndexThreadStatus.Uninitialized) hash ^= Status.GetHashCode();
       if (args_ != null) hash ^= Args.GetHashCode();
-      if (IsInProgress != false) hash ^= IsInProgress.GetHashCode();
-      if (IsComplete != false) hash ^= IsComplete.GetHashCode();
-      if (IsSuccessful != false) hash ^= IsSuccessful.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -349,21 +330,13 @@ namespace IntelliCook.RecipeSearch.Client {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
+      if (Status != global::IntelliCook.RecipeSearch.Client.FaissIndexThreadStatus.Uninitialized) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) Status);
+      }
       if (args_ != null) {
-        output.WriteRawTag(10);
+        output.WriteRawTag(18);
         output.WriteMessage(Args);
-      }
-      if (IsInProgress != false) {
-        output.WriteRawTag(16);
-        output.WriteBool(IsInProgress);
-      }
-      if (IsComplete != false) {
-        output.WriteRawTag(24);
-        output.WriteBool(IsComplete);
-      }
-      if (IsSuccessful != false) {
-        output.WriteRawTag(32);
-        output.WriteBool(IsSuccessful);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -375,21 +348,13 @@ namespace IntelliCook.RecipeSearch.Client {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Status != global::IntelliCook.RecipeSearch.Client.FaissIndexThreadStatus.Uninitialized) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) Status);
+      }
       if (args_ != null) {
-        output.WriteRawTag(10);
+        output.WriteRawTag(18);
         output.WriteMessage(Args);
-      }
-      if (IsInProgress != false) {
-        output.WriteRawTag(16);
-        output.WriteBool(IsInProgress);
-      }
-      if (IsComplete != false) {
-        output.WriteRawTag(24);
-        output.WriteBool(IsComplete);
-      }
-      if (IsSuccessful != false) {
-        output.WriteRawTag(32);
-        output.WriteBool(IsSuccessful);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -401,17 +366,11 @@ namespace IntelliCook.RecipeSearch.Client {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
+      if (Status != global::IntelliCook.RecipeSearch.Client.FaissIndexThreadStatus.Uninitialized) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Status);
+      }
       if (args_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Args);
-      }
-      if (IsInProgress != false) {
-        size += 1 + 1;
-      }
-      if (IsComplete != false) {
-        size += 1 + 1;
-      }
-      if (IsSuccessful != false) {
-        size += 1 + 1;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -425,20 +384,14 @@ namespace IntelliCook.RecipeSearch.Client {
       if (other == null) {
         return;
       }
+      if (other.Status != global::IntelliCook.RecipeSearch.Client.FaissIndexThreadStatus.Uninitialized) {
+        Status = other.Status;
+      }
       if (other.args_ != null) {
         if (args_ == null) {
           Args = new global::IntelliCook.RecipeSearch.Client.FaissIndexThreadArgs();
         }
         Args.MergeFrom(other.Args);
-      }
-      if (other.IsInProgress != false) {
-        IsInProgress = other.IsInProgress;
-      }
-      if (other.IsComplete != false) {
-        IsComplete = other.IsComplete;
-      }
-      if (other.IsSuccessful != false) {
-        IsSuccessful = other.IsSuccessful;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -459,23 +412,15 @@ namespace IntelliCook.RecipeSearch.Client {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 10: {
+          case 8: {
+            Status = (global::IntelliCook.RecipeSearch.Client.FaissIndexThreadStatus) input.ReadEnum();
+            break;
+          }
+          case 18: {
             if (args_ == null) {
               Args = new global::IntelliCook.RecipeSearch.Client.FaissIndexThreadArgs();
             }
             input.ReadMessage(Args);
-            break;
-          }
-          case 16: {
-            IsInProgress = input.ReadBool();
-            break;
-          }
-          case 24: {
-            IsComplete = input.ReadBool();
-            break;
-          }
-          case 32: {
-            IsSuccessful = input.ReadBool();
             break;
           }
         }
@@ -497,23 +442,15 @@ namespace IntelliCook.RecipeSearch.Client {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 10: {
+          case 8: {
+            Status = (global::IntelliCook.RecipeSearch.Client.FaissIndexThreadStatus) input.ReadEnum();
+            break;
+          }
+          case 18: {
             if (args_ == null) {
               Args = new global::IntelliCook.RecipeSearch.Client.FaissIndexThreadArgs();
             }
             input.ReadMessage(Args);
-            break;
-          }
-          case 16: {
-            IsInProgress = input.ReadBool();
-            break;
-          }
-          case 24: {
-            IsComplete = input.ReadBool();
-            break;
-          }
-          case 32: {
-            IsSuccessful = input.ReadBool();
             break;
           }
         }
