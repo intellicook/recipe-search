@@ -2,13 +2,13 @@ from typing import Optional
 
 import faiss
 
-from domain.embeddings.sentence_transformer import SentenceTransformerEmbedding
+from domain.searches.sentence_transformer import SentenceTransformerSearch
 
 
-class QWen215BInstructEmbedding(SentenceTransformerEmbedding):
-    """Embedding class for the gtw-Qwen2-1.5B-instruct model"""
+class QWen215BInstructSearch(SentenceTransformerSearch):
+    """Search class for the gtw-Qwen2-1.5B-instruct model"""
 
-    CONFIGS = SentenceTransformerEmbedding.Configs(
+    CONFIGS = SentenceTransformerSearch.Configs(
         model="Alibaba-NLP/gte-Qwen2-1.5B-instruct",
         prompt=(
             "Instruct: Given a web search query, retrieve relevant passages"
@@ -20,13 +20,13 @@ class QWen215BInstructEmbedding(SentenceTransformerEmbedding):
         super().__init__(self.CONFIGS, index)
 
     @classmethod
-    def load_from_file(cls, path: str) -> "QWen215BInstructEmbedding":
+    def load_from_file(cls, path: str) -> "QWen215BInstructSearch":
         """Load the index from a file.
 
         Arguments:
             path (str): The path to load the index from.
 
         Returns:
-            QWen215BInstructEmbedding: The loaded embedding
+            QWen215BInstructSearch: The loaded search model.
         """
         return super().load_from_file(cls.CONFIGS, path)

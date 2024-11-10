@@ -2,13 +2,13 @@ from typing import Optional
 
 import faiss
 
-from domain.embeddings.sentence_transformer import SentenceTransformerEmbedding
+from domain.searches.sentence_transformer import SentenceTransformerSearch
 
 
-class StellaEn15BV5Embedding(SentenceTransformerEmbedding):
-    """Embedding class for the stella_en_1.5B_v5 model"""
+class StellaEn15BV5Search(SentenceTransformerSearch):
+    """Search class for the stella_en_1.5B_v5 model"""
 
-    CONFIGS = SentenceTransformerEmbedding.Configs(
+    CONFIGS = SentenceTransformerSearch.Configs(
         model="dunzhang/stella_en_1.5B_v5",
         prompt=(
             "Instruct: Retrieve semantically similar food ingredient"
@@ -20,13 +20,13 @@ class StellaEn15BV5Embedding(SentenceTransformerEmbedding):
         super().__init__(self.CONFIGS, index)
 
     @classmethod
-    def load_from_file(cls, path: str) -> "StellaEn15BV5Embedding":
+    def load_from_file(cls, path: str) -> "StellaEn15BV5Search":
         """Load the index from a file.
 
         Arguments:
             path (str): The path to load the index from.
 
         Returns:
-            StellaEn15BV5Embedding: The loaded embedding
+            StellaEn15BV5Search: The loaded search model.
         """
         return super().load_from_file(cls.CONFIGS, path)

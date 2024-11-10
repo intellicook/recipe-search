@@ -7,19 +7,19 @@ import numpy.typing as npt
 from infra import models
 
 
-class BaseEmbedding(ABC):
-    """Base class for embedding models"""
+class BaseSearch(ABC):
+    """Base class for search models"""
 
     @classmethod
     @abstractmethod
-    def load_from_file(cls, path: str) -> "BaseEmbedding":
+    def load_from_file(cls, path: str) -> "BaseSearch":
         """Load the index from a file.
 
         Arguments:
             path (str): The path to load the index from.
 
         Returns:
-            BaseEmbedding: The loaded embedding model.
+            BaseSearch: The loaded search model.
         """
 
     @abstractmethod

@@ -119,7 +119,7 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
         if results is None:
             context.abort(
                 grpc.StatusCode.FAILED_PRECONDITION,
-                "Embedding model is not initialized",
+                "Search model is not initialized",
             )
 
         recipes = controllers.get_recipes(id for id, _ in results)
