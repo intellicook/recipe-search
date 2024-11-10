@@ -14,7 +14,7 @@ message AddRecipesRequestRecipe {
     string name = 1;
     repeated string ingredients = 2;
     repeated string instructions = 3;
-    string raw = 4;
+    optional string raw = 4;
 }
 
 message AddRecipesResponseRecipe {

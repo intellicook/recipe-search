@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n*protos/search_recipes_by_ingredients.proto\"h\n!SearchRecipesByIngredientsRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x13\n\x0bingredients\x18\x02 \x03(\t\x12\x12\n\x05limit\x18\x03 \x01(\rH\x00\x88\x01\x01\x42\x08\n\x06_limit\"X\n\"SearchRecipesByIngredientsResponse\x12\x32\n\x07recipes\x18\x01 \x03(\x0b\x32!.SearchRecipesByIngredientsRecipe\"N\n SearchRecipesByIngredientsRecipe\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x10\n\x08\x64istance\x18\x02 \x01(\x02\x12\x0c\n\x04name\x18\x03 \x01(\tB\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n*protos/search_recipes_by_ingredients.proto\"\x98\x01\n!SearchRecipesByIngredientsRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x13\n\x0bingredients\x18\x02 \x03(\t\x12\x12\n\x05limit\x18\x03 \x01(\rH\x00\x88\x01\x01\x12\x1b\n\x0einclude_detail\x18\x04 \x01(\x08H\x01\x88\x01\x01\x42\x08\n\x06_limitB\x11\n\x0f_include_detail\"X\n\"SearchRecipesByIngredientsResponse\x12\x32\n\x07recipes\x18\x01 \x03(\x0b\x32!.SearchRecipesByIngredientsRecipe\"\x85\x01\n SearchRecipesByIngredientsRecipe\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\x12<\n\x06\x64\x65tail\x18\x03 \x01(\x0b\x32\'.SearchRecipesByIngredientsRecipeDetailH\x00\x88\x01\x01\x42\t\n\x07_detail\"`\n&SearchRecipesByIngredientsRecipeDetail\x12\x13\n\x0bingredients\x18\x01 \x03(\t\x12\x14\n\x0cinstructions\x18\x02 \x03(\t\x12\x0b\n\x03raw\x18\x03 \x01(\tB\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,10 +32,12 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'protos.search_recipes_by_in
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\252\002\037IntelliCook.RecipeSearch.Client'
-  _globals['_SEARCHRECIPESBYINGREDIENTSREQUEST']._serialized_start=46
-  _globals['_SEARCHRECIPESBYINGREDIENTSREQUEST']._serialized_end=150
-  _globals['_SEARCHRECIPESBYINGREDIENTSRESPONSE']._serialized_start=152
-  _globals['_SEARCHRECIPESBYINGREDIENTSRESPONSE']._serialized_end=240
-  _globals['_SEARCHRECIPESBYINGREDIENTSRECIPE']._serialized_start=242
-  _globals['_SEARCHRECIPESBYINGREDIENTSRECIPE']._serialized_end=320
+  _globals['_SEARCHRECIPESBYINGREDIENTSREQUEST']._serialized_start=47
+  _globals['_SEARCHRECIPESBYINGREDIENTSREQUEST']._serialized_end=199
+  _globals['_SEARCHRECIPESBYINGREDIENTSRESPONSE']._serialized_start=201
+  _globals['_SEARCHRECIPESBYINGREDIENTSRESPONSE']._serialized_end=289
+  _globals['_SEARCHRECIPESBYINGREDIENTSRECIPE']._serialized_start=292
+  _globals['_SEARCHRECIPESBYINGREDIENTSRECIPE']._serialized_end=425
+  _globals['_SEARCHRECIPESBYINGREDIENTSRECIPEDETAIL']._serialized_start=427
+  _globals['_SEARCHRECIPESBYINGREDIENTSRECIPEDETAIL']._serialized_end=523
 # @@protoc_insertion_point(module_scope)
