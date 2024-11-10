@@ -171,8 +171,7 @@ class AzureOpenAIChat(BaseChat):
 
     SYSTEM_PROMPT_FORMATS = {
         SystemPromptKey.INTRO: (
-            "You are a cooking professional who helps users with their"
-            " queries."
+            "You are a cooking assistant who helps users with their queries."
         ),
         SystemPromptKey.USER: (
             "You are chatting with the user who's name is {name}."
@@ -183,9 +182,10 @@ class AzureOpenAIChat(BaseChat):
             " recipe's instructions are: {instructions}."
         ),
         SystemPromptKey.END: (
-            "Do not make up any information not provided here, only reply with"
-            " the information provided here. State that you do not have the"
-            " information if it is not provided here."
+            "Do not chat about anything unrelated to the recipe or cooking in"
+            " general. If the user tries to talk about something else, remind"
+            " them that you are a cooking assistant and that you can only"
+            " help with cooking-related queries."
         ),
     }
 
