@@ -127,6 +127,9 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
 
         recipes = controllers.get_recipes(id for id, _ in results)
 
+        id_to_recipes = {recipe.id: recipe for recipe in recipes}
+        ordered_recipes = [id_to_recipes[id] for id, _ in results]
+
         include_detail = (
             request.HasField("include_detail") and request.include_detail
         )
@@ -146,7 +149,7 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
                         else None
                     ),
                 )
-                for (id, _), recipe in zip(results, recipes)
+                for (id, _), recipe in zip(results, ordered_recipes)
             ],
         )
 
