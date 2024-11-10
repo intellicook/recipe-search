@@ -101,6 +101,8 @@ def get_recipe(id: int) -> models.RecipeModel:
 def get_recipes(ids: Iterable[int]) -> List[models.RecipeModel]:
     """Get the recipe details.
 
+    This function does not guarantee the order of the recipes.
+
     Arguments:
         ids (Iterable[int]): The IDs of the recipes.
 
@@ -221,6 +223,8 @@ def chat_by_recipe(
     chat = chats.model()
     chat.set_user(name)
     chat.set_recipe(recipe)
+
+    messages = messages[-configs.chat_message_limit :]
 
     logger.debug(f"Messages: {messages}")
 
