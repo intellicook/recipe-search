@@ -173,7 +173,7 @@ def test_search_recipes_by_ingredients_limit_zero(
     )
 
 
-def test_search_recipes_by_ingredients_embedding_not_initialized(
+def test_search_recipes_by_ingredients_search_not_initialized(
     mocker: pytest_mock.MockerFixture,
 ):
     username = "test_username"
@@ -198,5 +198,5 @@ def test_search_recipes_by_ingredients_embedding_not_initialized(
     mock_search.assert_called_once_with(ingredients=ingredients, limit=limit)
     context.abort.assert_called_once_with(
         grpc.StatusCode.FAILED_PRECONDITION,
-        "Embedding model is not initialized",
+        "Search model is not initialized",
     )

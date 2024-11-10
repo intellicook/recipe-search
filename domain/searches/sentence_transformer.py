@@ -8,16 +8,16 @@ import numpy.typing as npt
 import torch
 from sentence_transformers import SentenceTransformer
 
-from domain.embeddings.base import BaseEmbedding
+from domain.searches.base import BaseSearch
 from infra import models
 
 
-class SentenceTransformerEmbedding(BaseEmbedding):
-    """Embedding class for sentence transformer with Faiss index"""
+class SentenceTransformerSearch(BaseSearch):
+    """Search class for sentence transformer embedding with Faiss index"""
 
     @dataclass
     class Configs:
-        """Initial configuration for the embedding model"""
+        """Initial configuration for the search model"""
 
         model: str
         prompt: str
@@ -50,19 +50,19 @@ class SentenceTransformerEmbedding(BaseEmbedding):
     @classmethod
     def load_from_file(
         cls, init_configs: Configs, path: str
-    ) -> "SentenceTransformerEmbedding":
+    ) -> "SentenceTransformerSearch":
         """Load the index from a file.
 
         Arguments:
             init_configs (InitConfigs): The initial configuration for the
-                embedding model.
+                search model.
             path (str): The path to load the index from.
 
         Returns:
-            SentenceTransformerEmbedding: The loaded embedding model.
+            SentenceTransformerSearch: The loaded search model.
         """
         index = faiss.read_index(path)
-        return SentenceTransformerEmbedding(init_configs, index)
+        return SentenceTransformerSearch(init_configs, index)
 
     def save_to_file(self, path: str):
         """Save the index to a file.

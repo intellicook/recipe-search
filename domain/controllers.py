@@ -5,24 +5,24 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from configs.domain import configs
-from domain import chats, embeddings
+from domain import chats, searches
 from domain.chats.base import BaseChat, BaseChatMessage
-from domain.embeddings import faiss
-from domain.embeddings.base import BaseEmbedding
+from domain.searches import faiss
+from domain.searches.base import BaseSearch
 from infra import models
 from infra.db import engine
 
 logger = logging.getLogger(__name__)
 
 
-def init_embedding(cls: Type[BaseEmbedding]) -> Optional[BaseEmbedding]:
-    """Initialize the embedding model.
+def init_search(cls: Type[BaseSearch]) -> Optional[BaseSearch]:
+    """Initialize the search model.
 
     Arguments:
-        cls (Type[BaseEmbedding]): The embedding class to initialize.
+        cls (Type[BaseSearch]): The search class to initialize.
 
     Returns:
-        Optional[BaseEmbedding]: The initialized embedding model.
+        Optional[BaseSearch]: The initialized search model.
     """
     with Session(engine) as session:
         stmt = select(func.count()).select_from(models.IndexFileModel)
@@ -42,26 +42,26 @@ def init_embedding(cls: Type[BaseEmbedding]) -> Optional[BaseEmbedding]:
         stmt = select(models.IndexFileModel)
         index_file = session.execute(stmt).scalar_one()
 
-    if index_file.model not in embeddings.mapping:
+    if index_file.model not in searches.mapping:
         logger.info(
-            f"Embedding model not found, using {configs.embedding_model} from"
+            f"Search model not found, using {configs.search_model} from"
             " configs"
         )
     else:
         logger.info(
-            f"Using the {index_file.model} embedding model, as specified in"
+            f"Using the {index_file.model} search model, as specified in"
             " the 'model' field of the index file"
         )
-        cls = embeddings.mapping[index_file.model]
+        cls = searches.mapping[index_file.model]
 
-        if index_file.model != configs.embedding_model:
+        if index_file.model != configs.search_model:
             logger.warning(
-                f"Using the {index_file.model} embedding model, which is"
-                f" different from {configs.embedding_model} in configs"
+                f"Using the {index_file.model} search model, which is"
+                f" different from {configs.search_model} in configs"
             )
 
     try:
-        embedding = cls.load_from_file(index_file.path)
+        search = cls.load_from_file(index_file.path)
     except FileNotFoundError:
         logger.error(
             f"Index file at {index_file.path} not found, database is out of"
@@ -79,7 +79,7 @@ def init_embedding(cls: Type[BaseEmbedding]) -> Optional[BaseEmbedding]:
 
     logger.info(f"{cls.__name__} initialized")
 
-    return embedding
+    return search
 
 
 def get_recipe(id: int) -> models.RecipeModel:
@@ -152,11 +152,11 @@ def search_recipes_by_ingredients(
         f" {limit}"
     )
 
-    if embedding is None:
-        logger.debug("Embedding model is not initialized")
+    if search is None:
+        logger.debug("Search model is not initialized")
         return None
 
-    distances, indices = embedding.search(ingredients, limit=limit)
+    distances, indices = search.search(ingredients, limit=limit)
 
     return sorted(list(zip(indices, distances)), key=lambda x: x[1])
 
@@ -176,11 +176,11 @@ def init_faiss_index(
         f"Initializing Faiss index with count {count} and path {path}"
     )
 
-    def _reinit_embedding():
-        global embedding
-        embedding = init_embedding(embeddings.model)
+    def _reinit_search():
+        global search
+        search = init_search(searches.model)
 
-    faiss.init_index(count, configs.embedding_model, path, _reinit_embedding)
+    faiss.init_index(count, configs.search_model, path, _reinit_search)
 
 
 def get_faiss_index_thread() -> faiss.IndexThread:
@@ -227,4 +227,4 @@ def chat_by_recipe(
     return chat.chat(messages)
 
 
-embedding = init_embedding(embeddings.model)
+search = init_search(searches.model)

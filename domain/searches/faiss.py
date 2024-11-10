@@ -10,8 +10,8 @@ from sqlalchemy.orm import Session
 from tqdm import tqdm
 
 from configs.domain import configs
-from domain import embeddings
-from domain.embeddings.base import BaseEmbedding
+from domain import searches
+from domain.searches.base import BaseSearch
 from infra import models
 from infra.db import engine
 from protos.faiss_index_thread_pb2 import (
@@ -91,7 +91,7 @@ index_thread = IndexThread()
 
 def init_index(
     count: Optional[int] = None,
-    model: str = configs.embedding_model,
+    model: str = configs.search_model,
     path: str = configs.default_faiss_index_path,
     on_complete: Optional[Callable[[], None]] = None,
 ) -> bool:
@@ -100,8 +100,8 @@ def init_index(
     Arguments:
         count (Optional[int], optional): The number of recipes to index.
             Defaults to None.
-        model (str, optional): The embedding model to use. Defaults to
-            configs.embedding_model.
+        model (str, optional): The search model to use. Defaults to
+            configs.search_model.
         path (str, optional): The path to save the index file. Defaults to
             configs.default_faiss_index_path.
         on_complete (Optional[Callable[[], None]], optional): The callback
@@ -144,13 +144,13 @@ def init_index(
 
 def _init_index(
     count: int,
-    model: str = configs.embedding_model,
+    model: str = configs.search_model,
     path: str = configs.default_faiss_index_path,
     on_complete: Optional[Callable[[], None]] = None,
 ):
     try:
         # Choose the model
-        model_cls = embeddings.mapping[model]
+        model_cls = searches.mapping[model]
 
         with Session(engine) as session:
             # Delete all index files
@@ -169,13 +169,13 @@ def _init_index(
             recipes = session.execute(stmt).scalars().all()
 
         # Create the index
-        embedding: BaseEmbedding = model_cls()
+        search: BaseSearch = model_cls()
 
         for recipe in tqdm(recipes, desc="Indexing recipes"):
-            embedding.add(recipe)
+            search.add(recipe)
 
         # Save the index to file
-        embedding.save_to_file(path)
+        search.save_to_file(path)
 
         # Initialize the index file model
         index_file = models.IndexFileModel(
