@@ -1,6 +1,7 @@
 import logging
 from dataclasses import dataclass
-from typing import Iterable, Optional, Tuple
+from enum import Enum, auto
+from typing import ClassVar, Iterable, Optional, Tuple
 
 import faiss
 import numpy as np
@@ -15,12 +16,30 @@ from infra import models
 class SentenceTransformerSearch(BaseSearch):
     """Search class for sentence transformer embedding with Faiss index"""
 
+    class EncodeMethod(Enum):
+        """Methods to encode ingredient list"""
+
+        COMMA_JOINED_STR = auto()
+        QUERIED_COMMA_JOINED_STR = auto()
+        AVERAGE_VEC = auto()
+        AVERAGE_QUERIED_VEC = auto()
+
     @dataclass
     class Configs:
         """Initial configuration for the search model"""
 
         model: str
         prompt: str
+
+    DEFAULT_ENCODE_NON_QUERY_METHOD: ClassVar[EncodeMethod] = (
+        EncodeMethod.COMMA_JOINED_STR
+    )
+    DEFAULT_ENCODE_QUERY_METHOD: ClassVar[EncodeMethod] = (
+        EncodeMethod.QUERIED_COMMA_JOINED_STR
+    )
+    DEFAULT_ENCODE_QUERY: ClassVar[str] = (
+        "Which food ingredient lists contain {ingredient}?"
+    )
 
     logger: logging.Logger
     configs: Configs
@@ -62,7 +81,7 @@ class SentenceTransformerSearch(BaseSearch):
             SentenceTransformerSearch: The loaded search model.
         """
         index = faiss.read_index(path)
-        return SentenceTransformerSearch(init_configs, index)
+        return SentenceTransformerSearch(init_configs, index=index)
 
     def save_to_file(self, path: str):
         """Save the index to a file.
@@ -74,23 +93,47 @@ class SentenceTransformerSearch(BaseSearch):
         self.logger.debug(f"Index written to {path}")
 
     def encode(
-        self, ingredients: Iterable[str], is_query: bool = False
+        self,
+        ingredients: Iterable[str],
+        is_query: bool = False,
+        method: Optional[EncodeMethod] = None,
+        query: str = DEFAULT_ENCODE_QUERY,
     ) -> npt.NDArray[np.float32]:
         """Encode ingredients into a single vector.
 
         Arguments:
             ingredients (Iterable[str]): The ingredients to encode.
             is_query (bool): Whether the ingredients are a query or not.
+            method (EncodeMethod): The method to encode the ingredients.
+                If None, the method will be DEFAULT_ENCODE_NON_QUERY_METHOD
+                if is_query is False, otherwise DEFAULT_ENCODE_QUERY_METHOD.
+            query (str): The query to format for AVERAGE_QUERIED_VEC.
+                Defaults to DEFAULT_ENCODE_QUERY.
 
         Returns:
             npt.NDArray[np.float32]: The encoded vector.
         """
-        test = self.model.encode(
-            ", ".join(ingredients),
-            prompt=self.configs.prompt if is_query else None,
-            normalize_embeddings=True,
-        )
-        return test
+        if method is None:
+            method = (
+                self.DEFAULT_ENCODE_QUERY_METHOD
+                if is_query
+                else self.DEFAULT_ENCODE_NON_QUERY_METHOD
+            )
+
+        if method == self.EncodeMethod.COMMA_JOINED_STR:
+            return self._encode_comma_joined_str(ingredients, is_query)
+        elif method == self.EncodeMethod.QUERIED_COMMA_JOINED_STR:
+            return self._encode_queried_comma_joined_str(
+                query, ingredients, is_query
+            )
+        elif method == self.EncodeMethod.AVERAGE_VEC:
+            return self._encode_average_vec(ingredients, is_query)
+        elif method == self.EncodeMethod.AVERAGE_QUERIED_VEC:
+            return self._encode_average_queried_vec(
+                query, ingredients, is_query
+            )
+        else:
+            raise ValueError(f"Invalid method: {method}")
 
     def add(self, recipe: models.RecipeModel) -> npt.NDArray[np.float32]:
         """Add a recipe entry to the index.
@@ -136,3 +179,95 @@ class SentenceTransformerSearch(BaseSearch):
         self.logger.debug(f"Found {ids} with distances {distances}")
 
         return distances.flatten(), ids.flatten()
+
+    def _encode_comma_joined_str(
+        self, ingredients: Iterable[str], is_query: bool = False
+    ) -> npt.NDArray[np.float32]:
+        """Encode ingredients by first joining them with a comma.
+
+        Arguments:
+            ingredients (Iterable[str]): The ingredients to encode.
+            is_query (bool): Whether the ingredients are a query or not.
+
+        Returns:
+            npt.NDArray[np.float32]: The encoded vector.
+        """
+        vec = self.model.encode(
+            ", ".join(ingredients),
+            prompt=self.configs.prompt if is_query else None,
+            normalize_embeddings=True,
+        )
+        return vec
+
+    def _encode_queried_comma_joined_str(
+        self, query: str, ingredients: Iterable[str], is_query: bool = False
+    ) -> npt.NDArray[np.float32]:
+        """Encode ingredients by first formatting the query and joining them
+        with a comma.
+
+        Arguments:
+            query (str): The query to format.
+            ingredients (Iterable[str]): The ingredients to encode.
+            is_query (bool): Whether the ingredients are a query or not.
+
+        Returns:
+            npt.NDArray[np.float32]: The encoded vector.
+        """
+        if not is_query:
+            self.logger.warning(
+                "QUERIED_COMMA_JOINED_STR method should be used for queries,"
+                " defaulting to COMMA_JOINED_STR"
+            )
+            return self._encode_comma_joined_str(ingredients, is_query)
+
+        query = query.format(ingredient=", ".join(ingredients))
+        vec = self.model.encode(
+            query, prompt=self.configs.prompt, normalize_embeddings=True
+        )
+        return vec
+
+    def _encode_average_vec(
+        self, ingredients: Iterable[str], is_query: bool = False
+    ) -> npt.NDArray[np.float32]:
+        """Encode ingredients into a single vector by averaging the vectors.
+
+        Arguments:
+            ingredients (Iterable[str]): The ingredients to encode.
+            is_query (bool): Whether the ingredients are a query or not.
+
+        Returns:
+            npt.NDArray[np.float32]: The encoded vector.
+        """
+        vecs = self.model.encode(
+            list(ingredients),
+            prompt=self.configs.prompt if is_query else None,
+            normalize_embeddings=True,
+        )
+        vec = np.mean(vecs, axis=0)
+        return vec
+
+    def _encode_average_queried_vec(
+        self, query: str, ingredients: Iterable[str], is_query: bool = False
+    ) -> npt.NDArray[np.float32]:
+        """Encode ingredients by first formatting the query and averaging
+        the vectors.
+
+        Arguments:
+            query (str): The query to format.
+            ingredients (Iterable[str]): The ingredients to encode.
+            is_query (bool): Whether the ingredients are a query or not.
+
+        Returns:
+            npt.NDArray[np.float32]: The encoded vector.
+        """
+        if not is_query:
+            self.logger.warning(
+                "AVERAGE_QUERIED_VEC method should be used for queries,"
+                " defaulting to AVERAGE_VEC"
+            )
+            return self._encode_average_vec(ingredients, is_query)
+
+        queries = (
+            query.format(ingredient=ingredient) for ingredient in ingredients
+        )
+        return self._encode_average_vec(queries, is_query)
