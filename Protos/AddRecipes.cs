@@ -27,19 +27,19 @@ namespace IntelliCook.RecipeSearch.Client {
             "ChhQcm90b3MvYWRkX3JlY2lwZXMucHJvdG8iPgoRQWRkUmVjaXBlc1JlcXVl",
             "c3QSKQoHcmVjaXBlcxgBIAMoCzIYLkFkZFJlY2lwZXNSZXF1ZXN0UmVjaXBl",
             "IkAKEkFkZFJlY2lwZXNSZXNwb25zZRIqCgdyZWNpcGVzGAEgAygLMhkuQWRk",
-            "UmVjaXBlc1Jlc3BvbnNlUmVjaXBlIl8KF0FkZFJlY2lwZXNSZXF1ZXN0UmVj",
+            "UmVjaXBlc1Jlc3BvbnNlUmVjaXBlImwKF0FkZFJlY2lwZXNSZXF1ZXN0UmVj",
             "aXBlEgwKBG5hbWUYASABKAkSEwoLaW5ncmVkaWVudHMYAiADKAkSFAoMaW5z",
-            "dHJ1Y3Rpb25zGAMgAygJEgsKA3JhdxgEIAEoCSJsChhBZGRSZWNpcGVzUmVz",
-            "cG9uc2VSZWNpcGUSCgoCaWQYASABKAUSDAoEbmFtZRgCIAEoCRITCgtpbmdy",
-            "ZWRpZW50cxgDIAMoCRIUCgxpbnN0cnVjdGlvbnMYBCADKAkSCwoDcmF3GAUg",
-            "ASgJQiKqAh9JbnRlbGxpQ29vay5SZWNpcGVTZWFyY2guQ2xpZW50YgZwcm90",
-            "bzM="));
+            "dHJ1Y3Rpb25zGAMgAygJEhAKA3JhdxgEIAEoCUgAiAEBQgYKBF9yYXcibAoY",
+            "QWRkUmVjaXBlc1Jlc3BvbnNlUmVjaXBlEgoKAmlkGAEgASgFEgwKBG5hbWUY",
+            "AiABKAkSEwoLaW5ncmVkaWVudHMYAyADKAkSFAoMaW5zdHJ1Y3Rpb25zGAQg",
+            "AygJEgsKA3JhdxgFIAEoCUIiqgIfSW50ZWxsaUNvb2suUmVjaXBlU2VhcmNo",
+            "LkNsaWVudGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.AddRecipesRequest), global::IntelliCook.RecipeSearch.Client.AddRecipesRequest.Parser, new[]{ "Recipes" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.AddRecipesResponse), global::IntelliCook.RecipeSearch.Client.AddRecipesResponse.Parser, new[]{ "Recipes" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.AddRecipesRequestRecipe), global::IntelliCook.RecipeSearch.Client.AddRecipesRequestRecipe.Parser, new[]{ "Name", "Ingredients", "Instructions", "Raw" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.AddRecipesRequestRecipe), global::IntelliCook.RecipeSearch.Client.AddRecipesRequestRecipe.Parser, new[]{ "Name", "Ingredients", "Instructions", "Raw" }, new[]{ "Raw" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.AddRecipesResponseRecipe), global::IntelliCook.RecipeSearch.Client.AddRecipesResponseRecipe.Parser, new[]{ "Id", "Name", "Ingredients", "Instructions", "Raw" }, null, null, null, null)
           }));
     }
@@ -505,14 +505,28 @@ namespace IntelliCook.RecipeSearch.Client {
 
     /// <summary>Field number for the "raw" field.</summary>
     public const int RawFieldNumber = 4;
-    private string raw_ = "";
+    private readonly static string RawDefaultValue = "";
+
+    private string raw_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string Raw {
-      get { return raw_; }
+      get { return raw_ ?? RawDefaultValue; }
       set {
         raw_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
+    }
+    /// <summary>Gets whether the "raw" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasRaw {
+      get { return raw_ != null; }
+    }
+    /// <summary>Clears the value of the "raw" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearRaw() {
+      raw_ = null;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -544,7 +558,7 @@ namespace IntelliCook.RecipeSearch.Client {
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       hash ^= ingredients_.GetHashCode();
       hash ^= instructions_.GetHashCode();
-      if (Raw.Length != 0) hash ^= Raw.GetHashCode();
+      if (HasRaw) hash ^= Raw.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -569,7 +583,7 @@ namespace IntelliCook.RecipeSearch.Client {
       }
       ingredients_.WriteTo(output, _repeated_ingredients_codec);
       instructions_.WriteTo(output, _repeated_instructions_codec);
-      if (Raw.Length != 0) {
+      if (HasRaw) {
         output.WriteRawTag(34);
         output.WriteString(Raw);
       }
@@ -589,7 +603,7 @@ namespace IntelliCook.RecipeSearch.Client {
       }
       ingredients_.WriteTo(ref output, _repeated_ingredients_codec);
       instructions_.WriteTo(ref output, _repeated_instructions_codec);
-      if (Raw.Length != 0) {
+      if (HasRaw) {
         output.WriteRawTag(34);
         output.WriteString(Raw);
       }
@@ -608,7 +622,7 @@ namespace IntelliCook.RecipeSearch.Client {
       }
       size += ingredients_.CalculateSize(_repeated_ingredients_codec);
       size += instructions_.CalculateSize(_repeated_instructions_codec);
-      if (Raw.Length != 0) {
+      if (HasRaw) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Raw);
       }
       if (_unknownFields != null) {
@@ -628,7 +642,7 @@ namespace IntelliCook.RecipeSearch.Client {
       }
       ingredients_.Add(other.ingredients_);
       instructions_.Add(other.instructions_);
-      if (other.Raw.Length != 0) {
+      if (other.HasRaw) {
         Raw = other.Raw;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
