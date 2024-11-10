@@ -6,6 +6,7 @@ message SearchRecipesByIngredientsRequest {
     string username = 1;
     repeated string ingredients = 2;
     optional uint32 limit = 3;
+    optional bool include_detail = 4;
 }
 
 message SearchRecipesByIngredientsResponse {
@@ -14,6 +15,12 @@ message SearchRecipesByIngredientsResponse {
 
 message SearchRecipesByIngredientsRecipe {
     int32 id = 1;
-    float distance = 2;
-    string name = 3;
+    string name = 2;
+    optional SearchRecipesByIngredientsRecipeDetail detail = 3;
+}
+
+message SearchRecipesByIngredientsRecipeDetail {
+    repeated string ingredients = 1;
+    repeated string instructions = 2;
+    string raw = 3;
 }

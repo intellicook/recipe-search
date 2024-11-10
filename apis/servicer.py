@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 import grpc
 from sqlalchemy.exc import NoResultFound
@@ -30,6 +30,7 @@ from protos.init_faiss_index_pb2 import (
 from protos.recipe_pb2 import RecipeRequest, RecipeResponse
 from protos.search_recipes_by_ingredients_pb2 import (
     SearchRecipesByIngredientsRecipe,
+    SearchRecipesByIngredientsRecipeDetail,
     SearchRecipesByIngredientsRequest,
     SearchRecipesByIngredientsResponse,
 )
@@ -122,16 +123,30 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
                 "Search model is not initialized",
             )
 
+        results: List[Tuple[int, float]]
+
         recipes = controllers.get_recipes(id for id, _ in results)
+
+        include_detail = (
+            request.HasField("include_detail") and request.include_detail
+        )
 
         return SearchRecipesByIngredientsResponse(
             recipes=[
                 SearchRecipesByIngredientsRecipe(
                     id=id,
-                    distance=distance,
                     name=recipe.name,
+                    detail=(
+                        SearchRecipesByIngredientsRecipeDetail(
+                            ingredients=recipe.ingredients,
+                            instructions=recipe.instructions,
+                            raw=recipe.raw,
+                        )
+                        if include_detail
+                        else None
+                    ),
                 )
-                for (id, distance), recipe in zip(results, recipes)
+                for (id, _), recipe in zip(results, recipes)
             ],
         )
 
@@ -153,7 +168,7 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
                     name=recipe.name,
                     ingredients=list(recipe.ingredients),
                     instructions=list(recipe.instructions),
-                    raw=recipe.raw,
+                    raw=recipe.raw if recipe.HasField("raw") else "",
                 )
                 for recipe in request.recipes
             ],
