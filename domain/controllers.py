@@ -208,9 +208,11 @@ def search_recipes(
     if not include_detail:
         return [recipe.to_model() for recipe in results]
 
+    result_ids = [recipe.id for recipe in results]
+
     recipes = sorted(
         get_recipes(recipe.id for recipe in results),
-        key=lambda recipe: results.index(recipe.id),
+        key=lambda recipe: result_ids.index(recipe.id),
     )
 
     return recipes
