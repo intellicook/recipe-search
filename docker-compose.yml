@@ -37,7 +37,6 @@ services:
     ports:
       - 2606:8108
     environment:
-      - TYPESENSE_ENABLE_SEARCH_LOGGING=${TYPESENSE_ENABLE_SEARCH_LOGGING}
       - TYPESENSE_API_KEY=${TYPESENSE_API_KEY}
       - TYPESENSE_DATA_DIR=/data
     volumes:
