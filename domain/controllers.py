@@ -1,14 +1,14 @@
 import logging
 from typing import Iterable, List, Optional, Tuple, Type
 
-from sqlalchemy import func, select
+from sqlalchemy import delete, func, select, text
 from sqlalchemy.orm import Session
 
 from configs.domain import configs
 from domain import chats, searches
 from domain.chats.base import BaseChat, BaseChatMessage
-from domain.searches import faiss
 from domain.searches.base import BaseSearch
+from domain.searches.engines import faiss, typesense
 from infra import models
 from infra.db import engine
 
@@ -82,6 +82,15 @@ def init_search(cls: Type[BaseSearch]) -> Optional[BaseSearch]:
     return search
 
 
+def is_typesense_healthy() -> bool:
+    """Check if the Typesense search engine is healthy.
+
+    Returns:
+        bool: True if healthy, False otherwise.
+    """
+    return typesense.search_engine.is_healthy()
+
+
 def get_recipe(id: int) -> models.RecipeModel:
     """Get the recipe details.
 
@@ -131,6 +140,8 @@ def add_recipes(
         session.add_all(recipes)
         session.commit()
 
+    typesense.search_engine.add_recipes(recipes)
+
     return recipes
 
 
@@ -163,6 +174,48 @@ def search_recipes_by_ingredients(
     return sorted(list(zip(indices, distances)), key=lambda x: x[1])
 
 
+def search_recipes(
+    ingredients: Iterable[str],
+    page: int = 1,
+    per_page: int = configs.default_search_per_page,
+    include_detail: bool = False,
+) -> List[models.RecipeModel]:
+    """Search recipes by ingredients.
+
+    Results are ordered by relevance.
+
+    Arguments:
+        ingredients (Iterable[str]): The list of ingredients to search.
+        page (int): The page number to return. Defaults to 1.
+        per_page (int): The number of recipes to return per page. Defaults to
+            configs.domain.configs.default_search_per_page.
+        include_detail (bool): Whether to include the recipe details. Defaults
+            to False. If False, only the recipe ID, name, and ingredients are
+            assigned to the returned recipes.
+
+    Returns:
+        List[models.RecipeModel]: The list of recipes.
+    """
+    logger.debug(
+        f"Searching for recipes with: ingredients={ingredients},"
+        f" page={page}, per_page={per_page}, include_detail={include_detail}"
+    )
+
+    results = typesense.search_engine.search_recipes(
+        ingredients, page=page, per_page=per_page
+    )
+
+    if not include_detail:
+        return [recipe.to_model() for recipe in results]
+
+    recipes = sorted(
+        get_recipes(recipe.id for recipe in results),
+        key=lambda recipe: results.index(recipe.id),
+    )
+
+    return recipes
+
+
 def init_faiss_index(
     count: int = None,
     path: str = configs.default_faiss_index_path,
@@ -189,7 +242,7 @@ def get_faiss_index_thread() -> faiss.IndexThread:
     """Get the Faiss index thread.
 
     Returns:
-        faiss.FaissIndexThread: The Faiss index thread.
+        faiss.IndexThread: The Faiss index thread.
     """
     return faiss.index_thread
 
@@ -229,6 +282,35 @@ def chat_by_recipe(
     logger.debug(f"Messages: {messages}")
 
     return chat.chat(messages)
+
+
+def reset_data():
+    """Reset the data."""
+    with Session(engine) as session:
+        session.execute(delete(models.RecipeModel))
+        session.execute(
+            text(
+                f"ALTER SEQUENCE {models.RecipeModel.__tablename__}_id_seq"
+                " RESTART WITH 1"
+            )
+        )
+
+        session.execute(delete(models.IndexFileModel))
+        session.execute(
+            text(
+                f"ALTER SEQUENCE {models.IndexFileModel.__tablename__}_id_seq"
+                " RESTART WITH 1"
+            )
+        )
+
+        session.commit()
+
+    typesense.search_engine.remove_all_recipes()
+
+    global search
+
+    if search is not None:
+        search = None
 
 
 search = init_search(searches.model)

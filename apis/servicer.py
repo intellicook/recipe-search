@@ -28,11 +28,18 @@ from protos.init_faiss_index_pb2 import (
     InitFaissIndexResponse,
 )
 from protos.recipe_pb2 import RecipeRequest, RecipeResponse
+from protos.reset_data_pb2 import ResetDataRequest, ResetDataResponse
 from protos.search_recipes_by_ingredients_pb2 import (
     SearchRecipesByIngredientsRecipe,
     SearchRecipesByIngredientsRecipeDetail,
     SearchRecipesByIngredientsRequest,
     SearchRecipesByIngredientsResponse,
+)
+from protos.search_recipes_pb2 import (
+    SearchRecipesRecipe,
+    SearchRecipesRecipeDetail,
+    SearchRecipesRequest,
+    SearchRecipesResponse,
 )
 from protos.service_pb2_grpc import RecipeSearchServiceServicer
 
@@ -49,7 +56,6 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
         status = HealthStatus.HEALTHY
         checks: List[HealthCheck] = []
 
-        # Database
         checks.append(
             HealthCheck(
                 name="PostgreSQL",
@@ -61,7 +67,17 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
             )
         )
 
-        # Overall status
+        checks.append(
+            HealthCheck(
+                name="Typesense",
+                status=(
+                    HealthStatus.HEALTHY
+                    if controllers.is_typesense_healthy()
+                    else HealthStatus.UNHEALTHY
+                ),
+            )
+        )
+
         if any(check.status == HealthStatus.UNHEALTHY for check in checks):
             status = HealthStatus.UNHEALTHY
         elif any(check.status == HealthStatus.DEGRADED for check in checks):
@@ -150,6 +166,65 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
                     ),
                 )
                 for (id, _), recipe in zip(results, ordered_recipes)
+            ],
+        )
+
+    def SearchRecipes(
+        self,
+        request: SearchRecipesRequest,
+        context: grpc.ServicerContext,
+    ) -> SearchRecipesResponse:
+        """Search for recipes given the query"""
+        if not request.ingredients:
+            context.abort(
+                grpc.StatusCode.INVALID_ARGUMENT,
+                "Ingredients cannot be empty",
+            )
+
+        if not request.HasField("page"):
+            request.page = 1
+
+        if request.page <= 0:
+            context.abort(
+                grpc.StatusCode.INVALID_ARGUMENT,
+                "Page must be a positive integer",
+            )
+
+        if not request.HasField("per_page"):
+            request.per_page = domain_configs.default_search_per_page
+
+        if request.per_page <= 0:
+            context.abort(
+                grpc.StatusCode.INVALID_ARGUMENT,
+                "Per page must be a positive integer",
+            )
+
+        if not request.HasField("include_detail"):
+            request.include_detail = False
+
+        recipes = controllers.search_recipes(
+            ingredients=request.ingredients,
+            page=request.page,
+            per_page=request.per_page,
+            include_detail=request.include_detail,
+        )
+
+        return SearchRecipesResponse(
+            recipes=[
+                SearchRecipesRecipe(
+                    id=recipe.id,
+                    name=recipe.name,
+                    ingredients=recipe.ingredients,
+                    detail=(
+                        SearchRecipesRecipeDetail(
+                            instructions=recipe.instructions,
+                            raw=recipe.raw,
+                        )
+                        if request.include_detail
+                        else None
+                    ),
+                )
+                for recipe in recipes
             ],
         )
 
@@ -256,3 +331,13 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
         return ChatByRecipeResponse(
             message=response_message,
         )
+
+    def ResetData(
+        self,
+        request: ResetDataRequest,
+        context: grpc.ServicerContext,
+    ) -> ResetDataResponse:
+        """Reset the data in the database"""
+        controllers.reset_data()
+
+        return ResetDataResponse()
