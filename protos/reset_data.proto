@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option csharp_namespace = "IntelliCook.RecipeSearch.Client";
+
+message ResetDataRequest {
+
+}
+
+message ResetDataResponse {
+
+}

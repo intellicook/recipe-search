@@ -9,7 +9,9 @@ from protos import faiss_index_thread_pb2 as protos_dot_faiss__index__thread__pb
 from protos import health_pb2 as protos_dot_health__pb2
 from protos import init_faiss_index_pb2 as protos_dot_init__faiss__index__pb2
 from protos import recipe_pb2 as protos_dot_recipe__pb2
+from protos import reset_data_pb2 as protos_dot_reset__data__pb2
 from protos import search_recipes_by_ingredients_pb2 as protos_dot_search__recipes__by__ingredients__pb2
+from protos import search_recipes_pb2 as protos_dot_search__recipes__pb2
 
 GRPC_GENERATED_VERSION = '1.66.2'
 GRPC_VERSION = grpc.__version__
@@ -55,6 +57,11 @@ class RecipeSearchServiceStub(object):
                 request_serializer=protos_dot_search__recipes__by__ingredients__pb2.SearchRecipesByIngredientsRequest.SerializeToString,
                 response_deserializer=protos_dot_search__recipes__by__ingredients__pb2.SearchRecipesByIngredientsResponse.FromString,
                 _registered_method=True)
+        self.SearchRecipes = channel.unary_unary(
+                '/RecipeSearchService/SearchRecipes',
+                request_serializer=protos_dot_search__recipes__pb2.SearchRecipesRequest.SerializeToString,
+                response_deserializer=protos_dot_search__recipes__pb2.SearchRecipesResponse.FromString,
+                _registered_method=True)
         self.ChatByRecipe = channel.unary_unary(
                 '/RecipeSearchService/ChatByRecipe',
                 request_serializer=protos_dot_chat__by__recipe__pb2.ChatByRecipeRequest.SerializeToString,
@@ -74,6 +81,11 @@ class RecipeSearchServiceStub(object):
                 '/RecipeSearchService/GetFaissIndexThread',
                 request_serializer=protos_dot_faiss__index__thread__pb2.FaissIndexThreadRequest.SerializeToString,
                 response_deserializer=protos_dot_faiss__index__thread__pb2.FaissIndexThreadResponse.FromString,
+                _registered_method=True)
+        self.ResetData = channel.unary_unary(
+                '/RecipeSearchService/ResetData',
+                request_serializer=protos_dot_reset__data__pb2.ResetDataRequest.SerializeToString,
+                response_deserializer=protos_dot_reset__data__pb2.ResetDataResponse.FromString,
                 _registered_method=True)
 
 
@@ -95,6 +107,12 @@ class RecipeSearchServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def SearchRecipesByIngredients(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def SearchRecipes(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -126,6 +144,12 @@ class RecipeSearchServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ResetData(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_RecipeSearchServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -143,6 +167,11 @@ def add_RecipeSearchServiceServicer_to_server(servicer, server):
                     servicer.SearchRecipesByIngredients,
                     request_deserializer=protos_dot_search__recipes__by__ingredients__pb2.SearchRecipesByIngredientsRequest.FromString,
                     response_serializer=protos_dot_search__recipes__by__ingredients__pb2.SearchRecipesByIngredientsResponse.SerializeToString,
+            ),
+            'SearchRecipes': grpc.unary_unary_rpc_method_handler(
+                    servicer.SearchRecipes,
+                    request_deserializer=protos_dot_search__recipes__pb2.SearchRecipesRequest.FromString,
+                    response_serializer=protos_dot_search__recipes__pb2.SearchRecipesResponse.SerializeToString,
             ),
             'ChatByRecipe': grpc.unary_unary_rpc_method_handler(
                     servicer.ChatByRecipe,
@@ -163,6 +192,11 @@ def add_RecipeSearchServiceServicer_to_server(servicer, server):
                     servicer.GetFaissIndexThread,
                     request_deserializer=protos_dot_faiss__index__thread__pb2.FaissIndexThreadRequest.FromString,
                     response_serializer=protos_dot_faiss__index__thread__pb2.FaissIndexThreadResponse.SerializeToString,
+            ),
+            'ResetData': grpc.unary_unary_rpc_method_handler(
+                    servicer.ResetData,
+                    request_deserializer=protos_dot_reset__data__pb2.ResetDataRequest.FromString,
+                    response_serializer=protos_dot_reset__data__pb2.ResetDataResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -246,6 +280,33 @@ class RecipeSearchService(object):
             '/RecipeSearchService/SearchRecipesByIngredients',
             protos_dot_search__recipes__by__ingredients__pb2.SearchRecipesByIngredientsRequest.SerializeToString,
             protos_dot_search__recipes__by__ingredients__pb2.SearchRecipesByIngredientsResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def SearchRecipes(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/RecipeSearchService/SearchRecipes',
+            protos_dot_search__recipes__pb2.SearchRecipesRequest.SerializeToString,
+            protos_dot_search__recipes__pb2.SearchRecipesResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -354,6 +415,33 @@ class RecipeSearchService(object):
             '/RecipeSearchService/GetFaissIndexThread',
             protos_dot_faiss__index__thread__pb2.FaissIndexThreadRequest.SerializeToString,
             protos_dot_faiss__index__thread__pb2.FaissIndexThreadResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ResetData(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/RecipeSearchService/ResetData',
+            protos_dot_reset__data__pb2.ResetDataRequest.SerializeToString,
+            protos_dot_reset__data__pb2.ResetDataResponse.FromString,
             options,
             channel_credentials,
             insecure,

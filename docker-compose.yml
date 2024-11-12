@@ -14,6 +14,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      typesense-se:
+        condition: service_started
   db:
     image: postgres:14
     volumes:
@@ -29,9 +31,22 @@ services:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
+  typesense-se:
+    image: typesense/typesense:27.1
+    restart: on-failure
+    ports:
+      - 2606:8108
+    environment:
+      - TYPESENSE_ENABLE_SEARCH_LOGGING=${TYPESENSE_ENABLE_SEARCH_LOGGING}
+      - TYPESENSE_API_KEY=${TYPESENSE_API_KEY}
+      - TYPESENSE_DATA_DIR=/data
+    volumes:
+      - typesense_data:/data
 
 volumes:
   data:
     name: recipesearch_data
   postgres_data:
     name: postgres_data
+  typesense_data:
+    name: typesense_data

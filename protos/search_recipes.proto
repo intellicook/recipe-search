@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option csharp_namespace = "IntelliCook.RecipeSearch.Client";
+
+message SearchRecipesRequest {
+    string username = 1;
+    repeated string ingredients = 2;
+    optional uint32 page = 3;
+    optional uint32 per_page = 4;
+    optional bool include_detail = 5;
+}
+
+message SearchRecipesResponse {
+    repeated SearchRecipesRecipe recipes = 1;
+}
+
+message SearchRecipesRecipe {
+    int32 id = 1;
+    string name = 2;
+    repeated string ingredients = 3;
+    optional SearchRecipesRecipeDetail detail = 4;
+}
+
+message SearchRecipesRecipeDetail {
+    repeated string instructions = 1;
+    string raw = 2;
+}

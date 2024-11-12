@@ -4,6 +4,10 @@ from configs.domain import configs
 from infra import models
 
 
+def is_typesense_healthy() -> bool:
+    pass
+
+
 def get_recipe(id: int) -> models.RecipeModel:
     pass
 
@@ -20,6 +24,15 @@ def search_recipes_by_ingredients(
     ingredients: Iterable[str],
     limit: int = configs.default_search_limit,
 ) -> List[int]:
+    pass
+
+
+def search_recipes(
+    ingredients: Iterable[str],
+    page: int = 1,
+    per_page: int = configs.default_search_per_page,
+    include_detail: bool = False,
+) -> List[models.RecipeModel]:
     pass
 
 
