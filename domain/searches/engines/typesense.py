@@ -217,7 +217,8 @@ class TypesenseSearchEngine:
 
         response = self.recipes.documents.search(
             {
-                "q": " ".join(f'"{ingredient}"' for ingredient in ingredients),
+                "q": " ".join(ingredients),
+                "query_by_weights": "1,1",
                 "query_by": "name,ingredients",
                 "drop_tokens_threshold": recipes_count + 1,
                 "drop_tokens_mode": "both_sides:3",
