@@ -50,6 +50,14 @@ def get_faiss_index_thread() -> Any:  # faiss.IndexThread
 def chat_by_recipe(
     name: str,
     recipe: models.RecipeModel,
-    messages: Iterable[Any],  # Iterablep[BaseChatMessage]
-) -> Any:  # BaseChatMessage
+    messages: Iterable[models.ChatMessageModel],
+) -> models.ChatMessageModel:
+    pass
+
+
+def chat_by_recipe_stream(
+    name: str,
+    recipe: models.RecipeModel,
+    messages: Iterable[models.ChatMessageModel],
+) -> Iterable[models.ChatStreamModel]:
     pass
