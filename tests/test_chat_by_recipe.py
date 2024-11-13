@@ -61,20 +61,13 @@ def test_chat_by_recipe_success(mocker: pytest_mock.MockerFixture):
         "domain.controllers.get_recipe",
         return_value=recipe,
     )
-    mocker.patch(
-        "domain.controllers.get_chat_type",
-        return_value=mocker.MagicMock(
-            get_message_type=mocker.MagicMock(
-                return_value=mocker.MagicMock(
-                    from_proto=lambda message: message,
-                ),
-            ),
-        ),
-    )
     mock_chat = mocker.patch(
         "domain.controllers.chat_by_recipe",
-        return_value=mocker.MagicMock(
-            to_proto=lambda: expected_response.message,
+        return_value=models.ChatMessageModel(
+            role=models.ChatRoleModel.from_proto(
+                expected_response.message.role
+            ),
+            text=expected_response.message.text,
         ),
     )
 

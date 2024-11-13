@@ -1,8 +1,12 @@
+from dataclasses import dataclass
+from enum import StrEnum
 from typing import List
 
 from sqlalchemy import MetaData, PickleType
 from sqlalchemy.ext.mutable import MutableList
 from sqlalchemy.orm import Mapped, declarative_base, mapped_column
+
+from protos.chat_by_recipe_pb2 import ChatByRecipeRole
 
 Base = declarative_base(metadata=MetaData(schema="public"))
 
@@ -41,3 +45,76 @@ class IndexFileModel(Base):
 
     def __repr__(self) -> str:
         return f"IndexFile(path={self.path})"
+
+
+"""
+Following models are not database models,
+they are simply used as in-memory data structures.
+"""
+
+
+class ChatRoleModel(StrEnum):
+    """Chat role model"""
+
+    USER = "user"
+    ASSISTANT = "assistant"
+
+    @classmethod
+    def from_proto(cls, role: ChatByRecipeRole) -> "ChatRoleModel":
+        """Create a role from a proto role.
+
+        Arguments:
+            role (ChatByRecipeRole): The proto role.
+
+        Returns:
+            ChatRoleModel: The new role.
+        """
+        if role == ChatByRecipeRole.USER:
+            return cls.USER
+        if role == ChatByRecipeRole.ASSISTANT:
+            return cls.ASSISTANT
+
+    def to_proto(self) -> ChatByRecipeRole:
+        """Convert the role to a proto role.
+
+        Returns:
+            ChatByRecipeRole: The proto role.
+        """
+        if self == self.USER:
+            return ChatByRecipeRole.USER
+        if self == self.ASSISTANT:
+            return ChatByRecipeRole.ASSISTANT
+
+
+@dataclass
+class ChatMessageModel:
+    """Chat message model"""
+
+    role: ChatRoleModel
+    text: str
+
+    def __repr__(self) -> str:
+        return f"ChatMessage(role={self.role}, text={self.text})"
+
+
+@dataclass
+class ChatStreamHeaderModel:
+    """Chat stream header model"""
+
+    role: ChatRoleModel
+
+    def __repr__(self) -> str:
+        return f"ChatStreamHeader(role={self.role})"
+
+
+@dataclass
+class ChatStreamContentModel:
+    """Chat stream content model"""
+
+    text: str
+
+    def __repr__(self) -> str:
+        return f"ChatStreamContent(text={self.text})"
+
+
+ChatStreamModel = ChatStreamHeaderModel | ChatStreamContentModel

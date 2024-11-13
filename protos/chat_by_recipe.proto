@@ -13,13 +13,27 @@ message ChatByRecipeResponse {
     ChatByRecipeMessage message = 1;
 }
 
+message ChatByRecipeStreamResponse {
+    oneof response {
+        ChatByRecipeStreamHeader header = 1;
+        ChatByRecipeStreamContent content = 2;
+    }
+}
+
 enum ChatByRecipeRole {
-    SYSTEM = 0;
-    USER = 1;
-    ASSISTANT = 2;
+    USER = 0;
+    ASSISTANT = 1;
 }
 
 message ChatByRecipeMessage {
     ChatByRecipeRole role = 1;
     string text = 2;
+}
+
+message ChatByRecipeStreamHeader {
+    ChatByRecipeRole role = 1;
+}
+
+message ChatByRecipeStreamContent {
+    string text = 1;
 }

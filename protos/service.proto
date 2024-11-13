@@ -21,6 +21,7 @@ service RecipeSearchService {
     rpc SearchRecipesByIngredients (SearchRecipesByIngredientsRequest) returns (SearchRecipesByIngredientsResponse) {}
     rpc SearchRecipes (SearchRecipesRequest) returns (SearchRecipesResponse) {}
     rpc ChatByRecipe (ChatByRecipeRequest) returns (ChatByRecipeResponse) {}
+    rpc ChatByRecipeStream (ChatByRecipeRequest) returns (stream ChatByRecipeStreamResponse) {}
 
     // Admin services
 

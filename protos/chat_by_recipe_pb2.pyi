@@ -8,10 +8,8 @@ DESCRIPTOR: _descriptor.FileDescriptor
 
 class ChatByRecipeRole(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
-    SYSTEM: _ClassVar[ChatByRecipeRole]
     USER: _ClassVar[ChatByRecipeRole]
     ASSISTANT: _ClassVar[ChatByRecipeRole]
-SYSTEM: ChatByRecipeRole
 USER: ChatByRecipeRole
 ASSISTANT: ChatByRecipeRole
 
@@ -33,6 +31,14 @@ class ChatByRecipeResponse(_message.Message):
     message: ChatByRecipeMessage
     def __init__(self, message: _Optional[_Union[ChatByRecipeMessage, _Mapping]] = ...) -> None: ...
 
+class ChatByRecipeStreamResponse(_message.Message):
+    __slots__ = ("header", "content")
+    HEADER_FIELD_NUMBER: _ClassVar[int]
+    CONTENT_FIELD_NUMBER: _ClassVar[int]
+    header: ChatByRecipeStreamHeader
+    content: ChatByRecipeStreamContent
+    def __init__(self, header: _Optional[_Union[ChatByRecipeStreamHeader, _Mapping]] = ..., content: _Optional[_Union[ChatByRecipeStreamContent, _Mapping]] = ...) -> None: ...
+
 class ChatByRecipeMessage(_message.Message):
     __slots__ = ("role", "text")
     ROLE_FIELD_NUMBER: _ClassVar[int]
@@ -40,3 +46,15 @@ class ChatByRecipeMessage(_message.Message):
     role: ChatByRecipeRole
     text: str
     def __init__(self, role: _Optional[_Union[ChatByRecipeRole, str]] = ..., text: _Optional[str] = ...) -> None: ...
+
+class ChatByRecipeStreamHeader(_message.Message):
+    __slots__ = ("role",)
+    ROLE_FIELD_NUMBER: _ClassVar[int]
+    role: ChatByRecipeRole
+    def __init__(self, role: _Optional[_Union[ChatByRecipeRole, str]] = ...) -> None: ...
+
+class ChatByRecipeStreamContent(_message.Message):
+    __slots__ = ("text",)
+    TEXT_FIELD_NUMBER: _ClassVar[int]
+    text: str
+    def __init__(self, text: _Optional[str] = ...) -> None: ...
