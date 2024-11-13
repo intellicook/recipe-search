@@ -1,151 +1,30 @@
 import logging
 from dataclasses import dataclass
-from enum import Enum, StrEnum, auto
-from typing import Any, Dict, Iterable, Optional, Type
+from enum import Enum, auto
+from typing import Dict, Iterable, Optional
 
 import openai
-from openai.types.chat.chat_completion_message import (
-    ChatCompletionMessage as OpenAIChatCompletionMessage,
+from openai.types.chat import (
+    ChatCompletionAssistantMessageParam as OpenAIAssistantMessageParam,
+)
+from openai.types.chat import ChatCompletionMessage as OpenAICompletionMessage
+from openai.types.chat import (
+    ChatCompletionSystemMessageParam as OpenAISystemMessageParam,
+)
+from openai.types.chat import (
+    ChatCompletionUserMessageParam as OpenAIUserMessageParam,
+)
+from openai.types.chat.chat_completion_chunk import (
+    ChoiceDelta as OpenAIStreamChoiceDelta,
 )
 
 from configs.azure import configs
-from domain.chats.base import BaseChat, BaseChatMessage
+from domain.chats.base import BaseChat
 from infra import models
-from protos.chat_by_recipe_pb2 import ChatByRecipeMessage, ChatByRecipeRole
-
-
-@dataclass
-class AzureOpenAIChatMessage(BaseChatMessage):
-    """Message class for Azure OpenAI chat model"""
-
-    class Role(StrEnum):
-        """Message role enumeration"""
-
-        SYSTEM = "system"
-        USER = "user"
-        ASSISTANT = "assistant"
-
-        @classmethod
-        def from_proto(
-            cls, role: ChatByRecipeRole
-        ) -> "AzureOpenAIChatMessage.Role":
-            """Create a role from a protobuf role.
-
-            Arguments:
-                role (ChatByRecipeRole): The protobuf role.
-
-            Returns:
-                AzureOpenAIChatMessage.Role: The new role.
-            """
-            if role == ChatByRecipeRole.SYSTEM:
-                return cls.SYSTEM
-            if role == ChatByRecipeRole.USER:
-                return cls.USER
-            if role == ChatByRecipeRole.ASSISTANT:
-                return cls.ASSISTANT
-
-        def to_proto(self) -> ChatByRecipeRole:
-            """Convert the role to a protobuf role.
-
-            Returns:
-                ChatByRecipeRole: The protobuf role.
-            """
-            if self == self.SYSTEM:
-                return ChatByRecipeRole.SYSTEM
-            if self == self.USER:
-                return ChatByRecipeRole.USER
-            if self == self.ASSISTANT:
-                return ChatByRecipeRole.ASSISTANT
-
-    @dataclass
-    class Message:
-        """Message class"""
-
-        role: "AzureOpenAIChatMessage.Role"
-        content: str
-
-    message: Message
-
-    @classmethod
-    def from_proto(
-        cls, proto: ChatByRecipeMessage
-    ) -> "AzureOpenAIChatMessage":
-        """Create a message from a protobuf message.
-
-        Arguments:
-            proto (ChatByRecipeMessage): The protobuf message.
-
-        Returns:
-            BaseChatMessage: The new message.
-        """
-        return cls(
-            message=cls.Message(
-                role=cls.Role.from_proto(proto.role),
-                content=proto.text,
-            )
-        )
-
-    def to_proto(self) -> ChatByRecipeMessage:
-        """Convert the message to a protobuf message.
-
-        Returns:
-            ChatByRecipeMessage: The protobuf message.
-        """
-        return ChatByRecipeMessage(
-            role=self.message.role.to_proto(),
-            text=self.message.content,
-        )
-
-    def to_payload(self) -> Dict[str, Any]:
-        """Convert to message payload.
-
-        Returns:
-            Dict[str, Any]: The message payload.
-        """
-        return {
-            "role": self.message.role.value,
-            "content": [
-                {
-                    "type": "text",
-                    "text": self.message.content,
-                },
-            ],
-        }
-
-    @classmethod
-    def from_payload(
-        cls, message: OpenAIChatCompletionMessage
-    ) -> "AzureOpenAIChatMessage":
-        """Create from response message.
-
-        Arguments:
-            message (OpenAIChatCompletionMessage): The message type from
-                OpenAI.
-
-        Returns:
-            AzureOpenAIChatMessage: The message.
-        """
-        if not message.content:
-            raise Exception("Content is empty")
-
-        return cls(
-            message=cls.Message(
-                role=cls.Role(message.role), content=message.content
-            )
-        )
 
 
 class AzureOpenAIChat(BaseChat):
     """Chat class for Azure OpenAI chat model"""
-
-    @classmethod
-    def get_message_type(cls) -> Type[AzureOpenAIChatMessage]:
-        """Get the message type of the chat model.
-
-        Returns:
-            Type[AzureOpenAIChatMessage]: The message type of the chat model.
-        """
-        return AzureOpenAIChatMessage
 
     @dataclass
     class Configs:
@@ -225,17 +104,15 @@ class AzureOpenAIChat(BaseChat):
             if (prompt := self.system_prompts[key])
         )
 
-    def get_system_message(self) -> AzureOpenAIChatMessage:
-        """Get the system message.
+    def get_system_payload(self) -> OpenAISystemMessageParam:
+        """Get the OpenAI system message.
 
         Returns:
-            AzureOpenAIChatMessage: The system message.
+            OpenAISystemMessageParam: The system message.
         """
-        return AzureOpenAIChatMessage(
-            message=AzureOpenAIChatMessage.Message(
-                role=AzureOpenAIChatMessage.Role.SYSTEM,
-                content=self.get_system_prompt(),
-            )
+        return OpenAISystemMessageParam(
+            role="system",
+            content=self.get_system_prompt(),
         )
 
     def set_user(self, user: str):
@@ -268,22 +145,25 @@ class AzureOpenAIChat(BaseChat):
         )
 
     def chat(
-        self, messages: Iterable[AzureOpenAIChatMessage]
-    ) -> AzureOpenAIChatMessage:
+        self, messages: Iterable[models.ChatMessageModel]
+    ) -> models.ChatMessageModel:
         """Chat with the model.
 
         Arguments:
-            messages (Iterable[AzureOpenAIChatMessage]): The messages to chat
+            messages (Iterable[models.ChatMessageModel]): The messages to chat
                 with.
 
         Returns:
-            AzureOpenAIChatMessage: The response message.
+            models.ChatMessageModel: The response message.
         """
         response = self.client.chat.completions.create(
             model=self.configs.model,
             messages=[
-                self.get_system_message().to_payload(),
-                *(message.to_payload() for message in messages),
+                self.get_system_payload(),
+                *(
+                    self._message_model_to_openai_message_param(message)
+                    for message in messages
+                ),
             ],
         )
 
@@ -297,8 +177,122 @@ class AzureOpenAIChat(BaseChat):
         if choice.finish_reason not in ("length", "stop"):
             raise Exception(f"Invalid finish reason: {choice.finish_reason}")
 
-        response_message = AzureOpenAIChatMessage.from_payload(
+        response_message = self._openai_completion_message_to_model(
             response.choices[0].message
         )
 
         return response_message
+
+    def chat_stream(
+        self, messages: Iterable[models.ChatMessageModel]
+    ) -> Iterable[models.ChatStreamModel]:
+        """Chat with the model and return a stream of messages.
+
+        Arguments:
+            messages (Iterable[models.ChatMessageModel]): The messages to chat
+                with.
+
+        Returns:
+            Iterable[models.ChatStreamModel]: The response stream of messages.
+        """
+        stream = self.client.chat.completions.create(
+            model=self.configs.model,
+            messages=[
+                self.get_system_payload(),
+                *(
+                    self._message_model_to_openai_message_param(message)
+                    for message in messages
+                ),
+            ],
+            stream=True,
+        )
+
+        for chunk in stream:
+            if not chunk.choices or not chunk.choices[0].delta:
+                self.logger.debug(f"No delta in chunk: chunk={chunk}")
+                continue
+
+            delta = chunk.choices[0].delta
+            stream_model = self._openai_stream_choice_delta_to_stream_model(
+                delta
+            )
+
+            if stream_model is None:
+                self.logger.debug(
+                    f"Did not convert delta to stream model: delta={delta}"
+                )
+                continue
+
+            yield stream_model
+
+    def _openai_completion_message_to_model(
+        self,
+        message: OpenAICompletionMessage,
+    ) -> models.ChatMessageModel:
+        """Convert OpenAI completion message to message model.
+
+        Arguments:
+            message (OpenAICompletionMessage): The message from OpenAI.
+
+        Returns:
+            models.ChatMessageModel: The message model.
+        """
+        if not message.content:
+            raise Exception("Content is empty")
+
+        return models.ChatMessageModel(
+            role=models.ChatRoleModel.ASSISTANT,
+            text=message.content,
+        )
+
+    def _openai_stream_choice_delta_to_stream_model(
+        self,
+        delta: OpenAIStreamChoiceDelta,
+    ) -> Optional[models.ChatStreamModel]:
+        """Convert OpenAI stream choice delta to stream model.
+
+        Arguments:
+            delta (OpenAIStreamChoiceDelta): The message type from
+                OpenAI.
+
+        Returns:
+            Optional[models.ChatStreamModel]: The stream model.
+        """
+        if delta.role is not None:
+            if delta.role == "assistant":
+                return models.ChatStreamHeaderModel(
+                    role=models.ChatRoleModel.ASSISTANT,
+                )
+            else:
+                self.logger.warning(f"Unexpected role: {delta.role}")
+                return None
+
+        if delta.content is not None:
+            return models.ChatStreamContentModel(
+                text=delta.content,
+            )
+
+        return None
+
+    def _message_model_to_openai_message_param(
+        self,
+        message: models.ChatMessageModel,
+    ) -> OpenAIUserMessageParam | OpenAIAssistantMessageParam:
+        """Convert message model to OpenAI message parameter.
+
+        Arguments:
+            message (models.ChatMessageModel): The message model.
+
+        Returns:
+            OpenAIUserMessageParam | OpenAIAssistantMessageParam: The message
+                payload.
+        """
+        is_user = message.role == models.ChatRoleModel.USER
+        cls = (
+            OpenAIUserMessageParam if is_user else OpenAIAssistantMessageParam
+        )
+
+        return cls(
+            role=("user" if is_user else "assistant"),
+            content=message.text,
+        )

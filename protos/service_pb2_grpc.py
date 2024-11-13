@@ -67,6 +67,11 @@ class RecipeSearchServiceStub(object):
                 request_serializer=protos_dot_chat__by__recipe__pb2.ChatByRecipeRequest.SerializeToString,
                 response_deserializer=protos_dot_chat__by__recipe__pb2.ChatByRecipeResponse.FromString,
                 _registered_method=True)
+        self.ChatByRecipeStream = channel.unary_stream(
+                '/RecipeSearchService/ChatByRecipeStream',
+                request_serializer=protos_dot_chat__by__recipe__pb2.ChatByRecipeRequest.SerializeToString,
+                response_deserializer=protos_dot_chat__by__recipe__pb2.ChatByRecipeStreamResponse.FromString,
+                _registered_method=True)
         self.AddRecipes = channel.unary_unary(
                 '/RecipeSearchService/AddRecipes',
                 request_serializer=protos_dot_add__recipes__pb2.AddRecipesRequest.SerializeToString,
@@ -119,6 +124,12 @@ class RecipeSearchServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def ChatByRecipe(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ChatByRecipeStream(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -177,6 +188,11 @@ def add_RecipeSearchServiceServicer_to_server(servicer, server):
                     servicer.ChatByRecipe,
                     request_deserializer=protos_dot_chat__by__recipe__pb2.ChatByRecipeRequest.FromString,
                     response_serializer=protos_dot_chat__by__recipe__pb2.ChatByRecipeResponse.SerializeToString,
+            ),
+            'ChatByRecipeStream': grpc.unary_stream_rpc_method_handler(
+                    servicer.ChatByRecipeStream,
+                    request_deserializer=protos_dot_chat__by__recipe__pb2.ChatByRecipeRequest.FromString,
+                    response_serializer=protos_dot_chat__by__recipe__pb2.ChatByRecipeStreamResponse.SerializeToString,
             ),
             'AddRecipes': grpc.unary_unary_rpc_method_handler(
                     servicer.AddRecipes,
@@ -334,6 +350,33 @@ class RecipeSearchService(object):
             '/RecipeSearchService/ChatByRecipe',
             protos_dot_chat__by__recipe__pb2.ChatByRecipeRequest.SerializeToString,
             protos_dot_chat__by__recipe__pb2.ChatByRecipeResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def ChatByRecipeStream(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(
+            request,
+            target,
+            '/RecipeSearchService/ChatByRecipeStream',
+            protos_dot_chat__by__recipe__pb2.ChatByRecipeRequest.SerializeToString,
+            protos_dot_chat__by__recipe__pb2.ChatByRecipeStreamResponse.FromString,
             options,
             channel_credentials,
             insecure,

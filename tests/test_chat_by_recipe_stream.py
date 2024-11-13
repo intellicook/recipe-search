@@ -8,12 +8,14 @@ from infra import models
 from protos.chat_by_recipe_pb2 import (
     ChatByRecipeMessage,
     ChatByRecipeRequest,
-    ChatByRecipeResponse,
     ChatByRecipeRole,
+    ChatByRecipeStreamContent,
+    ChatByRecipeStreamHeader,
+    ChatByRecipeStreamResponse,
 )
 
 
-def test_chat_by_recipe_success(mocker: pytest_mock.MockerFixture):
+def test_chat_by_recipe_stream_success(mocker: pytest_mock.MockerFixture):
     id = 1
     username = "test_username"
     name = "test_name"
@@ -50,31 +52,55 @@ def test_chat_by_recipe_success(mocker: pytest_mock.MockerFixture):
             for message in messages
         ),
     )
-    expected_response = ChatByRecipeResponse(
-        message=ChatByRecipeMessage(
-            role=ChatByRecipeRole.ASSISTANT,
-            text="assistant response",
-        )
-    )
+    expected_responses = [
+        ChatByRecipeStreamResponse(
+            header=ChatByRecipeStreamHeader(
+                role=ChatByRecipeRole.ASSISTANT,
+            ),
+        ),
+        ChatByRecipeStreamResponse(
+            content=ChatByRecipeStreamContent(
+                text="assistant",
+            ),
+        ),
+        ChatByRecipeStreamResponse(
+            content=ChatByRecipeStreamContent(
+                text=" response",
+            ),
+        ),
+    ]
 
     mocker.patch(
         "domain.controllers.get_recipe",
         return_value=recipe,
     )
     mock_chat = mocker.patch(
-        "domain.controllers.chat_by_recipe",
-        return_value=models.ChatMessageModel(
-            role=models.ChatRoleModel.from_proto(
-                expected_response.message.role
+        "domain.controllers.chat_by_recipe_stream",
+        return_value=(
+            models.ChatStreamHeaderModel(
+                role=models.ChatRoleModel.from_proto(
+                    expected_responses[0].header.role
+                ),
             ),
-            text=expected_response.message.text,
+            models.ChatStreamContentModel(
+                text=expected_responses[1].content.text,
+            ),
+            models.ChatStreamContentModel(
+                text=expected_responses[2].content.text,
+            ),
         ),
     )
 
     context = mocker.MagicMock()
 
     servicer = RecipeSearchServicer()
-    response = servicer.ChatByRecipe(request, context)
+    for response in servicer.ChatByRecipeStream(request, context):
+        expected_response = expected_responses.pop(0)
+
+        if response.WhichOneof("response") == "header":
+            assert response.header.role == expected_response.header.role
+        elif response.WhichOneof("response") == "content":
+            assert response.content.text == expected_response.content.text
 
     mock_chat.assert_called_once_with(
         name,
@@ -84,10 +110,9 @@ def test_chat_by_recipe_success(mocker: pytest_mock.MockerFixture):
     assert all(
         req == arg for req, arg in zip(request.messages, mock_chat.args[2])
     )
-    assert response == expected_response
 
 
-def test_chat_by_recipe_recipe_not_found(
+def test_chat_by_recipe_stream_recipe_not_found(
     mocker: pytest_mock.MockerFixture,
 ):
     id = 1
@@ -130,7 +155,7 @@ def test_chat_by_recipe_recipe_not_found(
 
     servicer = RecipeSearchServicer()
     with pytest.raises(grpc.RpcError):
-        servicer.ChatByRecipe(request, context)
+        next(servicer.ChatByRecipeStream(request, context))
 
     mock_get_recipe.assert_called_once_with(id)
     context.abort.assert_called_once_with(

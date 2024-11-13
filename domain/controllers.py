@@ -6,7 +6,6 @@ from sqlalchemy.orm import Session
 
 from configs.domain import configs
 from domain import chats, searches
-from domain.chats.base import BaseChat, BaseChatMessage
 from domain.searches.base import BaseSearch
 from domain.searches.engines import faiss, typesense
 from infra import models
@@ -249,29 +248,21 @@ def get_faiss_index_thread() -> faiss.IndexThread:
     return faiss.index_thread
 
 
-def get_chat_type() -> Type[BaseChat]:
-    """Get the chat model.
-
-    Returns:
-        Type[BaseChat]: The chat model.
-    """
-    return chats.model
-
-
 def chat_by_recipe(
     name: str,
     recipe: models.RecipeModel,
-    messages: Iterable[BaseChatMessage],
-) -> BaseChatMessage:
+    messages: Iterable[models.ChatMessageModel],
+) -> models.ChatMessageModel:
     """Chat with the model by recipe.
 
     Arguments:
         name (str): The name of the user.
         recipe (models.RecipeModel): The recipe to chat with.
-        messages (Iterable[BaseChatMessage]): The messages to chat with.
+        messages (Iterable[models.ChatMessageModel]): The messages to chat
+            with.
 
     Returns:
-        BaseChatMessage: The response message.
+        models.ChatMessageModel: The response message.
     """
     logger.debug(f"Chatting with {name} by recipe {recipe.name}")
 
@@ -284,6 +275,35 @@ def chat_by_recipe(
     logger.debug(f"Messages: {messages}")
 
     return chat.chat(messages)
+
+
+def chat_by_recipe_stream(
+    name: str,
+    recipe: models.RecipeModel,
+    messages: Iterable[models.ChatMessageModel],
+) -> Iterable[models.ChatStreamModel]:
+    """Chat with the model by recipe and return a stream of messages.
+
+    Arguments:
+        name (str): The name of the user.
+        recipe (models.RecipeModel): The recipe to chat with.
+        messages (Iterable[models.ChatMessageModel]): The messages to chat
+            with.
+
+    Returns:
+        Iterable[models.ChatStreamModel]: The response stream of messages.
+    """
+    logger.debug(f"Chatting with {name} by recipe {recipe.name}")
+
+    chat = chats.model()
+    chat.set_user(name)
+    chat.set_recipe(recipe)
+
+    messages = messages[-configs.chat_message_limit :]
+
+    logger.debug(f"Messages: {messages}")
+
+    return chat.chat_stream(messages)
 
 
 def reset_data():

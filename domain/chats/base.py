@@ -1,45 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import Iterable, Type
+from typing import Iterable
 
 from infra import models
-from protos.chat_by_recipe_pb2 import ChatByRecipeMessage
-
-
-class BaseChatMessage(ABC):
-    """Base class for message used and returned by chat models"""
-
-    @classmethod
-    @abstractmethod
-    def from_proto(cls, proto: ChatByRecipeMessage) -> "BaseChatMessage":
-        """Create a message from a protobuf message.
-
-        Arguments:
-            proto (ChatByRecipeMessage): The protobuf message.
-
-        Returns:
-            BaseChatMessage: The new message.
-        """
-
-    @abstractmethod
-    def to_proto(self) -> ChatByRecipeMessage:
-        """Convert the message to a protobuf message.
-
-        Returns:
-            ChatByRecipeMessage: The protobuf message.
-        """
 
 
 class BaseChat(ABC):
     """Base class for chat models"""
-
-    @classmethod
-    @abstractmethod
-    def get_message_type(cls) -> Type[BaseChatMessage]:
-        """Get the message type of the chat model.
-
-        Returns:
-            Type[BaseChatMessage]: The message type of the chat model.
-        """
 
     @abstractmethod
     def set_user(self, user: str):
@@ -58,12 +24,29 @@ class BaseChat(ABC):
         """
 
     @abstractmethod
-    def chat(self, messages: Iterable[BaseChatMessage]) -> BaseChatMessage:
+    def chat(
+        self, messages: Iterable[models.ChatMessageModel]
+    ) -> models.ChatMessageModel:
         """Chat with the model.
 
         Arguments:
-            messages (Iterable[BaseChatMessage]): The messages to chat with.
+            messages (Iterable[models.ChatMessageModel]): The messages to chat
+                with.
 
         Returns:
-            BaseChatMessage: The response message.
+            models.ChatMessageModel: The response message.
+        """
+
+    @abstractmethod
+    def chat_stream(
+        self, messages: Iterable[models.ChatMessageModel]
+    ) -> models.ChatStreamModel:
+        """Chat with the model and return a stream of messages.
+
+        Arguments:
+            messages (Iterable[models.ChatMessageModel]): The messages to chat
+                with.
+
+        Returns:
+            Iterable[models.ChatStreamModel]: The response stream of messages.
         """

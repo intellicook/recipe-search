@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import Iterable, List, Tuple
 
 import grpc
 from sqlalchemy.exc import NoResultFound
@@ -11,7 +11,14 @@ from protos.add_recipes_pb2 import (
     AddRecipesResponse,
     AddRecipesResponseRecipe,
 )
-from protos.chat_by_recipe_pb2 import ChatByRecipeRequest, ChatByRecipeResponse
+from protos.chat_by_recipe_pb2 import (
+    ChatByRecipeMessage,
+    ChatByRecipeRequest,
+    ChatByRecipeResponse,
+    ChatByRecipeStreamContent,
+    ChatByRecipeStreamHeader,
+    ChatByRecipeStreamResponse,
+)
 from protos.faiss_index_thread_pb2 import (
     FaissIndexThreadRequest,
     FaissIndexThreadResponse,
@@ -320,17 +327,59 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
             )
 
         messages = [
-            controllers.get_chat_type().get_message_type().from_proto(message)
+            models.ChatMessageModel(
+                role=models.ChatRoleModel.from_proto(message.role),
+                text=message.text,
+            )
             for message in request.messages
         ]
 
         message = controllers.chat_by_recipe(request.name, recipe, messages)
 
-        response_message = message.to_proto()
-
         return ChatByRecipeResponse(
-            message=response_message,
+            message=ChatByRecipeMessage(
+                role=message.role.to_proto(),
+                text=message.text,
+            ),
         )
+
+    def ChatByRecipeStream(
+        self,
+        request: ChatByRecipeRequest,
+        context: grpc.ServicerContext,
+    ) -> Iterable[ChatByRecipeStreamResponse]:
+        """Chat with the model by recipe and return a stream of messages"""
+        try:
+            recipe = controllers.get_recipe(request.id)
+        except NoResultFound:
+            context.abort(
+                grpc.StatusCode.NOT_FOUND,
+                f"Recipe with ID {request.id} not found",
+            )
+
+        messages = [
+            models.ChatMessageModel(
+                role=models.ChatRoleModel.from_proto(message.role),
+                text=message.text,
+            )
+            for message in request.messages
+        ]
+
+        for message in controllers.chat_by_recipe_stream(
+            request.name, recipe, messages
+        ):
+            if isinstance(message, models.ChatStreamHeaderModel):
+                yield ChatByRecipeStreamResponse(
+                    header=ChatByRecipeStreamHeader(
+                        role=message.role.to_proto(),
+                    ),
+                )
+            elif isinstance(message, models.ChatStreamContentModel):
+                yield ChatByRecipeStreamResponse(
+                    content=ChatByRecipeStreamContent(
+                        text=message.text,
+                    ),
+                )
 
     def ResetData(
         self,
