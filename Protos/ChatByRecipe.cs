@@ -28,17 +28,25 @@ namespace IntelliCook.RecipeSearch.Client {
             "UmVxdWVzdBIKCgJpZBgBIAEoBRIQCgh1c2VybmFtZRgCIAEoCRIMCgRuYW1l",
             "GAMgASgJEiYKCG1lc3NhZ2VzGAQgAygLMhQuQ2hhdEJ5UmVjaXBlTWVzc2Fn",
             "ZSI9ChRDaGF0QnlSZWNpcGVSZXNwb25zZRIlCgdtZXNzYWdlGAEgASgLMhQu",
-            "Q2hhdEJ5UmVjaXBlTWVzc2FnZSJEChNDaGF0QnlSZWNpcGVNZXNzYWdlEh8K",
-            "BHJvbGUYASABKA4yES5DaGF0QnlSZWNpcGVSb2xlEgwKBHRleHQYAiABKAkq",
-            "NwoQQ2hhdEJ5UmVjaXBlUm9sZRIKCgZTWVNURU0QABIICgRVU0VSEAESDQoJ",
-            "QVNTSVNUQU5UEAJCIqoCH0ludGVsbGlDb29rLlJlY2lwZVNlYXJjaC5DbGll",
-            "bnRiBnByb3RvMw=="));
+            "Q2hhdEJ5UmVjaXBlTWVzc2FnZSKEAQoaQ2hhdEJ5UmVjaXBlU3RyZWFtUmVz",
+            "cG9uc2USKwoGaGVhZGVyGAEgASgLMhkuQ2hhdEJ5UmVjaXBlU3RyZWFtSGVh",
+            "ZGVySAASLQoHY29udGVudBgCIAEoCzIaLkNoYXRCeVJlY2lwZVN0cmVhbUNv",
+            "bnRlbnRIAEIKCghyZXNwb25zZSJEChNDaGF0QnlSZWNpcGVNZXNzYWdlEh8K",
+            "BHJvbGUYASABKA4yES5DaGF0QnlSZWNpcGVSb2xlEgwKBHRleHQYAiABKAki",
+            "OwoYQ2hhdEJ5UmVjaXBlU3RyZWFtSGVhZGVyEh8KBHJvbGUYASABKA4yES5D",
+            "aGF0QnlSZWNpcGVSb2xlIikKGUNoYXRCeVJlY2lwZVN0cmVhbUNvbnRlbnQS",
+            "DAoEdGV4dBgBIAEoCSorChBDaGF0QnlSZWNpcGVSb2xlEggKBFVTRVIQABIN",
+            "CglBU1NJU1RBTlQQAUIiqgIfSW50ZWxsaUNvb2suUmVjaXBlU2VhcmNoLkNs",
+            "aWVudGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.ChatByRecipeRequest), global::IntelliCook.RecipeSearch.Client.ChatByRecipeRequest.Parser, new[]{ "Id", "Username", "Name", "Messages" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.ChatByRecipeResponse), global::IntelliCook.RecipeSearch.Client.ChatByRecipeResponse.Parser, new[]{ "Message" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.ChatByRecipeMessage), global::IntelliCook.RecipeSearch.Client.ChatByRecipeMessage.Parser, new[]{ "Role", "Text" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamResponse), global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamResponse.Parser, new[]{ "Header", "Content" }, new[]{ "Response" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.ChatByRecipeMessage), global::IntelliCook.RecipeSearch.Client.ChatByRecipeMessage.Parser, new[]{ "Role", "Text" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamHeader), global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamHeader.Parser, new[]{ "Role" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamContent), global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamContent.Parser, new[]{ "Text" }, null, null, null, null)
           }));
     }
     #endregion
@@ -46,9 +54,8 @@ namespace IntelliCook.RecipeSearch.Client {
   }
   #region Enums
   public enum ChatByRecipeRole {
-    [pbr::OriginalName("SYSTEM")] System = 0,
-    [pbr::OriginalName("USER")] User = 1,
-    [pbr::OriginalName("ASSISTANT")] Assistant = 2,
+    [pbr::OriginalName("USER")] User = 0,
+    [pbr::OriginalName("ASSISTANT")] Assistant = 1,
   }
 
   #endregion
@@ -560,6 +567,300 @@ namespace IntelliCook.RecipeSearch.Client {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class ChatByRecipeStreamResponse : pb::IMessage<ChatByRecipeStreamResponse>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ChatByRecipeStreamResponse> _parser = new pb::MessageParser<ChatByRecipeStreamResponse>(() => new ChatByRecipeStreamResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<ChatByRecipeStreamResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::IntelliCook.RecipeSearch.Client.ChatByRecipeReflection.Descriptor.MessageTypes[2]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ChatByRecipeStreamResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ChatByRecipeStreamResponse(ChatByRecipeStreamResponse other) : this() {
+      switch (other.ResponseCase) {
+        case ResponseOneofCase.Header:
+          Header = other.Header.Clone();
+          break;
+        case ResponseOneofCase.Content:
+          Content = other.Content.Clone();
+          break;
+      }
+
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ChatByRecipeStreamResponse Clone() {
+      return new ChatByRecipeStreamResponse(this);
+    }
+
+    /// <summary>Field number for the "header" field.</summary>
+    public const int HeaderFieldNumber = 1;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamHeader Header {
+      get { return responseCase_ == ResponseOneofCase.Header ? (global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamHeader) response_ : null; }
+      set {
+        response_ = value;
+        responseCase_ = value == null ? ResponseOneofCase.None : ResponseOneofCase.Header;
+      }
+    }
+
+    /// <summary>Field number for the "content" field.</summary>
+    public const int ContentFieldNumber = 2;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamContent Content {
+      get { return responseCase_ == ResponseOneofCase.Content ? (global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamContent) response_ : null; }
+      set {
+        response_ = value;
+        responseCase_ = value == null ? ResponseOneofCase.None : ResponseOneofCase.Content;
+      }
+    }
+
+    private object response_;
+    /// <summary>Enum of possible cases for the "response" oneof.</summary>
+    public enum ResponseOneofCase {
+      None = 0,
+      Header = 1,
+      Content = 2,
+    }
+    private ResponseOneofCase responseCase_ = ResponseOneofCase.None;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ResponseOneofCase ResponseCase {
+      get { return responseCase_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearResponse() {
+      responseCase_ = ResponseOneofCase.None;
+      response_ = null;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as ChatByRecipeStreamResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(ChatByRecipeStreamResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Header, other.Header)) return false;
+      if (!object.Equals(Content, other.Content)) return false;
+      if (ResponseCase != other.ResponseCase) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (responseCase_ == ResponseOneofCase.Header) hash ^= Header.GetHashCode();
+      if (responseCase_ == ResponseOneofCase.Content) hash ^= Content.GetHashCode();
+      hash ^= (int) responseCase_;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (responseCase_ == ResponseOneofCase.Header) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Header);
+      }
+      if (responseCase_ == ResponseOneofCase.Content) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Content);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (responseCase_ == ResponseOneofCase.Header) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Header);
+      }
+      if (responseCase_ == ResponseOneofCase.Content) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Content);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (responseCase_ == ResponseOneofCase.Header) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Header);
+      }
+      if (responseCase_ == ResponseOneofCase.Content) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Content);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(ChatByRecipeStreamResponse other) {
+      if (other == null) {
+        return;
+      }
+      switch (other.ResponseCase) {
+        case ResponseOneofCase.Header:
+          if (Header == null) {
+            Header = new global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamHeader();
+          }
+          Header.MergeFrom(other.Header);
+          break;
+        case ResponseOneofCase.Content:
+          if (Content == null) {
+            Content = new global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamContent();
+          }
+          Content.MergeFrom(other.Content);
+          break;
+      }
+
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamHeader subBuilder = new global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamHeader();
+            if (responseCase_ == ResponseOneofCase.Header) {
+              subBuilder.MergeFrom(Header);
+            }
+            input.ReadMessage(subBuilder);
+            Header = subBuilder;
+            break;
+          }
+          case 18: {
+            global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamContent subBuilder = new global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamContent();
+            if (responseCase_ == ResponseOneofCase.Content) {
+              subBuilder.MergeFrom(Content);
+            }
+            input.ReadMessage(subBuilder);
+            Content = subBuilder;
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamHeader subBuilder = new global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamHeader();
+            if (responseCase_ == ResponseOneofCase.Header) {
+              subBuilder.MergeFrom(Header);
+            }
+            input.ReadMessage(subBuilder);
+            Header = subBuilder;
+            break;
+          }
+          case 18: {
+            global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamContent subBuilder = new global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamContent();
+            if (responseCase_ == ResponseOneofCase.Content) {
+              subBuilder.MergeFrom(Content);
+            }
+            input.ReadMessage(subBuilder);
+            Content = subBuilder;
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class ChatByRecipeMessage : pb::IMessage<ChatByRecipeMessage>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -574,7 +875,7 @@ namespace IntelliCook.RecipeSearch.Client {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::IntelliCook.RecipeSearch.Client.ChatByRecipeReflection.Descriptor.MessageTypes[2]; }
+      get { return global::IntelliCook.RecipeSearch.Client.ChatByRecipeReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -607,7 +908,7 @@ namespace IntelliCook.RecipeSearch.Client {
 
     /// <summary>Field number for the "role" field.</summary>
     public const int RoleFieldNumber = 1;
-    private global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole role_ = global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole.System;
+    private global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole role_ = global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole.User;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole Role {
@@ -653,7 +954,7 @@ namespace IntelliCook.RecipeSearch.Client {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (Role != global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole.System) hash ^= Role.GetHashCode();
+      if (Role != global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole.User) hash ^= Role.GetHashCode();
       if (Text.Length != 0) hash ^= Text.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -673,7 +974,7 @@ namespace IntelliCook.RecipeSearch.Client {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (Role != global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole.System) {
+      if (Role != global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole.User) {
         output.WriteRawTag(8);
         output.WriteEnum((int) Role);
       }
@@ -691,7 +992,7 @@ namespace IntelliCook.RecipeSearch.Client {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (Role != global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole.System) {
+      if (Role != global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole.User) {
         output.WriteRawTag(8);
         output.WriteEnum((int) Role);
       }
@@ -709,7 +1010,7 @@ namespace IntelliCook.RecipeSearch.Client {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (Role != global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole.System) {
+      if (Role != global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole.User) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Role);
       }
       if (Text.Length != 0) {
@@ -727,7 +1028,7 @@ namespace IntelliCook.RecipeSearch.Client {
       if (other == null) {
         return;
       }
-      if (other.Role != global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole.System) {
+      if (other.Role != global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole.User) {
         Role = other.Role;
       }
       if (other.Text.Length != 0) {
@@ -784,6 +1085,402 @@ namespace IntelliCook.RecipeSearch.Client {
             break;
           }
           case 18: {
+            Text = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class ChatByRecipeStreamHeader : pb::IMessage<ChatByRecipeStreamHeader>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ChatByRecipeStreamHeader> _parser = new pb::MessageParser<ChatByRecipeStreamHeader>(() => new ChatByRecipeStreamHeader());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<ChatByRecipeStreamHeader> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::IntelliCook.RecipeSearch.Client.ChatByRecipeReflection.Descriptor.MessageTypes[4]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ChatByRecipeStreamHeader() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ChatByRecipeStreamHeader(ChatByRecipeStreamHeader other) : this() {
+      role_ = other.role_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ChatByRecipeStreamHeader Clone() {
+      return new ChatByRecipeStreamHeader(this);
+    }
+
+    /// <summary>Field number for the "role" field.</summary>
+    public const int RoleFieldNumber = 1;
+    private global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole role_ = global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole.User;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole Role {
+      get { return role_; }
+      set {
+        role_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as ChatByRecipeStreamHeader);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(ChatByRecipeStreamHeader other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Role != other.Role) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Role != global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole.User) hash ^= Role.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Role != global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole.User) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) Role);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Role != global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole.User) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) Role);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Role != global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole.User) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Role);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(ChatByRecipeStreamHeader other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Role != global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole.User) {
+        Role = other.Role;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Role = (global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole) input.ReadEnum();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            Role = (global::IntelliCook.RecipeSearch.Client.ChatByRecipeRole) input.ReadEnum();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class ChatByRecipeStreamContent : pb::IMessage<ChatByRecipeStreamContent>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ChatByRecipeStreamContent> _parser = new pb::MessageParser<ChatByRecipeStreamContent>(() => new ChatByRecipeStreamContent());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<ChatByRecipeStreamContent> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::IntelliCook.RecipeSearch.Client.ChatByRecipeReflection.Descriptor.MessageTypes[5]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ChatByRecipeStreamContent() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ChatByRecipeStreamContent(ChatByRecipeStreamContent other) : this() {
+      text_ = other.text_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ChatByRecipeStreamContent Clone() {
+      return new ChatByRecipeStreamContent(this);
+    }
+
+    /// <summary>Field number for the "text" field.</summary>
+    public const int TextFieldNumber = 1;
+    private string text_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Text {
+      get { return text_; }
+      set {
+        text_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as ChatByRecipeStreamContent);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(ChatByRecipeStreamContent other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Text != other.Text) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Text.Length != 0) hash ^= Text.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Text.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Text);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Text.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Text);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Text.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Text);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(ChatByRecipeStreamContent other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Text.Length != 0) {
+        Text = other.Text;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Text = input.ReadString();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
             Text = input.ReadString();
             break;
           }
