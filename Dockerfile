@@ -12,7 +12,7 @@ ENV PYTHONUNBUFFERED 1
 RUN pip install --no-compile --no-cache-dir --upgrade pip
 RUN pip install --no-compile --no-cache-dir numpy==2.1.2 pillow==11.0.0 Jinja2==3.1.4
 RUN pip install --no-compile --no-cache-dir \
-    torch==2.5.1+cpu torchaudio==2.5.1+cpu torchvision==0.20.1+cpu \
+    torch==2.5.1 torchaudio==2.5.1 torchvision==0.20.1 \
     -i https://download.pytorch.org/whl/cpu
 COPY ./requirements.txt .
 RUN pip install --no-compile --no-cache-dir -r requirements.txt
