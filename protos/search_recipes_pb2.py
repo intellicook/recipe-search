@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1bprotos/search_recipes.proto\"\xad\x01\n\x14SearchRecipesRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x13\n\x0bingredients\x18\x02 \x03(\t\x12\x11\n\x04page\x18\x03 \x01(\rH\x00\x88\x01\x01\x12\x15\n\x08per_page\x18\x04 \x01(\rH\x01\x88\x01\x01\x12\x1b\n\x0einclude_detail\x18\x05 \x01(\x08H\x02\x88\x01\x01\x42\x07\n\x05_pageB\x0b\n\t_per_pageB\x11\n\x0f_include_detail\">\n\x15SearchRecipesResponse\x12%\n\x07recipes\x18\x01 \x03(\x0b\x32\x14.SearchRecipesRecipe\"\x80\x01\n\x13SearchRecipesRecipe\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0bingredients\x18\x03 \x03(\t\x12/\n\x06\x64\x65tail\x18\x04 \x01(\x0b\x32\x1a.SearchRecipesRecipeDetailH\x00\x88\x01\x01\x42\t\n\x07_detail\">\n\x19SearchRecipesRecipeDetail\x12\x14\n\x0cinstructions\x18\x01 \x03(\t\x12\x0b\n\x03raw\x18\x02 \x01(\tB\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1bprotos/search_recipes.proto\"\xad\x01\n\x14SearchRecipesRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x13\n\x0bingredients\x18\x02 \x03(\t\x12\x11\n\x04page\x18\x03 \x01(\rH\x00\x88\x01\x01\x12\x15\n\x08per_page\x18\x04 \x01(\rH\x01\x88\x01\x01\x12\x1b\n\x0einclude_detail\x18\x05 \x01(\x08H\x02\x88\x01\x01\x42\x07\n\x05_pageB\x0b\n\t_per_pageB\x11\n\x0f_include_detail\">\n\x15SearchRecipesResponse\x12%\n\x07recipes\x18\x01 \x03(\x0b\x32\x14.SearchRecipesRecipe\"\xa6\x01\n\x13SearchRecipesRecipe\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0bingredients\x18\x03 \x03(\t\x12$\n\x07matches\x18\x04 \x03(\x0b\x32\x13.SearchRecipesMatch\x12/\n\x06\x64\x65tail\x18\x05 \x01(\x0b\x32\x1a.SearchRecipesRecipeDetailH\x00\x88\x01\x01\x42\t\n\x07_detail\"k\n\x12SearchRecipesMatch\x12\'\n\x05\x66ield\x18\x01 \x01(\x0e\x32\x18.SearchRecipesMatchField\x12\x0e\n\x06tokens\x18\x02 \x03(\t\x12\x12\n\x05index\x18\x03 \x01(\x05H\x00\x88\x01\x01\x42\x08\n\x06_index\">\n\x19SearchRecipesRecipeDetail\x12\x14\n\x0cinstructions\x18\x01 \x03(\t\x12\x0b\n\x03raw\x18\x02 \x01(\t*4\n\x17SearchRecipesMatchField\x12\x08\n\x04NAME\x10\x00\x12\x0f\n\x0bINGREDIENTS\x10\x01\x42\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,12 +32,16 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'protos.search_recipes_pb2',
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\252\002\037IntelliCook.RecipeSearch.Client'
+  _globals['_SEARCHRECIPESMATCHFIELD']._serialized_start=613
+  _globals['_SEARCHRECIPESMATCHFIELD']._serialized_end=665
   _globals['_SEARCHRECIPESREQUEST']._serialized_start=32
   _globals['_SEARCHRECIPESREQUEST']._serialized_end=205
   _globals['_SEARCHRECIPESRESPONSE']._serialized_start=207
   _globals['_SEARCHRECIPESRESPONSE']._serialized_end=269
   _globals['_SEARCHRECIPESRECIPE']._serialized_start=272
-  _globals['_SEARCHRECIPESRECIPE']._serialized_end=400
-  _globals['_SEARCHRECIPESRECIPEDETAIL']._serialized_start=402
-  _globals['_SEARCHRECIPESRECIPEDETAIL']._serialized_end=464
+  _globals['_SEARCHRECIPESRECIPE']._serialized_end=438
+  _globals['_SEARCHRECIPESMATCH']._serialized_start=440
+  _globals['_SEARCHRECIPESMATCH']._serialized_end=547
+  _globals['_SEARCHRECIPESRECIPEDETAIL']._serialized_start=549
+  _globals['_SEARCHRECIPESRECIPEDETAIL']._serialized_end=611
 # @@protoc_insertion_point(module_scope)

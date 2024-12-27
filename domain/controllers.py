@@ -178,7 +178,7 @@ def search_recipes(
     page: int = 1,
     per_page: int = configs.default_search_per_page,
     include_detail: bool = False,
-) -> List[models.RecipeModel]:
+) -> List[models.TypesenseResult]:
     """Search recipes by ingredients.
 
     Results are ordered by relevance.
@@ -193,7 +193,7 @@ def search_recipes(
             assigned to the returned recipes.
 
     Returns:
-        List[models.RecipeModel]: The list of recipes.
+        List[models.TypesenseResult]: The list of results.
     """
     logger.debug(
         f"Searching for recipes with: ingredients={ingredients},"
@@ -205,16 +205,19 @@ def search_recipes(
     )
 
     if not include_detail:
-        return [recipe.to_model() for recipe in results]
+        return results
 
-    result_ids = [recipe.id for recipe in results]
+    result_ids = [result.recipe.id for result in results]
 
     recipes = sorted(
-        get_recipes(recipe.id for recipe in results),
+        get_recipes(result.recipe.id for result in results),
         key=lambda recipe: result_ids.index(recipe.id),
     )
 
-    return recipes
+    return [
+        models.TypesenseResult(recipe=recipe, highlights=result.highlights)
+        for recipe, result in zip(recipes, results)
+    ]
 
 
 def init_faiss_index(

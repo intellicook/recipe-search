@@ -6,6 +6,7 @@ from apis.servicer import RecipeSearchServicer
 from configs.domain import configs
 from infra import models
 from protos.search_recipes_pb2 import (
+    SearchRecipesMatch,
     SearchRecipesRecipe,
     SearchRecipesRecipeDetail,
     SearchRecipesRequest,
@@ -20,10 +21,35 @@ def test_search_recipes_success(
     ingredients = ["apple", "banana"]
     page = 1
     per_page = 3
-    recipes = [
-        models.RecipeModel(id=1, name="Recipe 1", ingredients=[]),
-        models.RecipeModel(id=2, name="Recipe 2", ingredients=[]),
-        models.RecipeModel(id=3, name="Recipe 3", ingredients=[]),
+    results = [
+        models.TypesenseResult(
+            recipe=models.RecipeModel(id=1, name="Recipe 1", ingredients=[]),
+            highlights=[
+                models.TypesenseResultHighlight(
+                    field=models.TypesenseResultHighlight.Field.NAME,
+                    tokens=["apple"],
+                )
+            ],
+        ),
+        models.TypesenseResult(
+            recipe=models.RecipeModel(id=2, name="Recipe 2", ingredients=[]),
+            highlights=[
+                models.TypesenseResultHighlight(
+                    field=models.TypesenseResultHighlight.Field.NAME,
+                    tokens=["banana"],
+                )
+            ],
+        ),
+        models.TypesenseResult(
+            recipe=models.RecipeModel(id=3, name="Recipe 3", ingredients=[]),
+            highlights=[
+                models.TypesenseResultHighlight(
+                    field=models.TypesenseResultHighlight.Field.INGREDIENTS,
+                    tokens=["banana"],
+                    index=1,
+                )
+            ],
+        ),
     ]
     request = SearchRecipesRequest(
         username=username,
@@ -34,7 +60,7 @@ def test_search_recipes_success(
 
     mock_search = mocker.patch(
         "domain.controllers.search_recipes",
-        return_value=recipes,
+        return_value=results,
     )
 
     context = mocker.MagicMock()
@@ -51,11 +77,19 @@ def test_search_recipes_success(
     assert response == SearchRecipesResponse(
         recipes=[
             SearchRecipesRecipe(
-                id=recipe.id,
-                name=recipe.name,
-                ingredients=recipe.ingredients,
+                id=result.recipe.id,
+                name=result.recipe.name,
+                ingredients=result.recipe.ingredients,
+                matches=[
+                    SearchRecipesMatch(
+                        field=match.field.to_proto(),
+                        tokens=match.tokens,
+                        index=match.index,
+                    )
+                    for match in result.highlights
+                ],
             )
-            for recipe in recipes
+            for result in results
         ]
     )
 
@@ -94,27 +128,51 @@ def test_search_recipes_include_detail(
     ingredients = ["apple", "banana"]
     page = 1
     per_page = 3
-    recipes = [
-        models.RecipeModel(
-            id=1,
-            name="Recipe 1",
-            ingredients=["ingredient 1.1", "ingredient 1.2"],
-            instructions=["instruction 1.1", "instruction 1.2"],
-            raw="raw 1",
+    results = [
+        models.TypesenseResult(
+            recipe=models.RecipeModel(
+                id=1,
+                name="Recipe 1",
+                ingredients=["ingredient 1.1", "ingredient 1.2"],
+                instructions=["instruction 1.1", "instruction 1.2"],
+                raw="raw 1",
+            ),
+            highlights=[
+                models.TypesenseResultHighlight(
+                    field=models.TypesenseResultHighlight.Field.NAME,
+                    tokens=["apple"],
+                )
+            ],
         ),
-        models.RecipeModel(
-            id=2,
-            name="Recipe 2",
-            ingredients=["ingredient 2.1", "ingredient 2.2"],
-            instructions=["instruction 2.1", "instruction 2.2"],
-            raw="raw 2",
+        models.TypesenseResult(
+            recipe=models.RecipeModel(
+                id=2,
+                name="Recipe 2",
+                ingredients=["ingredient 2.1", "ingredient 2.2"],
+                instructions=["instruction 2.1", "instruction 2.2"],
+                raw="raw 2",
+            ),
+            highlights=[
+                models.TypesenseResultHighlight(
+                    field=models.TypesenseResultHighlight.Field.NAME,
+                    tokens=["banana"],
+                )
+            ],
         ),
-        models.RecipeModel(
-            id=3,
-            name="Recipe 3",
-            ingredients=["ingredient 3.1", "ingredient 3.2"],
-            instructions=["instruction 3.1", "instruction 3.2"],
-            raw="raw 3",
+        models.TypesenseResult(
+            recipe=models.RecipeModel(
+                id=3,
+                name="Recipe 3",
+                ingredients=["ingredient 3.1", "ingredient 3.2"],
+                instructions=["instruction 3.1", "instruction 3.2"],
+                raw="raw 3",
+            ),
+            highlights=[
+                models.TypesenseResultHighlight(
+                    field=models.TypesenseResultHighlight.Field.INGREDIENTS,
+                    tokens=["banana"],
+                )
+            ],
         ),
     ]
     request = SearchRecipesRequest(
@@ -127,7 +185,7 @@ def test_search_recipes_include_detail(
 
     mock_search = mocker.patch(
         "domain.controllers.search_recipes",
-        return_value=recipes,
+        return_value=results,
     )
 
     context = mocker.MagicMock()
@@ -144,15 +202,23 @@ def test_search_recipes_include_detail(
     assert response == SearchRecipesResponse(
         recipes=[
             SearchRecipesRecipe(
-                id=recipe.id,
-                name=recipe.name,
-                ingredients=recipe.ingredients,
+                id=result.recipe.id,
+                name=result.recipe.name,
+                ingredients=result.recipe.ingredients,
+                matches=[
+                    SearchRecipesMatch(
+                        field=match.field.to_proto(),
+                        tokens=match.tokens,
+                        index=match.index,
+                    )
+                    for match in result.highlights
+                ],
                 detail=SearchRecipesRecipeDetail(
-                    instructions=recipe.instructions,
-                    raw=recipe.raw,
+                    instructions=result.recipe.instructions,
+                    raw=result.recipe.raw,
                 ),
             )
-            for recipe in recipes
+            for result in results
         ]
     )
 
@@ -162,15 +228,34 @@ def test_search_recipes_page_and_per_page_null(
 ):
     username = "test_username"
     ingredients = ["apple", "banana"]
-    recipes = [
-        models.RecipeModel(
-            id=1, name="Recipe 1", ingredients=[], instructions=[]
+    results = [
+        models.TypesenseResult(
+            recipe=models.RecipeModel(id=1, name="Recipe 1", ingredients=[]),
+            highlights=[
+                models.TypesenseResultHighlight(
+                    field=models.TypesenseResultHighlight.Field.NAME,
+                    tokens=["apple"],
+                )
+            ],
         ),
-        models.RecipeModel(
-            id=2, name="Recipe 2", ingredients=[], instructions=[]
+        models.TypesenseResult(
+            recipe=models.RecipeModel(id=2, name="Recipe 2", ingredients=[]),
+            highlights=[
+                models.TypesenseResultHighlight(
+                    field=models.TypesenseResultHighlight.Field.NAME,
+                    tokens=["banana"],
+                )
+            ],
         ),
-        models.RecipeModel(
-            id=3, name="Recipe 3", ingredients=[], instructions=[]
+        models.TypesenseResult(
+            recipe=models.RecipeModel(id=3, name="Recipe 3", ingredients=[]),
+            highlights=[
+                models.TypesenseResultHighlight(
+                    field=models.TypesenseResultHighlight.Field.INGREDIENTS,
+                    tokens=["banana"],
+                    index=1,
+                )
+            ],
         ),
     ]
     request = SearchRecipesRequest(
@@ -180,7 +265,7 @@ def test_search_recipes_page_and_per_page_null(
 
     mock_search = mocker.patch(
         "domain.controllers.search_recipes",
-        return_value=recipes,
+        return_value=results,
     )
 
     context = mocker.MagicMock()
@@ -197,11 +282,19 @@ def test_search_recipes_page_and_per_page_null(
     assert response == SearchRecipesResponse(
         recipes=[
             SearchRecipesRecipe(
-                id=recipe.id,
-                name=recipe.name,
-                ingredients=recipe.ingredients,
+                id=result.recipe.id,
+                name=result.recipe.name,
+                ingredients=result.recipe.ingredients,
+                matches=[
+                    SearchRecipesMatch(
+                        field=match.field.to_proto(),
+                        tokens=match.tokens,
+                        index=match.index,
+                    )
+                    for match in result.highlights
+                ],
             )
-            for recipe in recipes
+            for result in results
         ]
     )
 

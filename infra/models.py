@@ -1,12 +1,13 @@
 from dataclasses import dataclass
 from enum import StrEnum
-from typing import List
+from typing import List, Optional
 
 from sqlalchemy import MetaData, PickleType
 from sqlalchemy.ext.mutable import MutableList
 from sqlalchemy.orm import Mapped, declarative_base, mapped_column
 
 from protos.chat_by_recipe_pb2 import ChatByRecipeRole
+from protos.search_recipes_pb2 import SearchRecipesMatchField
 
 Base = declarative_base(metadata=MetaData(schema="public"))
 
@@ -51,6 +52,83 @@ class IndexFileModel(Base):
 Following models are not database models,
 they are simply used as in-memory data structures.
 """
+
+
+@dataclass
+class TypesenseResultHighlight:
+    """Typesense search result highlight class."""
+
+    class Field(StrEnum):
+        """Typesense search result highlight field class."""
+
+        NAME = "name"
+        INGREDIENTS = "ingredients"
+
+        def to_proto(self) -> SearchRecipesMatchField:
+            """Convert the result highlight field to a proto object.
+
+            Returns:
+                SearchRecipesMatchField: The proto object.
+            """
+            if self == self.NAME:
+                return SearchRecipesMatchField.NAME
+            if self == self.INGREDIENTS:
+                return SearchRecipesMatchField.INGREDIENTS
+
+    field: Field
+    tokens: List[str]
+    index: Optional[int] = None
+
+
+@dataclass
+class TypesenseResult:
+    """Typesense search result class."""
+
+    recipe: RecipeModel
+    highlights: List[TypesenseResultHighlight]
+
+    def from_json(json: dict) -> "TypesenseResult":
+        """Create a result from a JSON object.
+
+        Arguments:
+            json (dict): The JSON object.
+
+        Returns:
+            TypesenseResult: The result.
+        """
+        recipe = RecipeModel(
+            id=int(json["document"]["id"]),
+            name=json["document"]["name"],
+            ingredients=json["document"]["ingredients"],
+        )
+
+        highlights = [
+            (
+                [
+                    TypesenseResultHighlight(
+                        field=TypesenseResultHighlight.Field.NAME,
+                        tokens=highlight["matched_tokens"],
+                    )
+                ]
+                if highlight["field"] == "name"
+                else [
+                    TypesenseResultHighlight(
+                        field=TypesenseResultHighlight.Field.INGREDIENTS,
+                        tokens=tokens,
+                        index=index,
+                    )
+                    for index, tokens in zip(
+                        highlight["indices"], highlight["matched_tokens"]
+                    )
+                ]
+            )
+            for highlight in json["highlights"]
+        ]
+        highlights = [
+            highlight for sublist in highlights for highlight in sublist
+        ]
+
+        return TypesenseResult(recipe=recipe, highlights=highlights)
 
 
 class ChatRoleModel(StrEnum):
