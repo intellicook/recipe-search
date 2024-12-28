@@ -18,7 +18,19 @@ message SearchRecipesRecipe {
     int32 id = 1;
     string name = 2;
     repeated string ingredients = 3;
-    optional SearchRecipesRecipeDetail detail = 4;
+    repeated SearchRecipesMatch matches = 4;
+    optional SearchRecipesRecipeDetail detail = 5;
+}
+
+enum SearchRecipesMatchField {
+    NAME = 0;
+    INGREDIENTS = 1;
+}
+
+message SearchRecipesMatch {
+    SearchRecipesMatchField field = 1;
+    repeated string tokens = 2;
+    optional int32 index = 3;
 }
 
 message SearchRecipesRecipeDetail {

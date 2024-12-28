@@ -200,7 +200,7 @@ class TypesenseSearchEngine:
         ingredients: Iterable[str],
         page: int = 1,
         per_page: int = domain_configs.default_search_per_page,
-    ) -> List[Recipe]:
+    ) -> List[models.TypesenseResult]:
         """Search for recipes.
 
         Arguments:
@@ -210,7 +210,7 @@ class TypesenseSearchEngine:
                 domain_configs.default_search_per_page.
 
         Returns:
-            List[Recipe]: The list of recipes.
+            List[models.TypesenseResult]: The list of recipe results.
         """
         recipes_documents = self.recipes.retrieve()
         recipes_count = recipes_documents["num_documents"]
@@ -224,11 +224,12 @@ class TypesenseSearchEngine:
                 "drop_tokens_mode": "both_sides:3",
                 "page": page,
                 "per_page": per_page,
-                "highlight_fields": "none",
             }
         )
 
-        return [Recipe.from_json(hit["document"]) for hit in response["hits"]]
+        return [
+            models.TypesenseResult.from_json(hit) for hit in response["hits"]
+        ]
 
 
 search_engine = TypesenseSearchEngine()

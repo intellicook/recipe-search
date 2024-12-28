@@ -32,7 +32,7 @@ def search_recipes(
     page: int = 1,
     per_page: int = configs.default_search_per_page,
     include_detail: bool = False,
-) -> List[models.RecipeModel]:
+) -> List[Any]:  # List[typesense.Result]
     pass
 
 

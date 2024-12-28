@@ -43,6 +43,7 @@ from protos.search_recipes_by_ingredients_pb2 import (
     SearchRecipesByIngredientsResponse,
 )
 from protos.search_recipes_pb2 import (
+    SearchRecipesMatch,
     SearchRecipesRecipe,
     SearchRecipesRecipeDetail,
     SearchRecipesRequest,
@@ -209,7 +210,7 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
         if not request.HasField("include_detail"):
             request.include_detail = False
 
-        recipes = controllers.search_recipes(
+        results = controllers.search_recipes(
             ingredients=request.ingredients,
             page=request.page,
             per_page=request.per_page,
@@ -219,19 +220,27 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
         return SearchRecipesResponse(
             recipes=[
                 SearchRecipesRecipe(
-                    id=recipe.id,
-                    name=recipe.name,
-                    ingredients=recipe.ingredients,
+                    id=result.recipe.id,
+                    name=result.recipe.name,
+                    ingredients=result.recipe.ingredients,
+                    matches=[
+                        SearchRecipesMatch(
+                            field=highlight.field.to_proto(),
+                            tokens=highlight.tokens,
+                            index=highlight.index,
+                        )
+                        for highlight in result.highlights
+                    ],
                     detail=(
                         SearchRecipesRecipeDetail(
-                            instructions=recipe.instructions,
-                            raw=recipe.raw,
+                            instructions=result.recipe.instructions,
+                            raw=result.recipe.raw,
                         )
                         if request.include_detail
                         else None
                     ),
                 )
-                for recipe in recipes
+                for result in results
             ],
         )
 
