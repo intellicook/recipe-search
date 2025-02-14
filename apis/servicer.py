@@ -1,4 +1,4 @@
-from typing import Iterable, List, Tuple
+from typing import Iterable, List
 
 import grpc
 from sqlalchemy.exc import NoResultFound
@@ -19,29 +19,14 @@ from protos.chat_by_recipe_pb2 import (
     ChatByRecipeStreamHeader,
     ChatByRecipeStreamResponse,
 )
-from protos.faiss_index_thread_pb2 import (
-    FaissIndexThreadRequest,
-    FaissIndexThreadResponse,
-    FaissIndexThreadStatus,
-)
 from protos.health_pb2 import (
     HealthCheck,
     HealthRequest,
     HealthResponse,
     HealthStatus,
 )
-from protos.init_faiss_index_pb2 import (
-    InitFaissIndexRequest,
-    InitFaissIndexResponse,
-)
 from protos.recipe_pb2 import RecipeRequest, RecipeResponse
 from protos.reset_data_pb2 import ResetDataRequest, ResetDataResponse
-from protos.search_recipes_by_ingredients_pb2 import (
-    SearchRecipesByIngredientsRecipe,
-    SearchRecipesByIngredientsRecipeDetail,
-    SearchRecipesByIngredientsRequest,
-    SearchRecipesByIngredientsResponse,
-)
 from protos.search_recipes_pb2 import (
     SearchRecipesMatch,
     SearchRecipesRecipe,
@@ -113,68 +98,6 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
             ingredients=recipe.ingredients,
             instructions=recipe.instructions,
             raw=recipe.raw,
-        )
-
-    def SearchRecipesByIngredients(
-        self,
-        request: SearchRecipesByIngredientsRequest,
-        context: grpc.ServicerContext,
-    ) -> SearchRecipesByIngredientsResponse:
-        """Search for recipes given the ingredients"""
-        if not request.ingredients:
-            context.abort(
-                grpc.StatusCode.INVALID_ARGUMENT,
-                "Ingredients cannot be empty",
-            )
-
-        if not request.HasField("limit"):
-            request.limit = domain_configs.default_search_limit
-
-        if request.limit <= 0:
-            context.abort(
-                grpc.StatusCode.INVALID_ARGUMENT,
-                "Limit must be a positive integer",
-            )
-
-        results = controllers.search_recipes_by_ingredients(
-            ingredients=request.ingredients,
-            limit=request.limit,
-        )
-
-        if results is None:
-            context.abort(
-                grpc.StatusCode.FAILED_PRECONDITION,
-                "Search model is not initialized",
-            )
-
-        results: List[Tuple[int, float]]
-
-        recipes = controllers.get_recipes(id for id, _ in results)
-
-        id_to_recipes = {recipe.id: recipe for recipe in recipes}
-        ordered_recipes = [id_to_recipes[id] for id, _ in results]
-
-        include_detail = (
-            request.HasField("include_detail") and request.include_detail
-        )
-
-        return SearchRecipesByIngredientsResponse(
-            recipes=[
-                SearchRecipesByIngredientsRecipe(
-                    id=id,
-                    name=recipe.name,
-                    detail=(
-                        SearchRecipesByIngredientsRecipeDetail(
-                            ingredients=recipe.ingredients,
-                            instructions=recipe.instructions,
-                            raw=recipe.raw,
-                        )
-                        if include_detail
-                        else None
-                    ),
-                )
-                for (id, _), recipe in zip(results, ordered_recipes)
-            ],
         )
 
     def SearchRecipes(
@@ -280,46 +203,6 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
                 for recipe in recipes
             ],
         )
-
-    def InitFaissIndex(
-        self,
-        request: InitFaissIndexRequest,
-        context: grpc.ServicerContext,
-    ) -> InitFaissIndexResponse:
-        """Initialize the Faiss index"""
-        if (
-            controllers.get_faiss_index_thread().to_proto().status
-            == FaissIndexThreadStatus.IN_PROGRESS
-        ):
-            context.abort(
-                grpc.StatusCode.FAILED_PRECONDITION,
-                "Faiss index thread is already in progress",
-            )
-
-        count = request.count
-        if not request.HasField("count"):
-            count = None
-
-        path = request.path
-        if not request.HasField("path"):
-            path = domain_configs.default_faiss_index_path
-
-        controllers.init_faiss_index(
-            count=count,
-            path=path,
-        )
-
-        return InitFaissIndexResponse()
-
-    def GetFaissIndexThread(
-        self,
-        request: FaissIndexThreadRequest,
-        context: grpc.ServicerContext,
-    ) -> FaissIndexThreadResponse:
-        """Get the Faiss index thread status"""
-        thread = controllers.get_faiss_index_thread()
-
-        return thread.to_proto()
 
     def ChatByRecipe(
         self,
