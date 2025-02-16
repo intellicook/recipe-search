@@ -24,16 +24,22 @@ namespace IntelliCook.RecipeSearch.Client {
     static RecipeReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "ChNQcm90b3MvcmVjaXBlLnByb3RvIhsKDVJlY2lwZVJlcXVlc3QSCgoCaWQY",
-            "ASABKAUiYgoOUmVjaXBlUmVzcG9uc2USCgoCaWQYASABKAUSDAoEbmFtZRgC",
-            "IAEoCRITCgtpbmdyZWRpZW50cxgDIAMoCRIUCgxpbnN0cnVjdGlvbnMYBCAD",
-            "KAkSCwoDcmF3GAUgASgJQiKqAh9JbnRlbGxpQ29vay5SZWNpcGVTZWFyY2gu",
-            "Q2xpZW50YgZwcm90bzM="));
+            "ChNQcm90b3MvcmVjaXBlLnByb3RvGh1wcm90b3MvcmVjaXBlX251dHJpdGlv",
+            "bi5wcm90byIbCg1SZWNpcGVSZXF1ZXN0EgoKAmlkGAEgASgFIscBCg5SZWNp",
+            "cGVSZXNwb25zZRIKCgJpZBgBIAEoBRINCgV0aXRsZRgCIAEoCRITCgtkZXNj",
+            "cmlwdGlvbhgDIAEoCRIsCgtpbmdyZWRpZW50cxgEIAMoCzIXLlJlY2lwZVJl",
+            "Y2lwZUluZ3JlZGllbnQSEgoKZGlyZWN0aW9ucxgFIAMoCRIMCgR0aXBzGAYg",
+            "AygJEhAKCHV0ZW5zaWxzGAcgAygJEiMKCW51dHJpdGlvbhgIIAEoCzIQLlJl",
+            "Y2lwZU51dHJpdGlvbiJmChZSZWNpcGVSZWNpcGVJbmdyZWRpZW50EgwKBG5h",
+            "bWUYASABKAkSFQoIcXVhbnRpdHkYAiABKAJIAIgBARIRCgR1bml0GAMgASgJ",
+            "SAGIAQFCCwoJX3F1YW50aXR5QgcKBV91bml0QiKqAh9JbnRlbGxpQ29vay5S",
+            "ZWNpcGVTZWFyY2guQ2xpZW50YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { },
+          new pbr::FileDescriptor[] { global::IntelliCook.RecipeSearch.Client.RecipeNutritionReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.RecipeRequest), global::IntelliCook.RecipeSearch.Client.RecipeRequest.Parser, new[]{ "Id" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.RecipeResponse), global::IntelliCook.RecipeSearch.Client.RecipeResponse.Parser, new[]{ "Id", "Name", "Ingredients", "Instructions", "Raw" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.RecipeResponse), global::IntelliCook.RecipeSearch.Client.RecipeResponse.Parser, new[]{ "Id", "Title", "Description", "Ingredients", "Directions", "Tips", "Utensils", "Nutrition" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.RecipeRecipeIngredient), global::IntelliCook.RecipeSearch.Client.RecipeRecipeIngredient.Parser, new[]{ "Name", "Quantity", "Unit" }, new[]{ "Quantity", "Unit" }, null, null, null)
           }));
     }
     #endregion
@@ -274,10 +280,13 @@ namespace IntelliCook.RecipeSearch.Client {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public RecipeResponse(RecipeResponse other) : this() {
       id_ = other.id_;
-      name_ = other.name_;
+      title_ = other.title_;
+      description_ = other.description_;
       ingredients_ = other.ingredients_.Clone();
-      instructions_ = other.instructions_.Clone();
-      raw_ = other.raw_;
+      directions_ = other.directions_.Clone();
+      tips_ = other.tips_.Clone();
+      utensils_ = other.utensils_.Clone();
+      nutrition_ = other.nutrition_ != null ? other.nutrition_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -299,49 +308,83 @@ namespace IntelliCook.RecipeSearch.Client {
       }
     }
 
-    /// <summary>Field number for the "name" field.</summary>
-    public const int NameFieldNumber = 2;
-    private string name_ = "";
+    /// <summary>Field number for the "title" field.</summary>
+    public const int TitleFieldNumber = 2;
+    private string title_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Name {
-      get { return name_; }
+    public string Title {
+      get { return title_; }
       set {
-        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        title_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "description" field.</summary>
+    public const int DescriptionFieldNumber = 3;
+    private string description_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Description {
+      get { return description_; }
+      set {
+        description_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "ingredients" field.</summary>
-    public const int IngredientsFieldNumber = 3;
-    private static readonly pb::FieldCodec<string> _repeated_ingredients_codec
-        = pb::FieldCodec.ForString(26);
-    private readonly pbc::RepeatedField<string> ingredients_ = new pbc::RepeatedField<string>();
+    public const int IngredientsFieldNumber = 4;
+    private static readonly pb::FieldCodec<global::IntelliCook.RecipeSearch.Client.RecipeRecipeIngredient> _repeated_ingredients_codec
+        = pb::FieldCodec.ForMessage(34, global::IntelliCook.RecipeSearch.Client.RecipeRecipeIngredient.Parser);
+    private readonly pbc::RepeatedField<global::IntelliCook.RecipeSearch.Client.RecipeRecipeIngredient> ingredients_ = new pbc::RepeatedField<global::IntelliCook.RecipeSearch.Client.RecipeRecipeIngredient>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<string> Ingredients {
+    public pbc::RepeatedField<global::IntelliCook.RecipeSearch.Client.RecipeRecipeIngredient> Ingredients {
       get { return ingredients_; }
     }
 
-    /// <summary>Field number for the "instructions" field.</summary>
-    public const int InstructionsFieldNumber = 4;
-    private static readonly pb::FieldCodec<string> _repeated_instructions_codec
-        = pb::FieldCodec.ForString(34);
-    private readonly pbc::RepeatedField<string> instructions_ = new pbc::RepeatedField<string>();
+    /// <summary>Field number for the "directions" field.</summary>
+    public const int DirectionsFieldNumber = 5;
+    private static readonly pb::FieldCodec<string> _repeated_directions_codec
+        = pb::FieldCodec.ForString(42);
+    private readonly pbc::RepeatedField<string> directions_ = new pbc::RepeatedField<string>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<string> Instructions {
-      get { return instructions_; }
+    public pbc::RepeatedField<string> Directions {
+      get { return directions_; }
     }
 
-    /// <summary>Field number for the "raw" field.</summary>
-    public const int RawFieldNumber = 5;
-    private string raw_ = "";
+    /// <summary>Field number for the "tips" field.</summary>
+    public const int TipsFieldNumber = 6;
+    private static readonly pb::FieldCodec<string> _repeated_tips_codec
+        = pb::FieldCodec.ForString(50);
+    private readonly pbc::RepeatedField<string> tips_ = new pbc::RepeatedField<string>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Raw {
-      get { return raw_; }
+    public pbc::RepeatedField<string> Tips {
+      get { return tips_; }
+    }
+
+    /// <summary>Field number for the "utensils" field.</summary>
+    public const int UtensilsFieldNumber = 7;
+    private static readonly pb::FieldCodec<string> _repeated_utensils_codec
+        = pb::FieldCodec.ForString(58);
+    private readonly pbc::RepeatedField<string> utensils_ = new pbc::RepeatedField<string>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<string> Utensils {
+      get { return utensils_; }
+    }
+
+    /// <summary>Field number for the "nutrition" field.</summary>
+    public const int NutritionFieldNumber = 8;
+    private global::IntelliCook.RecipeSearch.Client.RecipeNutrition nutrition_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::IntelliCook.RecipeSearch.Client.RecipeNutrition Nutrition {
+      get { return nutrition_; }
       set {
-        raw_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        nutrition_ = value;
       }
     }
 
@@ -361,10 +404,13 @@ namespace IntelliCook.RecipeSearch.Client {
         return true;
       }
       if (Id != other.Id) return false;
-      if (Name != other.Name) return false;
+      if (Title != other.Title) return false;
+      if (Description != other.Description) return false;
       if(!ingredients_.Equals(other.ingredients_)) return false;
-      if(!instructions_.Equals(other.instructions_)) return false;
-      if (Raw != other.Raw) return false;
+      if(!directions_.Equals(other.directions_)) return false;
+      if(!tips_.Equals(other.tips_)) return false;
+      if(!utensils_.Equals(other.utensils_)) return false;
+      if (!object.Equals(Nutrition, other.Nutrition)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -373,10 +419,13 @@ namespace IntelliCook.RecipeSearch.Client {
     public override int GetHashCode() {
       int hash = 1;
       if (Id != 0) hash ^= Id.GetHashCode();
-      if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (Title.Length != 0) hash ^= Title.GetHashCode();
+      if (Description.Length != 0) hash ^= Description.GetHashCode();
       hash ^= ingredients_.GetHashCode();
-      hash ^= instructions_.GetHashCode();
-      if (Raw.Length != 0) hash ^= Raw.GetHashCode();
+      hash ^= directions_.GetHashCode();
+      hash ^= tips_.GetHashCode();
+      hash ^= utensils_.GetHashCode();
+      if (nutrition_ != null) hash ^= Nutrition.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -399,15 +448,21 @@ namespace IntelliCook.RecipeSearch.Client {
         output.WriteRawTag(8);
         output.WriteInt32(Id);
       }
-      if (Name.Length != 0) {
+      if (Title.Length != 0) {
         output.WriteRawTag(18);
-        output.WriteString(Name);
+        output.WriteString(Title);
+      }
+      if (Description.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Description);
       }
       ingredients_.WriteTo(output, _repeated_ingredients_codec);
-      instructions_.WriteTo(output, _repeated_instructions_codec);
-      if (Raw.Length != 0) {
-        output.WriteRawTag(42);
-        output.WriteString(Raw);
+      directions_.WriteTo(output, _repeated_directions_codec);
+      tips_.WriteTo(output, _repeated_tips_codec);
+      utensils_.WriteTo(output, _repeated_utensils_codec);
+      if (nutrition_ != null) {
+        output.WriteRawTag(66);
+        output.WriteMessage(Nutrition);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -423,15 +478,21 @@ namespace IntelliCook.RecipeSearch.Client {
         output.WriteRawTag(8);
         output.WriteInt32(Id);
       }
-      if (Name.Length != 0) {
+      if (Title.Length != 0) {
         output.WriteRawTag(18);
-        output.WriteString(Name);
+        output.WriteString(Title);
+      }
+      if (Description.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Description);
       }
       ingredients_.WriteTo(ref output, _repeated_ingredients_codec);
-      instructions_.WriteTo(ref output, _repeated_instructions_codec);
-      if (Raw.Length != 0) {
-        output.WriteRawTag(42);
-        output.WriteString(Raw);
+      directions_.WriteTo(ref output, _repeated_directions_codec);
+      tips_.WriteTo(ref output, _repeated_tips_codec);
+      utensils_.WriteTo(ref output, _repeated_utensils_codec);
+      if (nutrition_ != null) {
+        output.WriteRawTag(66);
+        output.WriteMessage(Nutrition);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -446,13 +507,18 @@ namespace IntelliCook.RecipeSearch.Client {
       if (Id != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Id);
       }
-      if (Name.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      if (Title.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Title);
+      }
+      if (Description.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Description);
       }
       size += ingredients_.CalculateSize(_repeated_ingredients_codec);
-      size += instructions_.CalculateSize(_repeated_instructions_codec);
-      if (Raw.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Raw);
+      size += directions_.CalculateSize(_repeated_directions_codec);
+      size += tips_.CalculateSize(_repeated_tips_codec);
+      size += utensils_.CalculateSize(_repeated_utensils_codec);
+      if (nutrition_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Nutrition);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -469,13 +535,21 @@ namespace IntelliCook.RecipeSearch.Client {
       if (other.Id != 0) {
         Id = other.Id;
       }
-      if (other.Name.Length != 0) {
-        Name = other.Name;
+      if (other.Title.Length != 0) {
+        Title = other.Title;
+      }
+      if (other.Description.Length != 0) {
+        Description = other.Description;
       }
       ingredients_.Add(other.ingredients_);
-      instructions_.Add(other.instructions_);
-      if (other.Raw.Length != 0) {
-        Raw = other.Raw;
+      directions_.Add(other.directions_);
+      tips_.Add(other.tips_);
+      utensils_.Add(other.utensils_);
+      if (other.nutrition_ != null) {
+        if (nutrition_ == null) {
+          Nutrition = new global::IntelliCook.RecipeSearch.Client.RecipeNutrition();
+        }
+        Nutrition.MergeFrom(other.Nutrition);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -501,19 +575,34 @@ namespace IntelliCook.RecipeSearch.Client {
             break;
           }
           case 18: {
-            Name = input.ReadString();
+            Title = input.ReadString();
             break;
           }
           case 26: {
-            ingredients_.AddEntriesFrom(input, _repeated_ingredients_codec);
+            Description = input.ReadString();
             break;
           }
           case 34: {
-            instructions_.AddEntriesFrom(input, _repeated_instructions_codec);
+            ingredients_.AddEntriesFrom(input, _repeated_ingredients_codec);
             break;
           }
           case 42: {
-            Raw = input.ReadString();
+            directions_.AddEntriesFrom(input, _repeated_directions_codec);
+            break;
+          }
+          case 50: {
+            tips_.AddEntriesFrom(input, _repeated_tips_codec);
+            break;
+          }
+          case 58: {
+            utensils_.AddEntriesFrom(input, _repeated_utensils_codec);
+            break;
+          }
+          case 66: {
+            if (nutrition_ == null) {
+              Nutrition = new global::IntelliCook.RecipeSearch.Client.RecipeNutrition();
+            }
+            input.ReadMessage(Nutrition);
             break;
           }
         }
@@ -540,19 +629,337 @@ namespace IntelliCook.RecipeSearch.Client {
             break;
           }
           case 18: {
-            Name = input.ReadString();
+            Title = input.ReadString();
             break;
           }
           case 26: {
-            ingredients_.AddEntriesFrom(ref input, _repeated_ingredients_codec);
+            Description = input.ReadString();
             break;
           }
           case 34: {
-            instructions_.AddEntriesFrom(ref input, _repeated_instructions_codec);
+            ingredients_.AddEntriesFrom(ref input, _repeated_ingredients_codec);
             break;
           }
           case 42: {
-            Raw = input.ReadString();
+            directions_.AddEntriesFrom(ref input, _repeated_directions_codec);
+            break;
+          }
+          case 50: {
+            tips_.AddEntriesFrom(ref input, _repeated_tips_codec);
+            break;
+          }
+          case 58: {
+            utensils_.AddEntriesFrom(ref input, _repeated_utensils_codec);
+            break;
+          }
+          case 66: {
+            if (nutrition_ == null) {
+              Nutrition = new global::IntelliCook.RecipeSearch.Client.RecipeNutrition();
+            }
+            input.ReadMessage(Nutrition);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class RecipeRecipeIngredient : pb::IMessage<RecipeRecipeIngredient>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<RecipeRecipeIngredient> _parser = new pb::MessageParser<RecipeRecipeIngredient>(() => new RecipeRecipeIngredient());
+    private pb::UnknownFieldSet _unknownFields;
+    private int _hasBits0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<RecipeRecipeIngredient> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::IntelliCook.RecipeSearch.Client.RecipeReflection.Descriptor.MessageTypes[2]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public RecipeRecipeIngredient() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public RecipeRecipeIngredient(RecipeRecipeIngredient other) : this() {
+      _hasBits0 = other._hasBits0;
+      name_ = other.name_;
+      quantity_ = other.quantity_;
+      unit_ = other.unit_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public RecipeRecipeIngredient Clone() {
+      return new RecipeRecipeIngredient(this);
+    }
+
+    /// <summary>Field number for the "name" field.</summary>
+    public const int NameFieldNumber = 1;
+    private string name_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Name {
+      get { return name_; }
+      set {
+        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "quantity" field.</summary>
+    public const int QuantityFieldNumber = 2;
+    private readonly static float QuantityDefaultValue = 0F;
+
+    private float quantity_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public float Quantity {
+      get { if ((_hasBits0 & 1) != 0) { return quantity_; } else { return QuantityDefaultValue; } }
+      set {
+        _hasBits0 |= 1;
+        quantity_ = value;
+      }
+    }
+    /// <summary>Gets whether the "quantity" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasQuantity {
+      get { return (_hasBits0 & 1) != 0; }
+    }
+    /// <summary>Clears the value of the "quantity" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearQuantity() {
+      _hasBits0 &= ~1;
+    }
+
+    /// <summary>Field number for the "unit" field.</summary>
+    public const int UnitFieldNumber = 3;
+    private readonly static string UnitDefaultValue = "";
+
+    private string unit_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Unit {
+      get { return unit_ ?? UnitDefaultValue; }
+      set {
+        unit_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+    /// <summary>Gets whether the "unit" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasUnit {
+      get { return unit_ != null; }
+    }
+    /// <summary>Clears the value of the "unit" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearUnit() {
+      unit_ = null;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as RecipeRecipeIngredient);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(RecipeRecipeIngredient other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Name != other.Name) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Quantity, other.Quantity)) return false;
+      if (Unit != other.Unit) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (HasQuantity) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Quantity);
+      if (HasUnit) hash ^= Unit.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Name.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Name);
+      }
+      if (HasQuantity) {
+        output.WriteRawTag(21);
+        output.WriteFloat(Quantity);
+      }
+      if (HasUnit) {
+        output.WriteRawTag(26);
+        output.WriteString(Unit);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Name.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Name);
+      }
+      if (HasQuantity) {
+        output.WriteRawTag(21);
+        output.WriteFloat(Quantity);
+      }
+      if (HasUnit) {
+        output.WriteRawTag(26);
+        output.WriteString(Unit);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Name.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      }
+      if (HasQuantity) {
+        size += 1 + 4;
+      }
+      if (HasUnit) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Unit);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(RecipeRecipeIngredient other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Name.Length != 0) {
+        Name = other.Name;
+      }
+      if (other.HasQuantity) {
+        Quantity = other.Quantity;
+      }
+      if (other.HasUnit) {
+        Unit = other.Unit;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Name = input.ReadString();
+            break;
+          }
+          case 21: {
+            Quantity = input.ReadFloat();
+            break;
+          }
+          case 26: {
+            Unit = input.ReadString();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            Name = input.ReadString();
+            break;
+          }
+          case 21: {
+            Quantity = input.ReadFloat();
+            break;
+          }
+          case 26: {
+            Unit = input.ReadString();
             break;
           }
         }
