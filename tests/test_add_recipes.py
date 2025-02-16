@@ -3,13 +3,20 @@ import pytest
 import pytest_mock
 
 from apis.servicer import RecipeSearchServicer
-from infra.models import RecipeModel
+from infra.models import (
+    RecipeModel,
+    RecipeModelIngredient,
+    RecipeModelNutrition,
+    RecipeModelNutritionValue,
+)
 from protos.add_recipes_pb2 import (
+    AddRecipesRecipeIngredient,
     AddRecipesRequest,
     AddRecipesRequestRecipe,
     AddRecipesResponse,
     AddRecipesResponseRecipe,
 )
+from protos.recipe_nutrition_pb2 import RecipeNutrition
 
 
 def test_add_recipes_success(
@@ -18,35 +25,87 @@ def test_add_recipes_success(
     recipes = [
         RecipeModel(
             id=1,
-            name="test_name",
-            ingredients=["apple", "banana"],
-            instructions=["step 1", "step 2"],
-            raw="raw recipe",
+            title="test_title",
+            description="test_description",
+            ingredients=[
+                RecipeModelIngredient(name="apple", quantity=1, unit="unit"),
+                RecipeModelIngredient(name="banana", quantity=2, unit="unit"),
+            ],
+            directions=["step 1", "step 2"],
+            tips=["tip 1", "tip 2"],
+            utensils=["knife", "spoon"],
+            nutrition=RecipeModelNutrition(
+                calories=RecipeModelNutritionValue.high,
+                fat=RecipeModelNutritionValue.low,
+                protein=RecipeModelNutritionValue.medium,
+                carbs=RecipeModelNutritionValue.none,
+            ),
         ),
         RecipeModel(
             id=2,
-            name="test_name",
-            ingredients=["apple", "banana"],
-            instructions=["step 1", "step 2"],
-            raw="raw recipe",
+            title="test_title",
+            description="test_description",
+            ingredients=[
+                RecipeModelIngredient(name="apple", quantity=1, unit="unit"),
+                RecipeModelIngredient(name="banana", quantity=2, unit="unit"),
+            ],
+            directions=["step 1", "step 2"],
+            tips=["tip 1", "tip 2"],
+            utensils=["knife", "spoon"],
+            nutrition=RecipeModelNutrition(
+                calories=RecipeModelNutritionValue.high,
+                fat=RecipeModelNutritionValue.low,
+                protein=RecipeModelNutritionValue.medium,
+                carbs=RecipeModelNutritionValue.none,
+            ),
         ),
     ]
     request_recipes = [
         AddRecipesRequestRecipe(
-            name=recipe.name,
-            ingredients=recipe.ingredients,
-            instructions=recipe.instructions,
-            raw=recipe.raw,
+            title=recipe.title,
+            description=recipe.description,
+            ingredients=[
+                AddRecipesRecipeIngredient(
+                    name=ingredient.name,
+                    quantity=ingredient.quantity,
+                    unit=ingredient.unit,
+                )
+                for ingredient in recipe.ingredients
+            ],
+            directions=recipe.directions,
+            tips=recipe.tips,
+            utensils=recipe.utensils,
+            nutrition=RecipeNutrition(
+                calories=recipe.nutrition.calories.to_proto(),
+                fat=recipe.nutrition.fat.to_proto(),
+                protein=recipe.nutrition.protein.to_proto(),
+                carbs=recipe.nutrition.carbs.to_proto(),
+            ),
         )
         for recipe in recipes
     ]
     response_recipes = [
         AddRecipesResponseRecipe(
             id=recipe.id,
-            name=recipe.name,
-            ingredients=recipe.ingredients,
-            instructions=recipe.instructions,
-            raw=recipe.raw,
+            title=recipe.title,
+            description=recipe.description,
+            ingredients=[
+                AddRecipesRecipeIngredient(
+                    name=ingredient.name,
+                    quantity=ingredient.quantity,
+                    unit=ingredient.unit,
+                )
+                for ingredient in recipe.ingredients
+            ],
+            directions=recipe.directions,
+            tips=recipe.tips,
+            utensils=recipe.utensils,
+            nutrition=RecipeNutrition(
+                calories=recipe.nutrition.calories.to_proto(),
+                fat=recipe.nutrition.fat.to_proto(),
+                protein=recipe.nutrition.protein.to_proto(),
+                carbs=recipe.nutrition.carbs.to_proto(),
+            ),
         )
         for recipe in recipes
     ]
@@ -78,34 +137,87 @@ def test_add_recipes_no_recipe_raw(
     recipes = [
         RecipeModel(
             id=1,
-            name="test_name",
-            ingredients=["apple", "banana"],
-            instructions=["step 1", "step 2"],
-            raw="",
+            title="test_title",
+            description="test_description",
+            ingredients=[
+                RecipeModelIngredient(name="apple", quantity=1, unit="unit"),
+                RecipeModelIngredient(name="banana", quantity=2, unit="unit"),
+            ],
+            directions=["step 1", "step 2"],
+            tips=["tip 1", "tip 2"],
+            utensils=["knife", "spoon"],
+            nutrition=RecipeModelNutrition(
+                calories=RecipeModelNutritionValue.high,
+                fat=RecipeModelNutritionValue.low,
+                protein=RecipeModelNutritionValue.medium,
+                carbs=RecipeModelNutritionValue.none,
+            ),
         ),
         RecipeModel(
             id=2,
-            name="test_name",
-            ingredients=["apple", "banana"],
-            instructions=["step 1", "step 2"],
-            raw="",
+            title="test_title",
+            description="test_description",
+            ingredients=[
+                RecipeModelIngredient(name="apple", quantity=1, unit="unit"),
+                RecipeModelIngredient(name="banana", quantity=2, unit="unit"),
+            ],
+            directions=["step 1", "step 2"],
+            tips=["tip 1", "tip 2"],
+            utensils=["knife", "spoon"],
+            nutrition=RecipeModelNutrition(
+                calories=RecipeModelNutritionValue.high,
+                fat=RecipeModelNutritionValue.low,
+                protein=RecipeModelNutritionValue.medium,
+                carbs=RecipeModelNutritionValue.none,
+            ),
         ),
     ]
     request_recipes = [
         AddRecipesRequestRecipe(
-            name=recipe.name,
-            ingredients=recipe.ingredients,
-            instructions=recipe.instructions,
+            title=recipe.title,
+            description=recipe.description,
+            ingredients=[
+                AddRecipesRecipeIngredient(
+                    name=ingredient.name,
+                    quantity=ingredient.quantity,
+                    unit=ingredient.unit,
+                )
+                for ingredient in recipe.ingredients
+            ],
+            directions=recipe.directions,
+            tips=recipe.tips,
+            utensils=recipe.utensils,
+            nutrition=RecipeNutrition(
+                calories=recipe.nutrition.calories.to_proto(),
+                fat=recipe.nutrition.fat.to_proto(),
+                protein=recipe.nutrition.protein.to_proto(),
+                carbs=recipe.nutrition.carbs.to_proto(),
+            ),
         )
         for recipe in recipes
     ]
     response_recipes = [
         AddRecipesResponseRecipe(
             id=recipe.id,
-            name=recipe.name,
-            ingredients=recipe.ingredients,
-            instructions=recipe.instructions,
-            raw=recipe.raw,
+            title=recipe.title,
+            description=recipe.description,
+            ingredients=[
+                AddRecipesRecipeIngredient(
+                    name=ingredient.name,
+                    quantity=ingredient.quantity,
+                    unit=ingredient.unit,
+                )
+                for ingredient in recipe.ingredients
+            ],
+            directions=recipe.directions,
+            tips=recipe.tips,
+            utensils=recipe.utensils,
+            nutrition=RecipeNutrition(
+                calories=recipe.nutrition.calories.to_proto(),
+                fat=recipe.nutrition.fat.to_proto(),
+                protein=recipe.nutrition.protein.to_proto(),
+                carbs=recipe.nutrition.carbs.to_proto(),
+            ),
         )
         for recipe in recipes
     ]

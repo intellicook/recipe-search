@@ -1,4 +1,4 @@
-from typing import Any, Iterable, List
+from typing import Iterable, List
 
 from configs.domain import configs
 from infra import models
@@ -20,30 +20,12 @@ def add_recipes(recipes: Iterable[models.RecipeModel]):
     pass
 
 
-def search_recipes_by_ingredients(
-    ingredients: Iterable[str],
-    limit: int = configs.default_search_limit,
-) -> List[int]:
-    pass
-
-
 def search_recipes(
     ingredients: Iterable[str],
     page: int = 1,
     per_page: int = configs.default_search_per_page,
     include_detail: bool = False,
-) -> List[Any]:  # List[typesense.Result]
-    pass
-
-
-def init_faiss_index(
-    count: int = None,
-    path: str = configs.default_faiss_index_path,
-):
-    pass
-
-
-def get_faiss_index_thread() -> Any:  # faiss.IndexThread
+) -> List[models.TypesenseResult]:
     pass
 
 

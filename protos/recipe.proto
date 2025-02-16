@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "protos/recipe_nutrition.proto";
+
 option csharp_namespace = "IntelliCook.RecipeSearch.Client";
 
 message RecipeRequest {
@@ -8,8 +10,17 @@ message RecipeRequest {
 
 message RecipeResponse {
     int32 id = 1;
-    string name = 2;
-    repeated string ingredients = 3;
-    repeated string instructions = 4;
-    string raw = 5;
+    string title = 2;
+    string description = 3;
+    repeated RecipeRecipeIngredient ingredients = 4;
+    repeated string directions = 5;
+    repeated string tips = 6;
+    repeated string utensils = 7;
+    RecipeNutrition nutrition = 8;
+}
+
+message RecipeRecipeIngredient {
+    string name = 1;
+    optional float quantity = 2;
+    optional string unit = 3;
 }

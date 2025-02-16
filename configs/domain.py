@@ -2,7 +2,7 @@ from pydantic import Field
 from pydantic_settings import SettingsConfigDict
 
 from configs.base import BaseConfigs
-from domain.model_types import ChatModelType, SearchModelType
+from domain.model_types import ChatModelType
 
 
 class DomainConfigs(BaseConfigs):
@@ -11,7 +11,6 @@ class DomainConfigs(BaseConfigs):
     default_faiss_index_path: str = Field("index.faiss")
     default_search_limit: int = Field(10)
     default_search_per_page: int = Field(10)
-    search_model: SearchModelType
     chat_message_limit: int = Field(10)
     chat_model: ChatModelType
 
