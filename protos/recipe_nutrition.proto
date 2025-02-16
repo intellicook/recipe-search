@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "IntelliCook.RecipeSearch.Client";
+
+enum RecipeNutritionValue {
+    HIGH = 0;
+    MEDIUM = 1;
+    LOW = 2;
+    NONE = 3;
+}
+
+message RecipeNutrition {
+    RecipeNutritionValue calories = 1;
+    RecipeNutritionValue fat = 2;
+    RecipeNutritionValue protein = 3;
+    RecipeNutritionValue carbs = 4;
+}

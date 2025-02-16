@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from configs.domain import configs
 from domain import chats
-from domain.searches.engines import typesense
+from domain.searches import typesense
 from infra import models
 from infra.db import engine
 
@@ -67,6 +67,8 @@ def add_recipes(
     Returns:
         List[models.RecipeModel]: The added recipes.
     """
+    # TODO: clean + embed
+
     with Session(engine, expire_on_commit=False) as session:
         session.add_all(recipes)
         session.commit()
@@ -139,7 +141,7 @@ def chat_by_recipe(
     Returns:
         models.ChatMessageModel: The response message.
     """
-    logger.debug(f"Chatting with {name} by recipe {recipe.name}")
+    logger.debug(f"Chatting with {name} by recipe {recipe.title}")
 
     chat = chats.model()
     chat.set_user(name)
@@ -168,7 +170,7 @@ def chat_by_recipe_stream(
     Returns:
         Iterable[models.ChatStreamModel]: The response stream of messages.
     """
-    logger.debug(f"Chatting with {name} by recipe {recipe.name}")
+    logger.debug(f"Chatting with {name} by recipe {recipe.title}")
 
     chat = chats.model()
     chat.set_user(name)
@@ -188,14 +190,6 @@ def reset_data():
         session.execute(
             text(
                 f"ALTER SEQUENCE {models.RecipeModel.__tablename__}_id_seq"
-                " RESTART WITH 1"
-            )
-        )
-
-        session.execute(delete(models.IndexFileModel))
-        session.execute(
-            text(
-                f"ALTER SEQUENCE {models.IndexFileModel.__tablename__}_id_seq"
                 " RESTART WITH 1"
             )
         )

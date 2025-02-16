@@ -28,11 +28,26 @@ def test_chat_by_recipe_success(mocker: pytest_mock.MockerFixture):
         },
     ]
     recipe = models.RecipeModel(
-        id=id,
-        name=name,
-        ingredients=["apple", "banana"],
-        instructions=["step 1", "step 2"],
-        raw="raw recipe",
+        id=1,
+        title="test_title",
+        description="test_description",
+        ingredients=[
+            models.RecipeModelIngredient(
+                name="apple", quantity=1, unit="unit"
+            ),
+            models.RecipeModelIngredient(
+                name="banana", quantity=2, unit="unit"
+            ),
+        ],
+        directions=["step 1", "step 2"],
+        tips=["tip 1", "tip 2"],
+        utensils=["knife", "spoon"],
+        nutrition=models.RecipeModelNutrition(
+            calories=models.RecipeModelNutritionValue.high,
+            fat=models.RecipeModelNutritionValue.low,
+            protein=models.RecipeModelNutritionValue.medium,
+            carbs=models.RecipeModelNutritionValue.none,
+        ),
     )
     request = ChatByRecipeRequest(
         id=id,

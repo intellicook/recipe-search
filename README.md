@@ -9,11 +9,13 @@ This is the recipe search service of IntelliCook.
 We use [Docker](https://www.docker.com) and [Docker Compose](https://docs.docker.com/compose) to manage the environment in both development and production.
 
 Before starting anything, you have to define the environment variables in the `.env` file. You can copy the `.env.example` file and fill in the values.
+
 ```bash
 cp .env.example .env
 ```
 
 With Docker Compose, you can run the services in the `docker-compose.yml` file:
+
 ```bash
 docker compose up
 ```
@@ -27,20 +29,25 @@ We use Python 3.12.2, so make sure you have that installed.
 You could use [pyenv](https://github.com/pyenv/pyenv) or [pyenv-win](https://github.com/pyenv-win/pyenv-win) (Windows is not recommended to install pyenv because it does not get native support) to manage your Python versions.
 
 Install the Python version you want to use.
+
 ```bash
 pyenv install 3.12.2
 ```
 
 Specify the version for this directory.
+
 ```bash
 pyenv local 3.12.2
 ```
 
 To check your Python version, run `python --version` in your terminal.
+
 ```bash
 python --version
 ```
+
 Or you may need to specify the version explicitly if you didn't use pyenv or have multiple versions installed.
+
 ```bash
 python3 --version
 ```
@@ -52,11 +59,13 @@ It is recommended to use a virtual environment to manage dependencies.
 It is highly recommended to use the [venv](https://docs.python.org/3/library/venv.html) module that comes with Python.
 
 To create a virtual environment in the `.venv` directory, run:
+
 ```bash
 python -m venv .venv
 ```
 
 Activate the environment.
+
 ```bash
 # Linux, Bash, Mac OS X
 source .venv/bin/activate
@@ -73,6 +82,7 @@ source .venv/bin/activate.csh
 ```
 
 Install the dependencies.
+
 ```bash
 # Install the dependencies of PyTorch
 pip install numpy==2.1.2 pillow==11.0.0 Jinja2==3.1.4
@@ -86,6 +96,7 @@ pip install -r requirements.txt
 ```
 
 When you want to deactivate the virtual environment.
+
 ```bash
 deactivate
 ```
@@ -97,16 +108,19 @@ We use [Flake8](https://flake8.pycqa.org) and [ISort](https://pycqa.github.io/is
 Finish the environment setup above (especially installing the dependencies with pip) before using pre-commit.
 
 Install and setup pre-commit.
+
 ```bash
 pre-commit install
 ```
 
 To run pre-commit manually (only scans staged files).
+
 ```bash
 pre-commit run --all-files
 ```
 
 Remember to stage files again if there are any changes made by the pre-commit hooks or by you.
+
 ```bash
 git add .
 ```
@@ -120,20 +134,21 @@ You need to have the [Black Formatter](https://marketplace.visualstudio.com/item
 Bring up the command palette with Ctrl+Shift+P(Windows/Linux) / Cmd+Shift+P(Mac) and search for "Preferences: Open Workspace Settings (JSON)".
 
 Then replace the content with the following:
+
 ```json
 {
-    "editor.formatOnSave": true,
-    "python.envFile": "",
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter",
-    },
-    "black-formatter.args": [
-        "--line-length",
-        "79",
-        "--preview",
-        "--enable-unstable-feature",
-        "string_processing"
-    ],
+  "editor.formatOnSave": true,
+  "python.envFile": "",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "black-formatter.args": [
+    "--line-length",
+    "79",
+    "--preview",
+    "--enable-unstable-feature",
+    "string_processing"
+  ]
 }
 ```
 
@@ -144,6 +159,7 @@ Then replace the content with the following:
 ### Clone Repository
 
 First clone the repository.
+
 ```bash
 git clone git@github.com:<username>/<repository>.git
 ```
@@ -153,6 +169,7 @@ git clone git@github.com:<username>/<repository>.git
 ### Checkout Branch
 
 Then checkout the branch you want to work on.
+
 ```bash
 git checkout <branch>
 ```
@@ -160,6 +177,7 @@ git checkout <branch>
 ### Committing Changes
 
 Commit your changes to the branch you are working on.
+
 ```bash
 git add .
 git commit -m "Your commit message"
@@ -172,11 +190,13 @@ Make any changes and stage your files again according to the pre-commit hooks.
 ### Pushing Changes
 
 Set your branch's upstream branch to be the same branch on the remote repository on GitHub.
+
 ```bash
 git push -u origin <branch>
 ```
 
 After the first time you set the upstream branch, you can simply push without specifying the branch.
+
 ```bash
 git push
 ```
@@ -188,17 +208,20 @@ We use [PostgreSQL](https://www.postgresql.org) as the database for the recipe s
 We use [Alembic](https://alembic.sqlalchemy.org) for database migrations.
 
 When there is a change in the database schema, you need to generate a new migration script:
+
 ```bash
 alembic revision -m "Your migration message"
 ```
 
 Implement the `upgrade` and `downgrade` functions in the generated migration script, you may reference the output from:
+
 ```py
 from sqlalchemy.schema import CreateTable
 print(CreateTable(YourModel.__table__))
 ```
 
 Alternatively, you can use the `--autogenerate` flag to automatically generate the script:
+
 ```bash
 alembic revision --autogenerate -m "Your migration message"
 ```
@@ -206,6 +229,7 @@ alembic revision --autogenerate -m "Your migration message"
 **Important**: For some reason, autogenerate always tries to remove the `alembic_version` table, you should remove the line that drops the table in the `upgrade` function and the line that creates the table in the `downgrade` function. If you know how to fix that, please let me know.
 
 **Important**: If you are calling these commands from the host machine, you may want to assign a value to the `DB_OVERRIDE_CONNECTION_STRING` environment variable to something like:
+
 ```bash
 postgresql+psycopg://postgres:postgres@host.docker.internal:2605/recipe_search
 ```
@@ -217,6 +241,7 @@ Then you should be able to see the generated migration script in the `alembic/ve
 We use [gRPC](https://grpc.io) and [Protocol Buffers](https://protobuf.dev) for the communication between the services.
 
 When you make changes to the `.proto` files in the `protos` directory, you need to regenerate the Python files in the `grpcs` directory:
+
 ```bash
 python -m grpc_tools.protoc --proto_path=. --python_out=. --grpc_python_out=. --pyi_out=. ./protos/*.proto
 ```
@@ -226,6 +251,7 @@ python -m grpc_tools.protoc --proto_path=. --python_out=. --grpc_python_out=. --
 Although we can use CPU for the service, we also allows [CUDA](https://developer.nvidia.com/cuda-toolkit) for GPU acceleration.
 
 If you already have CUDA installed on your machine, you can check the version with:
+
 ```bash
 nvcc --version
 ```
@@ -238,16 +264,8 @@ Alternatively, if you don't want to or cannot use CUDA, you may install their CP
 
 We use [Pytest](https://pytest.org) for testing.
 
-The requirements for testing is different, it is in the `test-requirements.txt` file.
-
-The test requirements is a subset of the main requirements without the AI related packages, the imports of them are mocked in `tests/conftest.py`.
-
-If you want to change the test requirements, you should add entries in `test-excluded-requirements.txt` then geneerate the `test-requirements.txt` file:
-```bash
-.\generate-test-requirements.ps
-```
-
 To run the tests:
+
 ```bash
 pytest
 ```

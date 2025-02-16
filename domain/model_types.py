@@ -1,13 +1,6 @@
 from enum import StrEnum
 
 
-class SearchModelType(StrEnum):
-    """Type of search model"""
-
-    QWEN = "qwen"
-    STELLA = "stella"
-
-
 class ChatModelType(StrEnum):
     """Type of chat model"""
 

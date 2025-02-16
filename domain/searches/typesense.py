@@ -19,7 +19,11 @@ class Recipe:
         "name": "recipes",
         "fields": [
             {
-                "name": "name",
+                "name": "title",
+                "type": "string",
+            },
+            {
+                "name": "description",
                 "type": "string",
             },
             {
@@ -30,7 +34,8 @@ class Recipe:
     }
 
     id: int
-    name: str
+    title: str
+    description: str
     ingredients: List[str]
 
     @classmethod
@@ -66,8 +71,9 @@ class Recipe:
         """
         return Recipe(
             id=recipe.id,
-            name=recipe.name,
-            ingredients=recipe.ingredients,
+            title=recipe.title,
+            description=recipe.description,
+            ingredients=[ingredient.name for ingredient in recipe.ingredients],
         )
 
     def to_model(self) -> models.RecipeModel:
@@ -78,8 +84,12 @@ class Recipe:
         """
         return models.RecipeModel(
             id=self.id,
-            name=self.name,
-            ingredients=self.ingredients,
+            title=self.title,
+            description=self.description,
+            ingredients=[
+                models.RecipeModelIngredient(name=ingredient)
+                for ingredient in self.ingredients
+            ],
         )
 
     def from_json(json: dict) -> "Recipe":
@@ -93,7 +103,8 @@ class Recipe:
         """
         return Recipe(
             id=int(json["id"]),
-            name=json["name"],
+            title=json["title"],
+            description=json["description"],
             ingredients=json["ingredients"],
         )
 
@@ -105,7 +116,8 @@ class Recipe:
         """
         return {
             "id": str(self.id),
-            "name": self.name,
+            "title": self.title,
+            "description": self.description,
             "ingredients": self.ingredients,
         }
 
@@ -137,7 +149,7 @@ class TypesenseSearchEngine:
                     }
                 ],
                 "api_key": configs.api_key,
-                "connection_timeout_seconds": 5,
+                "connection_timeout_seconds": 10,
             }
         )
 
@@ -215,11 +227,14 @@ class TypesenseSearchEngine:
         recipes_documents = self.recipes.retrieve()
         recipes_count = recipes_documents["num_documents"]
 
+        # TODO: Add keyword search + vector search rank
+        # https://typesense.org/docs/27.1/api/vector-search.html#sorting-hybrid-matches-on-vector-distance
+
         response = self.recipes.documents.search(
             {
                 "q": " ".join(ingredients),
-                "query_by_weights": "1,1",
-                "query_by": "name,ingredients",
+                "query_by_weights": "1,1,1",
+                "query_by": "title,description,ingredients",
                 "drop_tokens_threshold": recipes_count + 1,
                 "drop_tokens_mode": "both_sides:3",
                 "page": page,

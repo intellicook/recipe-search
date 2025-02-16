@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "protos/recipe_nutrition.proto";
+
 option csharp_namespace = "IntelliCook.RecipeSearch.Client";
 
 message SearchRecipesRequest {
@@ -16,15 +18,23 @@ message SearchRecipesResponse {
 
 message SearchRecipesRecipe {
     int32 id = 1;
-    string name = 2;
-    repeated string ingredients = 3;
-    repeated SearchRecipesMatch matches = 4;
-    optional SearchRecipesRecipeDetail detail = 5;
+    string title = 2;
+    string description = 3;
+    repeated SearchRecipesRecipeIngredient ingredients = 4;
+    repeated SearchRecipesMatch matches = 5;
+    optional SearchRecipesRecipeDetail detail = 6;
 }
 
 enum SearchRecipesMatchField {
-    NAME = 0;
-    INGREDIENTS = 1;
+    TITLE = 0;
+    DESCRIPTION = 1;
+    INGREDIENTS = 2;
+}
+
+message SearchRecipesRecipeIngredient {
+    string name = 1;
+    optional float quantity = 2;
+    optional string unit = 3;
 }
 
 message SearchRecipesMatch {
@@ -34,6 +44,8 @@ message SearchRecipesMatch {
 }
 
 message SearchRecipesRecipeDetail {
-    repeated string instructions = 1;
-    string raw = 2;
+    repeated string directions = 1;
+    repeated string tips = 2;
+    repeated string utensils = 3;
+    RecipeNutrition nutrition = 4;
 }

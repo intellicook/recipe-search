@@ -7,6 +7,7 @@ from configs.domain import configs as domain_configs
 from domain import controllers
 from infra import db, models
 from protos.add_recipes_pb2 import (
+    AddRecipesRecipeIngredient,
     AddRecipesRequest,
     AddRecipesResponse,
     AddRecipesResponseRecipe,
@@ -25,12 +26,18 @@ from protos.health_pb2 import (
     HealthResponse,
     HealthStatus,
 )
-from protos.recipe_pb2 import RecipeRequest, RecipeResponse
+from protos.recipe_nutrition_pb2 import RecipeNutrition
+from protos.recipe_pb2 import (
+    RecipeRecipeIngredient,
+    RecipeRequest,
+    RecipeResponse,
+)
 from protos.reset_data_pb2 import ResetDataRequest, ResetDataResponse
 from protos.search_recipes_pb2 import (
     SearchRecipesMatch,
     SearchRecipesRecipe,
     SearchRecipesRecipeDetail,
+    SearchRecipesRecipeIngredient,
     SearchRecipesRequest,
     SearchRecipesResponse,
 )
@@ -94,10 +101,25 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
 
         return RecipeResponse(
             id=recipe.id,
-            name=recipe.name,
-            ingredients=recipe.ingredients,
-            instructions=recipe.instructions,
-            raw=recipe.raw,
+            title=recipe.title,
+            description=recipe.description,
+            ingredients=[
+                RecipeRecipeIngredient(
+                    name=ingredient.name,
+                    quantity=ingredient.quantity,
+                    unit=ingredient.unit,
+                )
+                for ingredient in recipe.ingredients
+            ],
+            directions=recipe.directions,
+            tips=recipe.tips,
+            utensils=recipe.utensils,
+            nutrition=RecipeNutrition(
+                calories=recipe.nutrition.calories.to_proto(),
+                fat=recipe.nutrition.fat.to_proto(),
+                protein=recipe.nutrition.protein.to_proto(),
+                carbs=recipe.nutrition.carbs.to_proto(),
+            ),
         )
 
     def SearchRecipes(
@@ -144,8 +166,16 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
             recipes=[
                 SearchRecipesRecipe(
                     id=result.recipe.id,
-                    name=result.recipe.name,
-                    ingredients=result.recipe.ingredients,
+                    title=result.recipe.title,
+                    description=result.recipe.description,
+                    ingredients=[
+                        SearchRecipesRecipeIngredient(
+                            name=ingredient.name,
+                            quantity=ingredient.quantity,
+                            unit=ingredient.unit,
+                        )
+                        for ingredient in result.recipe.ingredients
+                    ],
                     matches=[
                         SearchRecipesMatch(
                             field=highlight.field.to_proto(),
@@ -156,8 +186,21 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
                     ],
                     detail=(
                         SearchRecipesRecipeDetail(
-                            instructions=result.recipe.instructions,
-                            raw=result.recipe.raw,
+                            directions=result.recipe.directions,
+                            tips=result.recipe.tips,
+                            utensils=result.recipe.utensils,
+                            nutrition=RecipeNutrition(
+                                calories=(
+                                    result.recipe.nutrition.calories.to_proto()
+                                ),
+                                fat=result.recipe.nutrition.fat.to_proto(),
+                                protein=(
+                                    result.recipe.nutrition.protein.to_proto()
+                                ),
+                                carbs=(
+                                    result.recipe.nutrition.carbs.to_proto()
+                                ),
+                            ),
                         )
                         if request.include_detail
                         else None
@@ -182,10 +225,33 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
         recipes = controllers.add_recipes(
             [
                 models.RecipeModel(
-                    name=recipe.name,
-                    ingredients=list(recipe.ingredients),
-                    instructions=list(recipe.instructions),
-                    raw=recipe.raw if recipe.HasField("raw") else "",
+                    title=recipe.title,
+                    description=recipe.description,
+                    ingredients=[
+                        models.RecipeModelIngredient(
+                            name=ingredient.name,
+                            quantity=ingredient.quantity,
+                            unit=ingredient.unit,
+                        )
+                        for ingredient in recipe.ingredients
+                    ],
+                    directions=list(recipe.directions),
+                    tips=list(recipe.tips),
+                    utensils=list(recipe.utensils),
+                    nutrition=models.RecipeModelNutrition(
+                        calories=models.RecipeModelNutritionValue.from_proto(
+                            recipe.nutrition.calories
+                        ),
+                        fat=models.RecipeModelNutritionValue.from_proto(
+                            recipe.nutrition.fat
+                        ),
+                        protein=models.RecipeModelNutritionValue.from_proto(
+                            recipe.nutrition.protein
+                        ),
+                        carbs=models.RecipeModelNutritionValue.from_proto(
+                            recipe.nutrition.carbs
+                        ),
+                    ),
                 )
                 for recipe in request.recipes
             ],
@@ -195,13 +261,28 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
             recipes=[
                 AddRecipesResponseRecipe(
                     id=recipe.id,
-                    name=recipe.name,
-                    ingredients=recipe.ingredients,
-                    instructions=recipe.instructions,
-                    raw=recipe.raw,
+                    title=recipe.title,
+                    description=recipe.description,
+                    ingredients=[
+                        AddRecipesRecipeIngredient(
+                            name=ingredient.name,
+                            quantity=ingredient.quantity,
+                            unit=ingredient.unit,
+                        )
+                        for ingredient in recipe.ingredients
+                    ],
+                    directions=recipe.directions,
+                    tips=recipe.tips,
+                    utensils=recipe.utensils,
+                    nutrition=RecipeNutrition(
+                        calories=recipe.nutrition.calories.to_proto(),
+                        fat=recipe.nutrition.fat.to_proto(),
+                        protein=recipe.nutrition.protein.to_proto(),
+                        carbs=recipe.nutrition.carbs.to_proto(),
+                    ),
                 )
                 for recipe in recipes
-            ],
+            ]
         )
 
     def ChatByRecipe(

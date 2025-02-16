@@ -1,3 +1,4 @@
+from protos import recipe_nutrition_pb2 as _recipe_nutrition_pb2
 from google.protobuf.internal import containers as _containers
 from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
@@ -8,9 +9,11 @@ DESCRIPTOR: _descriptor.FileDescriptor
 
 class SearchRecipesMatchField(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
-    NAME: _ClassVar[SearchRecipesMatchField]
+    TITLE: _ClassVar[SearchRecipesMatchField]
+    DESCRIPTION: _ClassVar[SearchRecipesMatchField]
     INGREDIENTS: _ClassVar[SearchRecipesMatchField]
-NAME: SearchRecipesMatchField
+TITLE: SearchRecipesMatchField
+DESCRIPTION: SearchRecipesMatchField
 INGREDIENTS: SearchRecipesMatchField
 
 class SearchRecipesRequest(_message.Message):
@@ -34,18 +37,30 @@ class SearchRecipesResponse(_message.Message):
     def __init__(self, recipes: _Optional[_Iterable[_Union[SearchRecipesRecipe, _Mapping]]] = ...) -> None: ...
 
 class SearchRecipesRecipe(_message.Message):
-    __slots__ = ("id", "name", "ingredients", "matches", "detail")
+    __slots__ = ("id", "title", "description", "ingredients", "matches", "detail")
     ID_FIELD_NUMBER: _ClassVar[int]
-    NAME_FIELD_NUMBER: _ClassVar[int]
+    TITLE_FIELD_NUMBER: _ClassVar[int]
+    DESCRIPTION_FIELD_NUMBER: _ClassVar[int]
     INGREDIENTS_FIELD_NUMBER: _ClassVar[int]
     MATCHES_FIELD_NUMBER: _ClassVar[int]
     DETAIL_FIELD_NUMBER: _ClassVar[int]
     id: int
-    name: str
-    ingredients: _containers.RepeatedScalarFieldContainer[str]
+    title: str
+    description: str
+    ingredients: _containers.RepeatedCompositeFieldContainer[SearchRecipesRecipeIngredient]
     matches: _containers.RepeatedCompositeFieldContainer[SearchRecipesMatch]
     detail: SearchRecipesRecipeDetail
-    def __init__(self, id: _Optional[int] = ..., name: _Optional[str] = ..., ingredients: _Optional[_Iterable[str]] = ..., matches: _Optional[_Iterable[_Union[SearchRecipesMatch, _Mapping]]] = ..., detail: _Optional[_Union[SearchRecipesRecipeDetail, _Mapping]] = ...) -> None: ...
+    def __init__(self, id: _Optional[int] = ..., title: _Optional[str] = ..., description: _Optional[str] = ..., ingredients: _Optional[_Iterable[_Union[SearchRecipesRecipeIngredient, _Mapping]]] = ..., matches: _Optional[_Iterable[_Union[SearchRecipesMatch, _Mapping]]] = ..., detail: _Optional[_Union[SearchRecipesRecipeDetail, _Mapping]] = ...) -> None: ...
+
+class SearchRecipesRecipeIngredient(_message.Message):
+    __slots__ = ("name", "quantity", "unit")
+    NAME_FIELD_NUMBER: _ClassVar[int]
+    QUANTITY_FIELD_NUMBER: _ClassVar[int]
+    UNIT_FIELD_NUMBER: _ClassVar[int]
+    name: str
+    quantity: float
+    unit: str
+    def __init__(self, name: _Optional[str] = ..., quantity: _Optional[float] = ..., unit: _Optional[str] = ...) -> None: ...
 
 class SearchRecipesMatch(_message.Message):
     __slots__ = ("field", "tokens", "index")
@@ -58,9 +73,13 @@ class SearchRecipesMatch(_message.Message):
     def __init__(self, field: _Optional[_Union[SearchRecipesMatchField, str]] = ..., tokens: _Optional[_Iterable[str]] = ..., index: _Optional[int] = ...) -> None: ...
 
 class SearchRecipesRecipeDetail(_message.Message):
-    __slots__ = ("instructions", "raw")
-    INSTRUCTIONS_FIELD_NUMBER: _ClassVar[int]
-    RAW_FIELD_NUMBER: _ClassVar[int]
-    instructions: _containers.RepeatedScalarFieldContainer[str]
-    raw: str
-    def __init__(self, instructions: _Optional[_Iterable[str]] = ..., raw: _Optional[str] = ...) -> None: ...
+    __slots__ = ("directions", "tips", "utensils", "nutrition")
+    DIRECTIONS_FIELD_NUMBER: _ClassVar[int]
+    TIPS_FIELD_NUMBER: _ClassVar[int]
+    UTENSILS_FIELD_NUMBER: _ClassVar[int]
+    NUTRITION_FIELD_NUMBER: _ClassVar[int]
+    directions: _containers.RepeatedScalarFieldContainer[str]
+    tips: _containers.RepeatedScalarFieldContainer[str]
+    utensils: _containers.RepeatedScalarFieldContainer[str]
+    nutrition: _recipe_nutrition_pb2.RecipeNutrition
+    def __init__(self, directions: _Optional[_Iterable[str]] = ..., tips: _Optional[_Iterable[str]] = ..., utensils: _Optional[_Iterable[str]] = ..., nutrition: _Optional[_Union[_recipe_nutrition_pb2.RecipeNutrition, _Mapping]] = ...) -> None: ...

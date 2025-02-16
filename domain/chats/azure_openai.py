@@ -1,3 +1,4 @@
+import json
 import logging
 from dataclasses import dataclass
 from enum import Enum, auto
@@ -57,14 +58,13 @@ class AzureOpenAIChat(BaseChat):
         ),
         SystemPromptKey.RECIPE: (
             "You are chatting with the user about a recipe. The recipe is"
-            " '{name}'. The recipe's ingredients are: {ingredients}. The"
-            " recipe's instructions are: {instructions}."
+            " {title}. The recipe's details are {json}."
         ),
         SystemPromptKey.END: (
-            "Do not chat about anything unrelated to the recipe or cooking in"
-            " general. If the user tries to talk about something else, remind"
-            " them that you are a cooking assistant and that you can only"
-            " help with cooking-related queries."
+            "You will only talk about things related to the above recipe or"
+            " cooking in general. If the user tries to talk about something"
+            " else, remind them that you are a cooking assistant and that you"
+            " can only help with cooking-related queries."
         ),
     }
 
@@ -133,15 +133,10 @@ class AzureOpenAIChat(BaseChat):
         Arguments:
             recipe (RecipeModel): The recipe to prepare.
         """
-        self.system_prompts[
-            self.SystemPromptKey.RECIPE
-        ] = self.SYSTEM_PROMPT_FORMATS[self.SystemPromptKey.RECIPE].format(
-            name=recipe.name,
-            ingredients=", ".join(recipe.ingredients),
-            instructions=" ".join(
-                f"{i}. {instruction}"
-                for i, instruction in enumerate(recipe.instructions)
-            ),
+        self.system_prompts[self.SystemPromptKey.RECIPE] = (
+            self.SYSTEM_PROMPT_FORMATS[self.SystemPromptKey.RECIPE].format(
+                title=recipe.title, json=json.dumps(recipe.as_dict())
+            )
         )
 
     def chat(
