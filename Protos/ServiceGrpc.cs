@@ -64,6 +64,14 @@ namespace IntelliCook.RecipeSearch.Client {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamResponse> __Marshaller_ChatByRecipeStreamResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::IntelliCook.RecipeSearch.Client.SetUserProfileRequest> __Marshaller_SetUserProfileRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::IntelliCook.RecipeSearch.Client.SetUserProfileRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::IntelliCook.RecipeSearch.Client.SetUserProfileResponse> __Marshaller_SetUserProfileResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::IntelliCook.RecipeSearch.Client.SetUserProfileResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::IntelliCook.RecipeSearch.Client.UserProfileRequest> __Marshaller_UserProfileRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::IntelliCook.RecipeSearch.Client.UserProfileRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::IntelliCook.RecipeSearch.Client.UserProfileResponse> __Marshaller_UserProfileResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::IntelliCook.RecipeSearch.Client.UserProfileResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::IntelliCook.RecipeSearch.Client.AddRecipesRequest> __Marshaller_AddRecipesRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::IntelliCook.RecipeSearch.Client.AddRecipesRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::IntelliCook.RecipeSearch.Client.AddRecipesResponse> __Marshaller_AddRecipesResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::IntelliCook.RecipeSearch.Client.AddRecipesResponse.Parser));
@@ -111,6 +119,22 @@ namespace IntelliCook.RecipeSearch.Client {
         "ChatByRecipeStream",
         __Marshaller_ChatByRecipeRequest,
         __Marshaller_ChatByRecipeStreamResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::IntelliCook.RecipeSearch.Client.SetUserProfileRequest, global::IntelliCook.RecipeSearch.Client.SetUserProfileResponse> __Method_SetUserProfile = new grpc::Method<global::IntelliCook.RecipeSearch.Client.SetUserProfileRequest, global::IntelliCook.RecipeSearch.Client.SetUserProfileResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "SetUserProfile",
+        __Marshaller_SetUserProfileRequest,
+        __Marshaller_SetUserProfileResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::IntelliCook.RecipeSearch.Client.UserProfileRequest, global::IntelliCook.RecipeSearch.Client.UserProfileResponse> __Method_GetUserProfile = new grpc::Method<global::IntelliCook.RecipeSearch.Client.UserProfileRequest, global::IntelliCook.RecipeSearch.Client.UserProfileResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetUserProfile",
+        __Marshaller_UserProfileRequest,
+        __Marshaller_UserProfileResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::IntelliCook.RecipeSearch.Client.AddRecipesRequest, global::IntelliCook.RecipeSearch.Client.AddRecipesResponse> __Method_AddRecipes = new grpc::Method<global::IntelliCook.RecipeSearch.Client.AddRecipesRequest, global::IntelliCook.RecipeSearch.Client.AddRecipesResponse>(
@@ -250,6 +274,46 @@ namespace IntelliCook.RecipeSearch.Client {
       public virtual grpc::AsyncServerStreamingCall<global::IntelliCook.RecipeSearch.Client.ChatByRecipeStreamResponse> ChatByRecipeStream(global::IntelliCook.RecipeSearch.Client.ChatByRecipeRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncServerStreamingCall(__Method_ChatByRecipeStream, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::IntelliCook.RecipeSearch.Client.SetUserProfileResponse SetUserProfile(global::IntelliCook.RecipeSearch.Client.SetUserProfileRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return SetUserProfile(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::IntelliCook.RecipeSearch.Client.SetUserProfileResponse SetUserProfile(global::IntelliCook.RecipeSearch.Client.SetUserProfileRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_SetUserProfile, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::IntelliCook.RecipeSearch.Client.SetUserProfileResponse> SetUserProfileAsync(global::IntelliCook.RecipeSearch.Client.SetUserProfileRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return SetUserProfileAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::IntelliCook.RecipeSearch.Client.SetUserProfileResponse> SetUserProfileAsync(global::IntelliCook.RecipeSearch.Client.SetUserProfileRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_SetUserProfile, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::IntelliCook.RecipeSearch.Client.UserProfileResponse GetUserProfile(global::IntelliCook.RecipeSearch.Client.UserProfileRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetUserProfile(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::IntelliCook.RecipeSearch.Client.UserProfileResponse GetUserProfile(global::IntelliCook.RecipeSearch.Client.UserProfileRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetUserProfile, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::IntelliCook.RecipeSearch.Client.UserProfileResponse> GetUserProfileAsync(global::IntelliCook.RecipeSearch.Client.UserProfileRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetUserProfileAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::IntelliCook.RecipeSearch.Client.UserProfileResponse> GetUserProfileAsync(global::IntelliCook.RecipeSearch.Client.UserProfileRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetUserProfile, null, options, request);
       }
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::IntelliCook.RecipeSearch.Client.AddRecipesResponse AddRecipes(global::IntelliCook.RecipeSearch.Client.AddRecipesRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))

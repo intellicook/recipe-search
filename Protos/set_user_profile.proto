@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+import "protos/user_profile_veggie_identity.proto";
+
+option csharp_namespace = "IntelliCook.RecipeSearch.Client";
+
+message SetUserProfileRequest {
+    string username = 1;
+    UserProfileVeggieIdentity veggie_identity = 2;
+    repeated string prefer = 3;
+    repeated string dislike = 4;
+}
+
+message SetUserProfileResponse {
+    string username = 1;
+    UserProfileVeggieIdentity veggie_identity = 2;
+    repeated string prefer = 3;
+    repeated string dislike = 4;
+}

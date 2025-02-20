@@ -28,9 +28,12 @@ namespace IntelliCook.RecipeSearch.Client {
             "cml0aW9uEicKCGNhbG9yaWVzGAEgASgOMhUuUmVjaXBlTnV0cml0aW9uVmFs",
             "dWUSIgoDZmF0GAIgASgOMhUuUmVjaXBlTnV0cml0aW9uVmFsdWUSJgoHcHJv",
             "dGVpbhgDIAEoDjIVLlJlY2lwZU51dHJpdGlvblZhbHVlEiQKBWNhcmJzGAQg",
-            "ASgOMhUuUmVjaXBlTnV0cml0aW9uVmFsdWUqPwoUUmVjaXBlTnV0cml0aW9u",
-            "VmFsdWUSCAoESElHSBAAEgoKBk1FRElVTRABEgcKA0xPVxACEggKBE5PTkUQ",
-            "A0IiqgIfSW50ZWxsaUNvb2suUmVjaXBlU2VhcmNoLkNsaWVudGIGcHJvdG8z"));
+            "ASgOMhUuUmVjaXBlTnV0cml0aW9uVmFsdWUqmwEKFFJlY2lwZU51dHJpdGlv",
+            "blZhbHVlEh8KG1JFQ0lQRV9OVVRSSVRJT05fVkFMVUVfSElHSBAAEiEKHVJF",
+            "Q0lQRV9OVVRSSVRJT05fVkFMVUVfTUVESVVNEAESHgoaUkVDSVBFX05VVFJJ",
+            "VElPTl9WQUxVRV9MT1cQAhIfChtSRUNJUEVfTlVUUklUSU9OX1ZBTFVFX05P",
+            "TkUQA0IiqgIfSW50ZWxsaUNvb2suUmVjaXBlU2VhcmNoLkNsaWVudGIGcHJv",
+            "dG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::IntelliCook.RecipeSearch.Client.RecipeNutritionValue), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -42,10 +45,10 @@ namespace IntelliCook.RecipeSearch.Client {
   }
   #region Enums
   public enum RecipeNutritionValue {
-    [pbr::OriginalName("HIGH")] High = 0,
-    [pbr::OriginalName("MEDIUM")] Medium = 1,
-    [pbr::OriginalName("LOW")] Low = 2,
-    [pbr::OriginalName("NONE")] None = 3,
+    [pbr::OriginalName("RECIPE_NUTRITION_VALUE_HIGH")] High = 0,
+    [pbr::OriginalName("RECIPE_NUTRITION_VALUE_MEDIUM")] Medium = 1,
+    [pbr::OriginalName("RECIPE_NUTRITION_VALUE_LOW")] Low = 2,
+    [pbr::OriginalName("RECIPE_NUTRITION_VALUE_NONE")] None = 3,
   }
 
   #endregion
