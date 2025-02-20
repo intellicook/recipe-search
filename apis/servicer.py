@@ -42,6 +42,11 @@ from protos.search_recipes_pb2 import (
     SearchRecipesResponse,
 )
 from protos.service_pb2_grpc import RecipeSearchServiceServicer
+from protos.set_user_profile_pb2 import (
+    SetUserProfileRequest,
+    SetUserProfileResponse,
+)
+from protos.user_profile_pb2 import UserProfileRequest, UserProfileResponse
 
 
 class RecipeSearchServicer(RecipeSearchServiceServicer):
@@ -144,7 +149,7 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
             )
 
         if not request.HasField("per_page"):
-            request.per_page = domain_configs.default_search_per_page
+            request.per_page = domain_configs.domain_default_search_per_page
 
         if request.per_page <= 0:
             context.abort(
@@ -157,6 +162,7 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
 
         results = controllers.search_recipes(
             ingredients=request.ingredients,
+            username=request.username,
             page=request.page,
             per_page=request.per_page,
             include_detail=request.include_detail,
@@ -363,3 +369,50 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
         controllers.reset_data()
 
         return ResetDataResponse()
+
+    def SetUserProfile(
+        self,
+        request: SetUserProfileRequest,
+        context: grpc.ServicerContext,
+    ) -> SetUserProfileResponse:
+        """Set the user profile"""
+        controllers.set_user_profile(
+            models.UserProfileModel(
+                username=request.username,
+                veggie_identity=(
+                    models.UserProfileModelVeggieIdentity.from_proto(
+                        request.veggie_identity
+                    )
+                ),
+                prefer=list(request.prefer),
+                dislike=list(request.dislike),
+            )
+        )
+
+        return SetUserProfileResponse(
+            username=request.username,
+            veggie_identity=request.veggie_identity,
+            prefer=request.prefer,
+            dislike=request.dislike,
+        )
+
+    def GetUserProfile(
+        self,
+        request: UserProfileRequest,
+        context: grpc.ServicerContext,
+    ) -> UserProfileResponse:
+        """Get the user profile"""
+        profile = controllers.get_user_profile(request.username)
+
+        if not profile:
+            context.abort(
+                grpc.StatusCode.NOT_FOUND,
+                f"User profile with username {request.username} not found",
+            )
+
+        return UserProfileResponse(
+            username=profile.username,
+            veggie_identity=profile.veggie_identity.to_proto(),
+            prefer=profile.prefer,
+            dislike=profile.dislike,
+        )

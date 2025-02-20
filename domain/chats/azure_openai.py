@@ -1,7 +1,7 @@
 import json
 import logging
 from dataclasses import dataclass
-from enum import Enum, auto
+from enum import Enum, StrEnum, auto
 from typing import Dict, Iterable, Optional
 
 import openai
@@ -87,7 +87,7 @@ class AzureOpenAIChat(BaseChat):
 
         self.client = openai.AzureOpenAI(
             api_version=self.configs.api_version,
-            azure_endpoint=configs.openai_base_url,
+            azure_endpoint=configs.azure_openai_base_url,
         )
 
         self.logger.info(f"{self.configs.model} initialized")
@@ -219,6 +219,71 @@ class AzureOpenAIChat(BaseChat):
                 continue
 
             yield stream_model
+
+    def identify_recipe_veggie_identity(
+        self, recipe: models.RecipeModel
+    ) -> models.UserProfileModelVeggieIdentity:
+        """Identify the recipe's veggie identity.
+
+        Arguments:
+            recipe (models.RecipeModel): The recipe to identify.
+
+        Returns:
+            models.UserProfileModelVeggieIdentity: The recipe's veggie
+                identity.
+        """
+
+        class RecipeVeggieIdentity(StrEnum):
+            """Recipe veggie identity enumeration"""
+
+            NON_VEGETARIAN = "non-vegetarian"
+            VEGETARIAN = "vegetarian"
+            VEGAN = "vegan"
+
+        response = self.client.beta.chat.completions.parse(
+            model=self.configs.model,
+            messages=[
+                OpenAISystemMessageParam(
+                    role="system",
+                    content=(
+                        "You are a menu assistant to determine whether the"
+                        " provided recipe is vegetarian, vegan, or"
+                        " non-vegetarian. Vegetarian is defined as not"
+                        " containing meat, fish, or poultry. Vegan is defined"
+                        " as not containing any animal products or"
+                        " by-products. Non-vegetarian is defined as"
+                        " containing meat, fish, or poultry. The recipe to"
+                        f" determine is: {json.dumps(recipe.as_dict())}"
+                    ),
+                ),
+            ],
+            temperature=0.2,
+            response_format=RecipeVeggieIdentity,
+        )
+
+        self.logger.debug(f"Response: {response}")
+
+        if not response.choices:
+            raise Exception("Response choices is empty")
+
+        choice = response.choices[0]
+
+        if choice.finish_reason not in ("stop",):
+            raise Exception(f"Invalid finish reason: {choice.finish_reason}")
+
+        identity = choice.message.parsed
+
+        return {
+            RecipeVeggieIdentity.NON_VEGETARIAN: (
+                models.UserProfileModelVeggieIdentity.NONE
+            ),
+            RecipeVeggieIdentity.VEGETARIAN: (
+                models.UserProfileModelVeggieIdentity.VEGETARIAN
+            ),
+            RecipeVeggieIdentity.VEGAN: (
+                models.UserProfileModelVeggieIdentity.VEGAN
+            ),
+        }[identity]
 
     def _openai_completion_message_to_model(
         self,

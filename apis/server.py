@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 def start():
     """Start the API server."""
-    port = api.configs.port
+    port = api.configs.api_port
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     service_pb2_grpc.add_RecipeSearchServiceServicer_to_server(
         RecipeSearchServicer(), server

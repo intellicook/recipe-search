@@ -11,4 +11,4 @@ mapping: Dict[ChatModelType, Type[BaseChat]] = {
     ChatModelType.GPT4O_MINI: GPT4OMiniChat,
 }
 
-model = mapping[configs.chat_model]
+model = mapping[configs.domain_chat_model]

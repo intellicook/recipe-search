@@ -96,6 +96,7 @@ def test_search_recipes_success(
 
     mock_search.assert_called_once_with(
         ingredients=ingredients,
+        username=username,
         page=page,
         per_page=per_page,
         include_detail=False,
@@ -270,6 +271,7 @@ def test_search_recipes_include_detail(
 
     mock_search.assert_called_once_with(
         ingredients=ingredients,
+        username=username,
         page=page,
         per_page=per_page,
         include_detail=True,
@@ -389,8 +391,9 @@ def test_search_recipes_page_and_per_page_null(
 
     mock_search.assert_called_once_with(
         ingredients=ingredients,
+        username=username,
         page=1,
-        per_page=configs.default_search_per_page,
+        per_page=configs.domain_default_search_per_page,
         include_detail=False,
     )
     assert response == SearchRecipesResponse(

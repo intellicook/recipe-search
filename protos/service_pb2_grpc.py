@@ -9,6 +9,8 @@ from protos import health_pb2 as protos_dot_health__pb2
 from protos import recipe_pb2 as protos_dot_recipe__pb2
 from protos import reset_data_pb2 as protos_dot_reset__data__pb2
 from protos import search_recipes_pb2 as protos_dot_search__recipes__pb2
+from protos import set_user_profile_pb2 as protos_dot_set__user__profile__pb2
+from protos import user_profile_pb2 as protos_dot_user__profile__pb2
 
 GRPC_GENERATED_VERSION = '1.66.2'
 GRPC_VERSION = grpc.__version__
@@ -64,6 +66,16 @@ class RecipeSearchServiceStub(object):
                 request_serializer=protos_dot_chat__by__recipe__pb2.ChatByRecipeRequest.SerializeToString,
                 response_deserializer=protos_dot_chat__by__recipe__pb2.ChatByRecipeStreamResponse.FromString,
                 _registered_method=True)
+        self.SetUserProfile = channel.unary_unary(
+                '/RecipeSearchService/SetUserProfile',
+                request_serializer=protos_dot_set__user__profile__pb2.SetUserProfileRequest.SerializeToString,
+                response_deserializer=protos_dot_set__user__profile__pb2.SetUserProfileResponse.FromString,
+                _registered_method=True)
+        self.GetUserProfile = channel.unary_unary(
+                '/RecipeSearchService/GetUserProfile',
+                request_serializer=protos_dot_user__profile__pb2.UserProfileRequest.SerializeToString,
+                response_deserializer=protos_dot_user__profile__pb2.UserProfileResponse.FromString,
+                _registered_method=True)
         self.AddRecipes = channel.unary_unary(
                 '/RecipeSearchService/AddRecipes',
                 request_serializer=protos_dot_add__recipes__pb2.AddRecipesRequest.SerializeToString,
@@ -111,6 +123,18 @@ class RecipeSearchServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def SetUserProfile(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetUserProfile(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def AddRecipes(self, request, context):
         """Admin services
 
@@ -152,6 +176,16 @@ def add_RecipeSearchServiceServicer_to_server(servicer, server):
                     servicer.ChatByRecipeStream,
                     request_deserializer=protos_dot_chat__by__recipe__pb2.ChatByRecipeRequest.FromString,
                     response_serializer=protos_dot_chat__by__recipe__pb2.ChatByRecipeStreamResponse.SerializeToString,
+            ),
+            'SetUserProfile': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetUserProfile,
+                    request_deserializer=protos_dot_set__user__profile__pb2.SetUserProfileRequest.FromString,
+                    response_serializer=protos_dot_set__user__profile__pb2.SetUserProfileResponse.SerializeToString,
+            ),
+            'GetUserProfile': grpc.unary_unary_rpc_method_handler(
+                    servicer.GetUserProfile,
+                    request_deserializer=protos_dot_user__profile__pb2.UserProfileRequest.FromString,
+                    response_serializer=protos_dot_user__profile__pb2.UserProfileResponse.SerializeToString,
             ),
             'AddRecipes': grpc.unary_unary_rpc_method_handler(
                     servicer.AddRecipes,
@@ -299,6 +333,60 @@ class RecipeSearchService(object):
             '/RecipeSearchService/ChatByRecipeStream',
             protos_dot_chat__by__recipe__pb2.ChatByRecipeRequest.SerializeToString,
             protos_dot_chat__by__recipe__pb2.ChatByRecipeStreamResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def SetUserProfile(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/RecipeSearchService/SetUserProfile',
+            protos_dot_set__user__profile__pb2.SetUserProfileRequest.SerializeToString,
+            protos_dot_set__user__profile__pb2.SetUserProfileResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def GetUserProfile(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/RecipeSearchService/GetUserProfile',
+            protos_dot_user__profile__pb2.UserProfileRequest.SerializeToString,
+            protos_dot_user__profile__pb2.UserProfileResponse.FromString,
             options,
             channel_credentials,
             insecure,

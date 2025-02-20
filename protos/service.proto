@@ -6,6 +6,8 @@ import "protos/search_recipes.proto";
 import "protos/chat_by_recipe.proto";
 import "protos/add_recipes.proto";
 import "protos/reset_data.proto";
+import "protos/set_user_profile.proto";
+import "protos/user_profile.proto";
 
 option csharp_namespace = "IntelliCook.RecipeSearch.Client";
 
@@ -18,6 +20,8 @@ service RecipeSearchService {
     rpc SearchRecipes (SearchRecipesRequest) returns (SearchRecipesResponse) {}
     rpc ChatByRecipe (ChatByRecipeRequest) returns (ChatByRecipeResponse) {}
     rpc ChatByRecipeStream (ChatByRecipeRequest) returns (stream ChatByRecipeStreamResponse) {}
+    rpc SetUserProfile (SetUserProfileRequest) returns (SetUserProfileResponse) {}
+    rpc GetUserProfile (UserProfileRequest) returns (UserProfileResponse) {}
 
     // Admin services
 
