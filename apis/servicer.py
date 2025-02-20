@@ -46,6 +46,7 @@ from protos.set_user_profile_pb2 import (
     SetUserProfileRequest,
     SetUserProfileResponse,
 )
+from protos.user_profile_pb2 import UserProfileRequest, UserProfileResponse
 
 
 class RecipeSearchServicer(RecipeSearchServiceServicer):
@@ -397,11 +398,11 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
 
     def GetUserProfile(
         self,
-        request: SetUserProfileRequest,
+        request: UserProfileRequest,
         context: grpc.ServicerContext,
-    ) -> SetUserProfileResponse:
+    ) -> UserProfileResponse:
         """Get the user profile"""
-        profile = controllers.user_profile(request.username)
+        profile = controllers.get_user_profile(request.username)
 
         if not profile:
             context.abort(
@@ -409,7 +410,7 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
                 f"User profile with username {request.username} not found",
             )
 
-        return SetUserProfileResponse(
+        return UserProfileResponse(
             username=profile.username,
             veggie_identity=profile.veggie_identity.to_proto(),
             prefer=profile.prefer,

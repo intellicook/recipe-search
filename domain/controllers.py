@@ -112,7 +112,7 @@ def search_recipes(
         f" page={page}, per_page={per_page}, include_detail={include_detail}"
     )
 
-    profile = user_profile(username)
+    profile = get_user_profile(username)
     profile_embedding = profile.embedding if profile else None
 
     if not profile_embedding:
@@ -240,7 +240,7 @@ def set_user_profile(profile: models.UserProfileModel):
         session.commit()
 
 
-def user_profile(username: str) -> Optional[models.UserProfileModel]:
+def get_user_profile(username: str) -> Optional[models.UserProfileModel]:
     """Get the user profile.
 
     Arguments:

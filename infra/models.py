@@ -126,7 +126,7 @@ class UserProfileModelVeggieIdentity(StrEnum):
         Returns:
             UserProfileModelVeggieIdentity: The new veggie identity.
         """
-        Id = UserProfileModelVeggieIdentity
+        Id = UserProfileVeggieIdentity
         if identity == Id.USER_PROFILE_VEGGIE_IDENTITY_NONE:
             return cls.NONE
         if identity == Id.USER_PROFILE_VEGGIE_IDENTITY_VEGAN:
@@ -140,7 +140,7 @@ class UserProfileModelVeggieIdentity(StrEnum):
         Returns:
             UserProfileVeggieIdentity: The proto identity.
         """
-        Id = UserProfileModelVeggieIdentity
+        Id = UserProfileVeggieIdentity
         if self == self.NONE:
             return Id.USER_PROFILE_VEGGIE_IDENTITY_NONE
         if self == self.VEGAN:

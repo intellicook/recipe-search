@@ -1,4 +1,4 @@
-from typing import Iterable, List
+from typing import Iterable, List, Optional
 
 from configs.domain import configs
 from infra import models
@@ -42,4 +42,12 @@ def chat_by_recipe_stream(
     recipe: models.RecipeModel,
     messages: Iterable[models.ChatMessageModel],
 ) -> Iterable[models.ChatStreamModel]:
+    pass
+
+
+def set_user_profile(profile: models.UserProfileModel):
+    pass
+
+
+def get_user_profile(username: str) -> Optional[models.UserProfileModel]:
     pass
