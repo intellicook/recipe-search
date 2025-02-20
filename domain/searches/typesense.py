@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from typing import ClassVar, Iterable, List
+from typing import ClassVar, Iterable, List, Optional
 
 import typesense
 import typesense.collection
@@ -8,6 +8,7 @@ import typesense.exceptions
 
 from configs.domain import configs as domain_configs
 from configs.typesense import configs
+from domain import embeddings
 from infra import models
 
 
@@ -30,6 +31,11 @@ class Recipe:
                 "name": "ingredients",
                 "type": "string[]",
             },
+            {
+                "name": "embedding",
+                "type": "float[]",
+                "num_dim": embeddings.model.num_dim(),
+            },
         ],
     }
 
@@ -37,6 +43,7 @@ class Recipe:
     title: str
     description: str
     ingredients: List[str]
+    embedding: List[float]
 
     @classmethod
     def equal_schema(cls, json: dict) -> bool:
@@ -74,6 +81,7 @@ class Recipe:
             title=recipe.title,
             description=recipe.description,
             ingredients=[ingredient.name for ingredient in recipe.ingredients],
+            embedding=embeddings.model().embed_recipe(recipe),
         )
 
     def to_model(self) -> models.RecipeModel:
@@ -106,6 +114,7 @@ class Recipe:
             title=json["title"],
             description=json["description"],
             ingredients=json["ingredients"],
+            embedding=json["embedding"],
         )
 
     def to_json(self) -> dict:
@@ -119,6 +128,7 @@ class Recipe:
             "title": self.title,
             "description": self.description,
             "ingredients": self.ingredients,
+            "embedding": self.embedding,
         }
 
 
@@ -143,12 +153,12 @@ class TypesenseSearchEngine:
             {
                 "nodes": [
                     {
-                        "host": configs.host,
+                        "host": configs.typesense_host,
                         "port": "8108",
                         "protocol": "http",
                     }
                 ],
-                "api_key": configs.api_key,
+                "api_key": configs.typesense_api_key,
                 "connection_timeout_seconds": 10,
             }
         )
@@ -210,13 +220,16 @@ class TypesenseSearchEngine:
     def search_recipes(
         self,
         ingredients: Iterable[str],
+        user_profile_embedding: Optional[List[float]],
         page: int = 1,
-        per_page: int = domain_configs.default_search_per_page,
+        per_page: int = domain_configs.domain_default_search_per_page,
     ) -> List[models.TypesenseResult]:
         """Search for recipes.
 
         Arguments:
             ingredients (Iterable[str]): The ingredients to search for.
+            user_profile_embedding (Optional[List[float]]): The user profile
+                embedding.
             page (int): The page number. Defaults to 1.
             per_page (int): The number of results per page. Defaults to
                 domain_configs.default_search_per_page.
@@ -227,23 +240,42 @@ class TypesenseSearchEngine:
         recipes_documents = self.recipes.retrieve()
         recipes_count = recipes_documents["num_documents"]
 
-        # TODO: Add keyword search + vector search rank
-        # https://typesense.org/docs/27.1/api/vector-search.html#sorting-hybrid-matches-on-vector-distance
+        params = {
+            "q": " ".join(ingredients),
+            "query_by_weights": "1,1,1",
+            "query_by": "title,description,ingredients",
+            "drop_tokens_threshold": recipes_count + 1,
+            "drop_tokens_mode": "both_sides:3",
+            "page": page,
+            "per_page": per_page,
+        }
 
-        response = self.recipes.documents.search(
+        if user_profile_embedding:
+            params["sort_by"] = "_vector_distance:asc"
+            params["vector_query"] = (
+                f"embedding:([{', '.join(
+                    str(v)
+                    for v in user_profile_embedding
+                )}])"
+            )
+
+        response = self.client.multi_search.perform(
             {
-                "q": " ".join(ingredients),
-                "query_by_weights": "1,1,1",
-                "query_by": "title,description,ingredients",
-                "drop_tokens_threshold": recipes_count + 1,
-                "drop_tokens_mode": "both_sides:3",
-                "page": page,
-                "per_page": per_page,
-            }
+                "searches": [
+                    {
+                        "collection": Recipe.SCHEMA["name"],
+                        **params,
+                    }
+                ]
+            },
+            {},
         )
 
+        self.logger.debug(f"Search response: {response}")
+
         return [
-            models.TypesenseResult.from_json(hit) for hit in response["hits"]
+            models.TypesenseResult.from_json(hit)
+            for hit in response["results"][0]["hits"]
         ]
 
 

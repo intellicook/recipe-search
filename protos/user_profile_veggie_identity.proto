@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option csharp_namespace = "IntelliCook.RecipeSearch.Client";
+
+enum UserProfileVeggieIdentity {
+    USER_PROFILE_VEGGIE_IDENTITY_NONE = 0;
+    USER_PROFILE_VEGGIE_IDENTITY_VEGETARIAN = 1;
+    USER_PROFILE_VEGGIE_IDENTITY_VEGAN = 2;
+}

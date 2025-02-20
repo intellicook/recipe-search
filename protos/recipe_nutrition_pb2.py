@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dprotos/recipe_nutrition.proto\"\xac\x01\n\x0fRecipeNutrition\x12\'\n\x08\x63\x61lories\x18\x01 \x01(\x0e\x32\x15.RecipeNutritionValue\x12\"\n\x03\x66\x61t\x18\x02 \x01(\x0e\x32\x15.RecipeNutritionValue\x12&\n\x07protein\x18\x03 \x01(\x0e\x32\x15.RecipeNutritionValue\x12$\n\x05\x63\x61rbs\x18\x04 \x01(\x0e\x32\x15.RecipeNutritionValue*?\n\x14RecipeNutritionValue\x12\x08\n\x04HIGH\x10\x00\x12\n\n\x06MEDIUM\x10\x01\x12\x07\n\x03LOW\x10\x02\x12\x08\n\x04NONE\x10\x03\x42\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dprotos/recipe_nutrition.proto\"\xac\x01\n\x0fRecipeNutrition\x12\'\n\x08\x63\x61lories\x18\x01 \x01(\x0e\x32\x15.RecipeNutritionValue\x12\"\n\x03\x66\x61t\x18\x02 \x01(\x0e\x32\x15.RecipeNutritionValue\x12&\n\x07protein\x18\x03 \x01(\x0e\x32\x15.RecipeNutritionValue\x12$\n\x05\x63\x61rbs\x18\x04 \x01(\x0e\x32\x15.RecipeNutritionValue*\x9b\x01\n\x14RecipeNutritionValue\x12\x1f\n\x1bRECIPE_NUTRITION_VALUE_HIGH\x10\x00\x12!\n\x1dRECIPE_NUTRITION_VALUE_MEDIUM\x10\x01\x12\x1e\n\x1aRECIPE_NUTRITION_VALUE_LOW\x10\x02\x12\x1f\n\x1bRECIPE_NUTRITION_VALUE_NONE\x10\x03\x42\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,8 +32,8 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'protos.recipe_nutrition_pb2
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\252\002\037IntelliCook.RecipeSearch.Client'
-  _globals['_RECIPENUTRITIONVALUE']._serialized_start=208
-  _globals['_RECIPENUTRITIONVALUE']._serialized_end=271
+  _globals['_RECIPENUTRITIONVALUE']._serialized_start=209
+  _globals['_RECIPENUTRITIONVALUE']._serialized_end=364
   _globals['_RECIPENUTRITION']._serialized_start=34
   _globals['_RECIPENUTRITION']._serialized_end=206
 # @@protoc_insertion_point(module_scope)

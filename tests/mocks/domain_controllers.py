@@ -23,7 +23,7 @@ def add_recipes(recipes: Iterable[models.RecipeModel]):
 def search_recipes(
     ingredients: Iterable[str],
     page: int = 1,
-    per_page: int = configs.default_search_per_page,
+    per_page: int = configs.domain_default_search_per_page,
     include_detail: bool = False,
 ) -> List[models.TypesenseResult]:
     pass

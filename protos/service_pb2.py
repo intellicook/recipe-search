@@ -28,9 +28,11 @@ from protos import search_recipes_pb2 as protos_dot_search__recipes__pb2
 from protos import chat_by_recipe_pb2 as protos_dot_chat__by__recipe__pb2
 from protos import add_recipes_pb2 as protos_dot_add__recipes__pb2
 from protos import reset_data_pb2 as protos_dot_reset__data__pb2
+from protos import set_user_profile_pb2 as protos_dot_set__user__profile__pb2
+from protos import user_profile_pb2 as protos_dot_user__profile__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14protos/service.proto\x1a\x13protos/health.proto\x1a\x13protos/recipe.proto\x1a\x1bprotos/search_recipes.proto\x1a\x1bprotos/chat_by_recipe.proto\x1a\x18protos/add_recipes.proto\x1a\x17protos/reset_data.proto2\xb2\x03\n\x13RecipeSearchService\x12.\n\tGetHealth\x12\x0e.HealthRequest\x1a\x0f.HealthResponse\"\x00\x12.\n\tGetRecipe\x12\x0e.RecipeRequest\x1a\x0f.RecipeResponse\"\x00\x12@\n\rSearchRecipes\x12\x15.SearchRecipesRequest\x1a\x16.SearchRecipesResponse\"\x00\x12=\n\x0c\x43hatByRecipe\x12\x14.ChatByRecipeRequest\x1a\x15.ChatByRecipeResponse\"\x00\x12K\n\x12\x43hatByRecipeStream\x12\x14.ChatByRecipeRequest\x1a\x1b.ChatByRecipeStreamResponse\"\x00\x30\x01\x12\x37\n\nAddRecipes\x12\x12.AddRecipesRequest\x1a\x13.AddRecipesResponse\"\x00\x12\x34\n\tResetData\x12\x11.ResetDataRequest\x1a\x12.ResetDataResponse\"\x00\x42\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x14protos/service.proto\x1a\x13protos/health.proto\x1a\x13protos/recipe.proto\x1a\x1bprotos/search_recipes.proto\x1a\x1bprotos/chat_by_recipe.proto\x1a\x18protos/add_recipes.proto\x1a\x17protos/reset_data.proto\x1a\x1dprotos/set_user_profile.proto\x1a\x19protos/user_profile.proto2\xb6\x04\n\x13RecipeSearchService\x12.\n\tGetHealth\x12\x0e.HealthRequest\x1a\x0f.HealthResponse\"\x00\x12.\n\tGetRecipe\x12\x0e.RecipeRequest\x1a\x0f.RecipeResponse\"\x00\x12@\n\rSearchRecipes\x12\x15.SearchRecipesRequest\x1a\x16.SearchRecipesResponse\"\x00\x12=\n\x0c\x43hatByRecipe\x12\x14.ChatByRecipeRequest\x1a\x15.ChatByRecipeResponse\"\x00\x12K\n\x12\x43hatByRecipeStream\x12\x14.ChatByRecipeRequest\x1a\x1b.ChatByRecipeStreamResponse\"\x00\x30\x01\x12\x43\n\x0eSetUserProfile\x12\x16.SetUserProfileRequest\x1a\x17.SetUserProfileResponse\"\x00\x12=\n\x0eGetUserProfile\x12\x13.UserProfileRequest\x1a\x14.UserProfileResponse\"\x00\x12\x37\n\nAddRecipes\x12\x12.AddRecipesRequest\x1a\x13.AddRecipesResponse\"\x00\x12\x34\n\tResetData\x12\x11.ResetDataRequest\x1a\x12.ResetDataResponse\"\x00\x42\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -38,6 +40,6 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'protos.service_pb2', _globa
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\252\002\037IntelliCook.RecipeSearch.Client'
-  _globals['_RECIPESEARCHSERVICE']._serialized_start=176
-  _globals['_RECIPESEARCHSERVICE']._serialized_end=610
+  _globals['_RECIPESEARCHSERVICE']._serialized_start=234
+  _globals['_RECIPESEARCHSERVICE']._serialized_end=800
 # @@protoc_insertion_point(module_scope)

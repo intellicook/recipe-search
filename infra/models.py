@@ -9,6 +9,7 @@ from sqlalchemy.orm import Mapped, declarative_base, mapped_column
 from protos.chat_by_recipe_pb2 import ChatByRecipeRole
 from protos.recipe_nutrition_pb2 import RecipeNutritionValue
 from protos.search_recipes_pb2 import SearchRecipesMatchField
+from protos.user_profile_veggie_identity_pb2 import UserProfileVeggieIdentity
 
 Base = declarative_base(metadata=MetaData(schema="public"))
 
@@ -56,13 +57,13 @@ class RecipeModelNutritionValue(StrEnum):
         Returns:
             RecipeModelNutritionValue: The new nutrition value.
         """
-        if value == RecipeNutritionValue.HIGH:
+        if value == RecipeNutritionValue.RECIPE_NUTRITION_VALUE_HIGH:
             return cls.high
-        if value == RecipeNutritionValue.MEDIUM:
+        if value == RecipeNutritionValue.RECIPE_NUTRITION_VALUE_MEDIUM:
             return cls.medium
-        if value == RecipeNutritionValue.LOW:
+        if value == RecipeNutritionValue.RECIPE_NUTRITION_VALUE_LOW:
             return cls.low
-        if value == RecipeNutritionValue.NONE:
+        if value == RecipeNutritionValue.RECIPE_NUTRITION_VALUE_NONE:
             return cls.none
 
     def to_proto(self) -> str:
@@ -72,13 +73,13 @@ class RecipeModelNutritionValue(StrEnum):
             str: The proto value.
         """
         if self == self.high:
-            return RecipeNutritionValue.HIGH
+            return RecipeNutritionValue.RECIPE_NUTRITION_VALUE_HIGH
         if self == self.medium:
-            return RecipeNutritionValue.MEDIUM
+            return RecipeNutritionValue.RECIPE_NUTRITION_VALUE_MEDIUM
         if self == self.low:
-            return RecipeNutritionValue.LOW
+            return RecipeNutritionValue.RECIPE_NUTRITION_VALUE_LOW
         if self == self.none:
-            return RecipeNutritionValue.NONE
+            return RecipeNutritionValue.RECIPE_NUTRITION_VALUE_NONE
 
 
 @dataclass
@@ -106,6 +107,48 @@ class RecipeModelNutrition:
         }
 
 
+class UserProfileModelVeggieIdentity(StrEnum):
+    """User profile model veggie identity class."""
+
+    NONE = "none"
+    VEGAN = "vegan"
+    VEGETARIAN = "vegetarian"
+
+    @classmethod
+    def from_proto(
+        cls, identity: UserProfileVeggieIdentity
+    ) -> "UserProfileModelVeggieIdentity":
+        """Create a veggie identity from a proto identity.
+
+        Arguments:
+            identity (UserProfileVeggieIdentity): The proto identity.
+
+        Returns:
+            UserProfileModelVeggieIdentity: The new veggie identity.
+        """
+        Id = UserProfileModelVeggieIdentity
+        if identity == Id.USER_PROFILE_VEGGIE_IDENTITY_NONE:
+            return cls.NONE
+        if identity == Id.USER_PROFILE_VEGGIE_IDENTITY_VEGAN:
+            return cls.VEGAN
+        if identity == Id.USER_PROFILE_VEGGIE_IDENTITY_VEGETARIAN:
+            return cls.VEGETARIAN
+
+    def to_proto(self) -> UserProfileVeggieIdentity:
+        """Convert the veggie identity to a proto identity.
+
+        Returns:
+            UserProfileVeggieIdentity: The proto identity.
+        """
+        Id = UserProfileModelVeggieIdentity
+        if self == self.NONE:
+            return Id.USER_PROFILE_VEGGIE_IDENTITY_NONE
+        if self == self.VEGAN:
+            return Id.USER_PROFILE_VEGGIE_IDENTITY_VEGAN
+        if self == self.VEGETARIAN:
+            return Id.USER_PROFILE_VEGGIE_IDENTITY_VEGETARIAN
+
+
 class RecipeModel(Base):
     """Recipe model"""
 
@@ -125,13 +168,15 @@ class RecipeModel(Base):
         MutableList.as_mutable(PickleType)
     )
     nutrition: Mapped[RecipeModelNutrition] = mapped_column(PickleType)
+    veggie_identity: Mapped[UserProfileModelVeggieIdentity] = mapped_column()
 
     def __repr__(self) -> str:
         return (
             f"RecipeModel(id={self.id}, title={self.title},"
             f" description={self.description}, ingredients={self.ingredients},"
             f" directions={self.directions}, tips={self.tips},"
-            f" utensils={self.utensils}, nutrition={self.nutrition})"
+            f" utensils={self.utensils}, nutrition={self.nutrition},"
+            f" veggie_identity={self.veggie_identity})"
         )
 
     def as_dict(self) -> Dict[str, Any]:
@@ -147,6 +192,31 @@ class RecipeModel(Base):
             "utensils": self.utensils,
             "nutrition": self.nutrition.as_dict(),
         }
+
+
+class UserProfileModel(Base):
+    """User profile model"""
+
+    __tablename__ = "user_profile"
+
+    username: Mapped[str] = mapped_column(primary_key=True)
+    veggie_identity: Mapped[UserProfileModelVeggieIdentity] = mapped_column()
+    prefer: Mapped[List[str]] = mapped_column(
+        MutableList.as_mutable(PickleType)
+    )
+    dislike: Mapped[List[str]] = mapped_column(
+        MutableList.as_mutable(PickleType)
+    )
+    embedding: Mapped[List[float]] = mapped_column(
+        MutableList.as_mutable(PickleType)
+    )
+
+    def __repr__(self) -> str:
+        return (
+            f"UserProfile(username={self.username},"
+            f" is_vegan={self.veggie_identity}, prefer={self.prefer},"
+            f" dislike={self.dislike})"
+        )
 
 
 """

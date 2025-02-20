@@ -1,11 +1,11 @@
 import logging
-from typing import Iterable, List
+from typing import Iterable, List, Optional
 
 from sqlalchemy import delete, select, text
 from sqlalchemy.orm import Session
 
 from configs.domain import configs
-from domain import chats
+from domain import chats, embeddings
 from domain.searches import typesense
 from infra import models
 from infra.db import engine
@@ -67,7 +67,13 @@ def add_recipes(
     Returns:
         List[models.RecipeModel]: The added recipes.
     """
-    # TODO: clean + embed
+    # chat = chats.model()
+    for recipe in recipes:
+        if not recipe.veggie_identity:
+            # recipe.veggie_identity = chat.identify_recipe_veggie_identity(
+            #     recipe
+            # )
+            recipe.veggie_identity = models.UserProfileModelVeggieIdentity.NONE
 
     with Session(engine, expire_on_commit=False) as session:
         session.add_all(recipes)
@@ -80,8 +86,9 @@ def add_recipes(
 
 def search_recipes(
     ingredients: Iterable[str],
+    username: str,
     page: int = 1,
-    per_page: int = configs.default_search_per_page,
+    per_page: int = configs.domain_default_search_per_page,
     include_detail: bool = False,
 ) -> List[models.TypesenseResult]:
     """Search recipes by ingredients.
@@ -105,8 +112,16 @@ def search_recipes(
         f" page={page}, per_page={per_page}, include_detail={include_detail}"
     )
 
+    profile = user_profile(username)
+    profile_embedding = profile.embedding if profile else None
+
+    if not profile_embedding:
+        logger.debug("User profile not used")
+    else:
+        logger.debug("User profile used")
+
     results = typesense.search_engine.search_recipes(
-        ingredients, page=page, per_page=per_page
+        ingredients, profile_embedding, page=page, per_page=per_page
     )
 
     if not include_detail:
@@ -147,7 +162,7 @@ def chat_by_recipe(
     chat.set_user(name)
     chat.set_recipe(recipe)
 
-    messages = messages[-configs.chat_message_limit :]
+    messages = messages[-configs.domain_chat_message_limit :]
 
     logger.debug(f"Messages: {messages}")
 
@@ -176,7 +191,7 @@ def chat_by_recipe_stream(
     chat.set_user(name)
     chat.set_recipe(recipe)
 
-    messages = messages[-configs.chat_message_limit :]
+    messages = messages[-configs.domain_chat_message_limit :]
 
     logger.debug(f"Messages: {messages}")
 
@@ -197,3 +212,47 @@ def reset_data():
         session.commit()
 
     typesense.search_engine.remove_all_recipes()
+
+
+def set_user_profile(profile: models.UserProfileModel):
+    """Set the user profile.
+
+    Arguments:
+        profile (models.UserProfileModel): The user profile.
+    """
+    if not profile.embedding:
+        profile.embedding = embeddings.model().embed_user_profile(profile)
+
+    with Session(engine) as session:
+        stmt = select(models.UserProfileModel).where(
+            models.UserProfileModel.username == profile.username
+        )
+        existing_profile = session.execute(stmt).scalar_one_or_none()
+
+        if existing_profile:
+            existing_profile.veggie_identity = profile.veggie_identity
+            existing_profile.prefer = profile.prefer
+            existing_profile.dislike = profile.dislike
+            existing_profile.embedding = profile.embedding
+        else:
+            session.add(profile)
+
+        session.commit()
+
+
+def user_profile(username: str) -> Optional[models.UserProfileModel]:
+    """Get the user profile.
+
+    Arguments:
+        username (str): The username.
+
+    Returns:
+        Optional[models.UserProfileModel]: The user profile.
+    """
+    with Session(engine) as session:
+        stmt = select(models.UserProfileModel).where(
+            models.UserProfileModel.username == username
+        )
+        profile = session.execute(stmt).scalar_one_or_none()
+
+    return profile

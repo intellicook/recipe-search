@@ -7,14 +7,14 @@ DESCRIPTOR: _descriptor.FileDescriptor
 
 class RecipeNutritionValue(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = ()
-    HIGH: _ClassVar[RecipeNutritionValue]
-    MEDIUM: _ClassVar[RecipeNutritionValue]
-    LOW: _ClassVar[RecipeNutritionValue]
-    NONE: _ClassVar[RecipeNutritionValue]
-HIGH: RecipeNutritionValue
-MEDIUM: RecipeNutritionValue
-LOW: RecipeNutritionValue
-NONE: RecipeNutritionValue
+    RECIPE_NUTRITION_VALUE_HIGH: _ClassVar[RecipeNutritionValue]
+    RECIPE_NUTRITION_VALUE_MEDIUM: _ClassVar[RecipeNutritionValue]
+    RECIPE_NUTRITION_VALUE_LOW: _ClassVar[RecipeNutritionValue]
+    RECIPE_NUTRITION_VALUE_NONE: _ClassVar[RecipeNutritionValue]
+RECIPE_NUTRITION_VALUE_HIGH: RecipeNutritionValue
+RECIPE_NUTRITION_VALUE_MEDIUM: RecipeNutritionValue
+RECIPE_NUTRITION_VALUE_LOW: RecipeNutritionValue
+RECIPE_NUTRITION_VALUE_NONE: RecipeNutritionValue
 
 class RecipeNutrition(_message.Message):
     __slots__ = ("calories", "fat", "protein", "carbs")

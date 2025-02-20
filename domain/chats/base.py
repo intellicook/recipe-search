@@ -50,3 +50,17 @@ class BaseChat(ABC):
         Returns:
             Iterable[models.ChatStreamModel]: The response stream of messages.
         """
+
+    @abstractmethod
+    def identify_recipe_veggie_identity(
+        self, recipe: models.RecipeModel
+    ) -> models.UserProfileModelVeggieIdentity:
+        """Identify the recipe's veggie identity.
+
+        Arguments:
+            recipe (models.RecipeModel): The recipe to identify.
+
+        Returns:
+            models.UserProfileModelVeggieIdentity: The recipe's veggie
+                identity.
+        """
