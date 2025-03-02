@@ -25,31 +25,32 @@ namespace IntelliCook.RecipeSearch.Client {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChtQcm90b3Mvc2VhcmNoX3JlY2lwZXMucHJvdG8aHXByb3Rvcy9yZWNpcGVf",
-            "bnV0cml0aW9uLnByb3RvIq0BChRTZWFyY2hSZWNpcGVzUmVxdWVzdBIQCgh1",
-            "c2VybmFtZRgBIAEoCRITCgtpbmdyZWRpZW50cxgCIAMoCRIRCgRwYWdlGAMg",
-            "ASgNSACIAQESFQoIcGVyX3BhZ2UYBCABKA1IAYgBARIbCg5pbmNsdWRlX2Rl",
-            "dGFpbBgFIAEoCEgCiAEBQgcKBV9wYWdlQgsKCV9wZXJfcGFnZUIRCg9faW5j",
-            "bHVkZV9kZXRhaWwiPgoVU2VhcmNoUmVjaXBlc1Jlc3BvbnNlEiUKB3JlY2lw",
-            "ZXMYASADKAsyFC5TZWFyY2hSZWNpcGVzUmVjaXBlItwBChNTZWFyY2hSZWNp",
-            "cGVzUmVjaXBlEgoKAmlkGAEgASgFEg0KBXRpdGxlGAIgASgJEhMKC2Rlc2Ny",
-            "aXB0aW9uGAMgASgJEjMKC2luZ3JlZGllbnRzGAQgAygLMh4uU2VhcmNoUmVj",
-            "aXBlc1JlY2lwZUluZ3JlZGllbnQSJAoHbWF0Y2hlcxgFIAMoCzITLlNlYXJj",
-            "aFJlY2lwZXNNYXRjaBIvCgZkZXRhaWwYBiABKAsyGi5TZWFyY2hSZWNpcGVz",
-            "UmVjaXBlRGV0YWlsSACIAQFCCQoHX2RldGFpbCJtCh1TZWFyY2hSZWNpcGVz",
-            "UmVjaXBlSW5ncmVkaWVudBIMCgRuYW1lGAEgASgJEhUKCHF1YW50aXR5GAIg",
-            "ASgCSACIAQESEQoEdW5pdBgDIAEoCUgBiAEBQgsKCV9xdWFudGl0eUIHCgVf",
-            "dW5pdCJrChJTZWFyY2hSZWNpcGVzTWF0Y2gSJwoFZmllbGQYASABKA4yGC5T",
-            "ZWFyY2hSZWNpcGVzTWF0Y2hGaWVsZBIOCgZ0b2tlbnMYAiADKAkSEgoFaW5k",
-            "ZXgYAyABKAVIAIgBAUIICgZfaW5kZXgidAoZU2VhcmNoUmVjaXBlc1JlY2lw",
-            "ZURldGFpbBISCgpkaXJlY3Rpb25zGAEgAygJEgwKBHRpcHMYAiADKAkSEAoI",
-            "dXRlbnNpbHMYAyADKAkSIwoJbnV0cml0aW9uGAQgASgLMhAuUmVjaXBlTnV0",
-            "cml0aW9uKkYKF1NlYXJjaFJlY2lwZXNNYXRjaEZpZWxkEgkKBVRJVExFEAAS",
-            "DwoLREVTQ1JJUFRJT04QARIPCgtJTkdSRURJRU5UUxACQiKqAh9JbnRlbGxp",
-            "Q29vay5SZWNpcGVTZWFyY2guQ2xpZW50YgZwcm90bzM="));
+            "bnV0cml0aW9uLnByb3RvItcBChRTZWFyY2hSZWNpcGVzUmVxdWVzdBIQCgh1",
+            "c2VybmFtZRgBIAEoCRITCgtpbmdyZWRpZW50cxgCIAMoCRIYCgtleHRyYV90",
+            "ZXJtcxgDIAEoCUgAiAEBEhEKBHBhZ2UYBCABKA1IAYgBARIVCghwZXJfcGFn",
+            "ZRgFIAEoDUgCiAEBEhsKDmluY2x1ZGVfZGV0YWlsGAYgASgISAOIAQFCDgoM",
+            "X2V4dHJhX3Rlcm1zQgcKBV9wYWdlQgsKCV9wZXJfcGFnZUIRCg9faW5jbHVk",
+            "ZV9kZXRhaWwiPgoVU2VhcmNoUmVjaXBlc1Jlc3BvbnNlEiUKB3JlY2lwZXMY",
+            "ASADKAsyFC5TZWFyY2hSZWNpcGVzUmVjaXBlItwBChNTZWFyY2hSZWNpcGVz",
+            "UmVjaXBlEgoKAmlkGAEgASgFEg0KBXRpdGxlGAIgASgJEhMKC2Rlc2NyaXB0",
+            "aW9uGAMgASgJEjMKC2luZ3JlZGllbnRzGAQgAygLMh4uU2VhcmNoUmVjaXBl",
+            "c1JlY2lwZUluZ3JlZGllbnQSJAoHbWF0Y2hlcxgFIAMoCzITLlNlYXJjaFJl",
+            "Y2lwZXNNYXRjaBIvCgZkZXRhaWwYBiABKAsyGi5TZWFyY2hSZWNpcGVzUmVj",
+            "aXBlRGV0YWlsSACIAQFCCQoHX2RldGFpbCJtCh1TZWFyY2hSZWNpcGVzUmVj",
+            "aXBlSW5ncmVkaWVudBIMCgRuYW1lGAEgASgJEhUKCHF1YW50aXR5GAIgASgC",
+            "SACIAQESEQoEdW5pdBgDIAEoCUgBiAEBQgsKCV9xdWFudGl0eUIHCgVfdW5p",
+            "dCJrChJTZWFyY2hSZWNpcGVzTWF0Y2gSJwoFZmllbGQYASABKA4yGC5TZWFy",
+            "Y2hSZWNpcGVzTWF0Y2hGaWVsZBIOCgZ0b2tlbnMYAiADKAkSEgoFaW5kZXgY",
+            "AyABKAVIAIgBAUIICgZfaW5kZXgidAoZU2VhcmNoUmVjaXBlc1JlY2lwZURl",
+            "dGFpbBISCgpkaXJlY3Rpb25zGAEgAygJEgwKBHRpcHMYAiADKAkSEAoIdXRl",
+            "bnNpbHMYAyADKAkSIwoJbnV0cml0aW9uGAQgASgLMhAuUmVjaXBlTnV0cml0",
+            "aW9uKkYKF1NlYXJjaFJlY2lwZXNNYXRjaEZpZWxkEgkKBVRJVExFEAASDwoL",
+            "REVTQ1JJUFRJT04QARIPCgtJTkdSRURJRU5UUxACQiKqAh9JbnRlbGxpQ29v",
+            "ay5SZWNpcGVTZWFyY2guQ2xpZW50YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::IntelliCook.RecipeSearch.Client.RecipeNutritionReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::IntelliCook.RecipeSearch.Client.SearchRecipesMatchField), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.SearchRecipesRequest), global::IntelliCook.RecipeSearch.Client.SearchRecipesRequest.Parser, new[]{ "Username", "Ingredients", "Page", "PerPage", "IncludeDetail" }, new[]{ "Page", "PerPage", "IncludeDetail" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.SearchRecipesRequest), global::IntelliCook.RecipeSearch.Client.SearchRecipesRequest.Parser, new[]{ "Username", "Ingredients", "ExtraTerms", "Page", "PerPage", "IncludeDetail" }, new[]{ "ExtraTerms", "Page", "PerPage", "IncludeDetail" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.SearchRecipesResponse), global::IntelliCook.RecipeSearch.Client.SearchRecipesResponse.Parser, new[]{ "Recipes" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.SearchRecipesRecipe), global::IntelliCook.RecipeSearch.Client.SearchRecipesRecipe.Parser, new[]{ "Id", "Title", "Description", "Ingredients", "Matches", "Detail" }, new[]{ "Detail" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::IntelliCook.RecipeSearch.Client.SearchRecipesRecipeIngredient), global::IntelliCook.RecipeSearch.Client.SearchRecipesRecipeIngredient.Parser, new[]{ "Name", "Quantity", "Unit" }, new[]{ "Quantity", "Unit" }, null, null, null),
@@ -109,6 +110,7 @@ namespace IntelliCook.RecipeSearch.Client {
       _hasBits0 = other._hasBits0;
       username_ = other.username_;
       ingredients_ = other.ingredients_.Clone();
+      extraTerms_ = other.extraTerms_;
       page_ = other.page_;
       perPage_ = other.perPage_;
       includeDetail_ = other.includeDetail_;
@@ -144,8 +146,34 @@ namespace IntelliCook.RecipeSearch.Client {
       get { return ingredients_; }
     }
 
+    /// <summary>Field number for the "extra_terms" field.</summary>
+    public const int ExtraTermsFieldNumber = 3;
+    private readonly static string ExtraTermsDefaultValue = "";
+
+    private string extraTerms_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string ExtraTerms {
+      get { return extraTerms_ ?? ExtraTermsDefaultValue; }
+      set {
+        extraTerms_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+    /// <summary>Gets whether the "extra_terms" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasExtraTerms {
+      get { return extraTerms_ != null; }
+    }
+    /// <summary>Clears the value of the "extra_terms" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearExtraTerms() {
+      extraTerms_ = null;
+    }
+
     /// <summary>Field number for the "page" field.</summary>
-    public const int PageFieldNumber = 3;
+    public const int PageFieldNumber = 4;
     private readonly static uint PageDefaultValue = 0;
 
     private uint page_;
@@ -172,7 +200,7 @@ namespace IntelliCook.RecipeSearch.Client {
     }
 
     /// <summary>Field number for the "per_page" field.</summary>
-    public const int PerPageFieldNumber = 4;
+    public const int PerPageFieldNumber = 5;
     private readonly static uint PerPageDefaultValue = 0;
 
     private uint perPage_;
@@ -199,7 +227,7 @@ namespace IntelliCook.RecipeSearch.Client {
     }
 
     /// <summary>Field number for the "include_detail" field.</summary>
-    public const int IncludeDetailFieldNumber = 5;
+    public const int IncludeDetailFieldNumber = 6;
     private readonly static bool IncludeDetailDefaultValue = false;
 
     private bool includeDetail_;
@@ -242,6 +270,7 @@ namespace IntelliCook.RecipeSearch.Client {
       }
       if (Username != other.Username) return false;
       if(!ingredients_.Equals(other.ingredients_)) return false;
+      if (ExtraTerms != other.ExtraTerms) return false;
       if (Page != other.Page) return false;
       if (PerPage != other.PerPage) return false;
       if (IncludeDetail != other.IncludeDetail) return false;
@@ -254,6 +283,7 @@ namespace IntelliCook.RecipeSearch.Client {
       int hash = 1;
       if (Username.Length != 0) hash ^= Username.GetHashCode();
       hash ^= ingredients_.GetHashCode();
+      if (HasExtraTerms) hash ^= ExtraTerms.GetHashCode();
       if (HasPage) hash ^= Page.GetHashCode();
       if (HasPerPage) hash ^= PerPage.GetHashCode();
       if (HasIncludeDetail) hash ^= IncludeDetail.GetHashCode();
@@ -280,16 +310,20 @@ namespace IntelliCook.RecipeSearch.Client {
         output.WriteString(Username);
       }
       ingredients_.WriteTo(output, _repeated_ingredients_codec);
+      if (HasExtraTerms) {
+        output.WriteRawTag(26);
+        output.WriteString(ExtraTerms);
+      }
       if (HasPage) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(32);
         output.WriteUInt32(Page);
       }
       if (HasPerPage) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(40);
         output.WriteUInt32(PerPage);
       }
       if (HasIncludeDetail) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(48);
         output.WriteBool(IncludeDetail);
       }
       if (_unknownFields != null) {
@@ -307,16 +341,20 @@ namespace IntelliCook.RecipeSearch.Client {
         output.WriteString(Username);
       }
       ingredients_.WriteTo(ref output, _repeated_ingredients_codec);
+      if (HasExtraTerms) {
+        output.WriteRawTag(26);
+        output.WriteString(ExtraTerms);
+      }
       if (HasPage) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(32);
         output.WriteUInt32(Page);
       }
       if (HasPerPage) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(40);
         output.WriteUInt32(PerPage);
       }
       if (HasIncludeDetail) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(48);
         output.WriteBool(IncludeDetail);
       }
       if (_unknownFields != null) {
@@ -333,6 +371,9 @@ namespace IntelliCook.RecipeSearch.Client {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Username);
       }
       size += ingredients_.CalculateSize(_repeated_ingredients_codec);
+      if (HasExtraTerms) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ExtraTerms);
+      }
       if (HasPage) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(Page);
       }
@@ -358,6 +399,9 @@ namespace IntelliCook.RecipeSearch.Client {
         Username = other.Username;
       }
       ingredients_.Add(other.ingredients_);
+      if (other.HasExtraTerms) {
+        ExtraTerms = other.ExtraTerms;
+      }
       if (other.HasPage) {
         Page = other.Page;
       }
@@ -394,15 +438,19 @@ namespace IntelliCook.RecipeSearch.Client {
             ingredients_.AddEntriesFrom(input, _repeated_ingredients_codec);
             break;
           }
-          case 24: {
-            Page = input.ReadUInt32();
+          case 26: {
+            ExtraTerms = input.ReadString();
             break;
           }
           case 32: {
-            PerPage = input.ReadUInt32();
+            Page = input.ReadUInt32();
             break;
           }
           case 40: {
+            PerPage = input.ReadUInt32();
+            break;
+          }
+          case 48: {
             IncludeDetail = input.ReadBool();
             break;
           }
@@ -433,15 +481,19 @@ namespace IntelliCook.RecipeSearch.Client {
             ingredients_.AddEntriesFrom(ref input, _repeated_ingredients_codec);
             break;
           }
-          case 24: {
-            Page = input.ReadUInt32();
+          case 26: {
+            ExtraTerms = input.ReadString();
             break;
           }
           case 32: {
-            PerPage = input.ReadUInt32();
+            Page = input.ReadUInt32();
             break;
           }
           case 40: {
+            PerPage = input.ReadUInt32();
+            break;
+          }
+          case 48: {
             IncludeDetail = input.ReadBool();
             break;
           }
