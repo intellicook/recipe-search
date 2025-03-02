@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Optional
 
 from infra import models
 
@@ -54,12 +54,16 @@ class BaseEmbedding(ABC):
         return self.embed(text)
 
     def embed_user_profile(
-        self, profile: models.UserProfileModel
+        self,
+        profile: models.UserProfileModel,
+        extra_terms: Optional[str] = None,
     ) -> List[float]:
         """Embed the user profile.
 
         Arguments:
             profile (models.UserProfileModel): The user profile to embed.
+            extra_terms (Optional[str]): Extra terms to include in the
+                embedding. Defaults to None.
 
         Returns:
             List[float]: The embedding of the user profile.
@@ -92,6 +96,7 @@ class BaseEmbedding(ABC):
                     if has_dislike
                     else ""
                 ),
+                (f"Additionally: {extra_terms}.\n" if extra_terms else ""),
                 query,
             ]
         )

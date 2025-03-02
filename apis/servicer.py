@@ -163,6 +163,11 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
         results = controllers.search_recipes(
             ingredients=request.ingredients,
             username=request.username,
+            extra_terms=(
+                request.extra_terms
+                if request.HasField("extra_terms")
+                else None
+            ),
             page=request.page,
             per_page=request.per_page,
             include_detail=request.include_detail,

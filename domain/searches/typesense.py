@@ -220,7 +220,7 @@ class TypesenseSearchEngine:
     def search_recipes(
         self,
         ingredients: Iterable[str],
-        user_profile_embedding: Optional[List[float]],
+        embedding: Optional[List[float]],
         page: int = 1,
         per_page: int = domain_configs.domain_default_search_per_page,
     ) -> List[models.TypesenseResult]:
@@ -228,8 +228,7 @@ class TypesenseSearchEngine:
 
         Arguments:
             ingredients (Iterable[str]): The ingredients to search for.
-            user_profile_embedding (Optional[List[float]]): The user profile
-                embedding.
+            embedding (Optional[List[float]]): The embedding.
             page (int): The page number. Defaults to 1.
             per_page (int): The number of results per page. Defaults to
                 domain_configs.default_search_per_page.
@@ -240,7 +239,7 @@ class TypesenseSearchEngine:
         recipes_documents = self.recipes.retrieve()
         recipes_count = recipes_documents["num_documents"]
 
-        params = {
+        params_with_user_profile = {
             "q": " ".join(ingredients),
             "query_by_weights": "1,1,1",
             "query_by": "title,description,ingredients",
@@ -248,25 +247,29 @@ class TypesenseSearchEngine:
             "drop_tokens_mode": "both_sides:3",
             "page": page,
             "per_page": per_page,
+            "exclude_fields": "embedding",
         }
 
-        if user_profile_embedding:
-            params["sort_by"] = "_vector_distance:asc"
-            params["vector_query"] = (
+        if embedding:
+            params_with_user_profile["sort_by"] = "_vector_distance:asc"
+            params_with_user_profile["rerank_hybrid_matches"] = True
+            params_with_user_profile["vector_query"] = (
                 f"embedding:([{', '.join(
                     str(v)
-                    for v in user_profile_embedding
+                    for v in embedding
                 )}])"
             )
 
+        searches = [
+            {
+                "collection": Recipe.SCHEMA["name"],
+                **params_with_user_profile,
+            }
+        ]
+
         response = self.client.multi_search.perform(
             {
-                "searches": [
-                    {
-                        "collection": Recipe.SCHEMA["name"],
-                        **params,
-                    }
-                ]
+                "searches": searches,
             },
             {},
         )
