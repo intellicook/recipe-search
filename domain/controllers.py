@@ -87,6 +87,7 @@ def add_recipes(
 def search_recipes(
     ingredients: Iterable[str],
     username: str,
+    extra_terms: Optional[str] = None,
     page: int = 1,
     per_page: int = configs.domain_default_search_per_page,
     include_detail: bool = False,
@@ -97,6 +98,9 @@ def search_recipes(
 
     Arguments:
         ingredients (Iterable[str]): The list of ingredients to search.
+        username (str): The username of the user profile to use.
+        extra_terms (Optional[str]): Extra terms to search for. Defaults to
+            None.
         page (int): The page number to return. Defaults to 1.
         per_page (int): The number of recipes to return per page. Defaults to
             configs.domain.configs.default_search_per_page.
@@ -109,19 +113,34 @@ def search_recipes(
     """
     logger.debug(
         f"Searching for recipes with: ingredients={ingredients},"
-        f" page={page}, per_page={per_page}, include_detail={include_detail}"
+        f" username={username}, extra_terms={extra_terms}, page={page},"
+        f" per_page={per_page}, include_detail={include_detail}"
     )
 
     profile = get_user_profile(username)
-    profile_embedding = profile.embedding if profile else None
 
-    if not profile_embedding:
-        logger.debug("User profile not used")
-    else:
+    if profile:
+        embedding = profile.embedding
         logger.debug("User profile used")
 
+        if extra_terms:
+            embedding = embeddings.model().embed_user_profile(
+                profile, extra_terms
+            )
+            logger.debug("Extra terms used")
+    else:
+        embedding = None
+        logger.debug("User profile not used")
+
+        if extra_terms:
+            embedding = embeddings.model().embed(extra_terms)
+            logger.debug("Extra terms used")
+
     results = typesense.search_engine.search_recipes(
-        ingredients, profile_embedding, page=page, per_page=per_page
+        ingredients,
+        embedding,
+        page=page,
+        per_page=per_page,
     )
 
     if not include_detail:

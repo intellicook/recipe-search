@@ -17,18 +17,20 @@ DESCRIPTION: SearchRecipesMatchField
 INGREDIENTS: SearchRecipesMatchField
 
 class SearchRecipesRequest(_message.Message):
-    __slots__ = ("username", "ingredients", "page", "per_page", "include_detail")
+    __slots__ = ("username", "ingredients", "extra_terms", "page", "per_page", "include_detail")
     USERNAME_FIELD_NUMBER: _ClassVar[int]
     INGREDIENTS_FIELD_NUMBER: _ClassVar[int]
+    EXTRA_TERMS_FIELD_NUMBER: _ClassVar[int]
     PAGE_FIELD_NUMBER: _ClassVar[int]
     PER_PAGE_FIELD_NUMBER: _ClassVar[int]
     INCLUDE_DETAIL_FIELD_NUMBER: _ClassVar[int]
     username: str
     ingredients: _containers.RepeatedScalarFieldContainer[str]
+    extra_terms: str
     page: int
     per_page: int
     include_detail: bool
-    def __init__(self, username: _Optional[str] = ..., ingredients: _Optional[_Iterable[str]] = ..., page: _Optional[int] = ..., per_page: _Optional[int] = ..., include_detail: bool = ...) -> None: ...
+    def __init__(self, username: _Optional[str] = ..., ingredients: _Optional[_Iterable[str]] = ..., extra_terms: _Optional[str] = ..., page: _Optional[int] = ..., per_page: _Optional[int] = ..., include_detail: bool = ...) -> None: ...
 
 class SearchRecipesResponse(_message.Message):
     __slots__ = ("recipes",)

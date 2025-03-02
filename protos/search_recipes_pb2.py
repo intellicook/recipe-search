@@ -25,7 +25,7 @@ _sym_db = _symbol_database.Default()
 from protos import recipe_nutrition_pb2 as protos_dot_recipe__nutrition__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1bprotos/search_recipes.proto\x1a\x1dprotos/recipe_nutrition.proto\"\xad\x01\n\x14SearchRecipesRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x13\n\x0bingredients\x18\x02 \x03(\t\x12\x11\n\x04page\x18\x03 \x01(\rH\x00\x88\x01\x01\x12\x15\n\x08per_page\x18\x04 \x01(\rH\x01\x88\x01\x01\x12\x1b\n\x0einclude_detail\x18\x05 \x01(\x08H\x02\x88\x01\x01\x42\x07\n\x05_pageB\x0b\n\t_per_pageB\x11\n\x0f_include_detail\">\n\x15SearchRecipesResponse\x12%\n\x07recipes\x18\x01 \x03(\x0b\x32\x14.SearchRecipesRecipe\"\xdc\x01\n\x13SearchRecipesRecipe\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\x33\n\x0bingredients\x18\x04 \x03(\x0b\x32\x1e.SearchRecipesRecipeIngredient\x12$\n\x07matches\x18\x05 \x03(\x0b\x32\x13.SearchRecipesMatch\x12/\n\x06\x64\x65tail\x18\x06 \x01(\x0b\x32\x1a.SearchRecipesRecipeDetailH\x00\x88\x01\x01\x42\t\n\x07_detail\"m\n\x1dSearchRecipesRecipeIngredient\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\x08quantity\x18\x02 \x01(\x02H\x00\x88\x01\x01\x12\x11\n\x04unit\x18\x03 \x01(\tH\x01\x88\x01\x01\x42\x0b\n\t_quantityB\x07\n\x05_unit\"k\n\x12SearchRecipesMatch\x12\'\n\x05\x66ield\x18\x01 \x01(\x0e\x32\x18.SearchRecipesMatchField\x12\x0e\n\x06tokens\x18\x02 \x03(\t\x12\x12\n\x05index\x18\x03 \x01(\x05H\x00\x88\x01\x01\x42\x08\n\x06_index\"t\n\x19SearchRecipesRecipeDetail\x12\x12\n\ndirections\x18\x01 \x03(\t\x12\x0c\n\x04tips\x18\x02 \x03(\t\x12\x10\n\x08utensils\x18\x03 \x03(\t\x12#\n\tnutrition\x18\x04 \x01(\x0b\x32\x10.RecipeNutrition*F\n\x17SearchRecipesMatchField\x12\t\n\x05TITLE\x10\x00\x12\x0f\n\x0b\x44\x45SCRIPTION\x10\x01\x12\x0f\n\x0bINGREDIENTS\x10\x02\x42\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1bprotos/search_recipes.proto\x1a\x1dprotos/recipe_nutrition.proto\"\xd7\x01\n\x14SearchRecipesRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x13\n\x0bingredients\x18\x02 \x03(\t\x12\x18\n\x0b\x65xtra_terms\x18\x03 \x01(\tH\x00\x88\x01\x01\x12\x11\n\x04page\x18\x04 \x01(\rH\x01\x88\x01\x01\x12\x15\n\x08per_page\x18\x05 \x01(\rH\x02\x88\x01\x01\x12\x1b\n\x0einclude_detail\x18\x06 \x01(\x08H\x03\x88\x01\x01\x42\x0e\n\x0c_extra_termsB\x07\n\x05_pageB\x0b\n\t_per_pageB\x11\n\x0f_include_detail\">\n\x15SearchRecipesResponse\x12%\n\x07recipes\x18\x01 \x03(\x0b\x32\x14.SearchRecipesRecipe\"\xdc\x01\n\x13SearchRecipesRecipe\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\x33\n\x0bingredients\x18\x04 \x03(\x0b\x32\x1e.SearchRecipesRecipeIngredient\x12$\n\x07matches\x18\x05 \x03(\x0b\x32\x13.SearchRecipesMatch\x12/\n\x06\x64\x65tail\x18\x06 \x01(\x0b\x32\x1a.SearchRecipesRecipeDetailH\x00\x88\x01\x01\x42\t\n\x07_detail\"m\n\x1dSearchRecipesRecipeIngredient\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x15\n\x08quantity\x18\x02 \x01(\x02H\x00\x88\x01\x01\x12\x11\n\x04unit\x18\x03 \x01(\tH\x01\x88\x01\x01\x42\x0b\n\t_quantityB\x07\n\x05_unit\"k\n\x12SearchRecipesMatch\x12\'\n\x05\x66ield\x18\x01 \x01(\x0e\x32\x18.SearchRecipesMatchField\x12\x0e\n\x06tokens\x18\x02 \x03(\t\x12\x12\n\x05index\x18\x03 \x01(\x05H\x00\x88\x01\x01\x42\x08\n\x06_index\"t\n\x19SearchRecipesRecipeDetail\x12\x12\n\ndirections\x18\x01 \x03(\t\x12\x0c\n\x04tips\x18\x02 \x03(\t\x12\x10\n\x08utensils\x18\x03 \x03(\t\x12#\n\tnutrition\x18\x04 \x01(\x0b\x32\x10.RecipeNutrition*F\n\x17SearchRecipesMatchField\x12\t\n\x05TITLE\x10\x00\x12\x0f\n\x0b\x44\x45SCRIPTION\x10\x01\x12\x0f\n\x0bINGREDIENTS\x10\x02\x42\"\xaa\x02\x1fIntelliCook.RecipeSearch.Clientb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -33,18 +33,18 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'protos.search_recipes_pb2',
 if not _descriptor._USE_C_DESCRIPTORS:
   _globals['DESCRIPTOR']._loaded_options = None
   _globals['DESCRIPTOR']._serialized_options = b'\252\002\037IntelliCook.RecipeSearch.Client'
-  _globals['_SEARCHRECIPESMATCHFIELD']._serialized_start=863
-  _globals['_SEARCHRECIPESMATCHFIELD']._serialized_end=933
+  _globals['_SEARCHRECIPESMATCHFIELD']._serialized_start=905
+  _globals['_SEARCHRECIPESMATCHFIELD']._serialized_end=975
   _globals['_SEARCHRECIPESREQUEST']._serialized_start=63
-  _globals['_SEARCHRECIPESREQUEST']._serialized_end=236
-  _globals['_SEARCHRECIPESRESPONSE']._serialized_start=238
-  _globals['_SEARCHRECIPESRESPONSE']._serialized_end=300
-  _globals['_SEARCHRECIPESRECIPE']._serialized_start=303
-  _globals['_SEARCHRECIPESRECIPE']._serialized_end=523
-  _globals['_SEARCHRECIPESRECIPEINGREDIENT']._serialized_start=525
-  _globals['_SEARCHRECIPESRECIPEINGREDIENT']._serialized_end=634
-  _globals['_SEARCHRECIPESMATCH']._serialized_start=636
-  _globals['_SEARCHRECIPESMATCH']._serialized_end=743
-  _globals['_SEARCHRECIPESRECIPEDETAIL']._serialized_start=745
-  _globals['_SEARCHRECIPESRECIPEDETAIL']._serialized_end=861
+  _globals['_SEARCHRECIPESREQUEST']._serialized_end=278
+  _globals['_SEARCHRECIPESRESPONSE']._serialized_start=280
+  _globals['_SEARCHRECIPESRESPONSE']._serialized_end=342
+  _globals['_SEARCHRECIPESRECIPE']._serialized_start=345
+  _globals['_SEARCHRECIPESRECIPE']._serialized_end=565
+  _globals['_SEARCHRECIPESRECIPEINGREDIENT']._serialized_start=567
+  _globals['_SEARCHRECIPESRECIPEINGREDIENT']._serialized_end=676
+  _globals['_SEARCHRECIPESMATCH']._serialized_start=678
+  _globals['_SEARCHRECIPESMATCH']._serialized_end=785
+  _globals['_SEARCHRECIPESRECIPEDETAIL']._serialized_start=787
+  _globals['_SEARCHRECIPESRECIPEDETAIL']._serialized_end=903
 # @@protoc_insertion_point(module_scope)

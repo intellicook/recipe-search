@@ -274,6 +274,7 @@ class AzureOpenAIChat(BaseChat):
         identity = choice.message.parsed
 
         return {
+            None: (models.UserProfileModelVeggieIdentity.NONE),
             RecipeVeggieIdentity.NON_VEGETARIAN: (
                 models.UserProfileModelVeggieIdentity.NONE
             ),

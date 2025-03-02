@@ -7,9 +7,10 @@ option csharp_namespace = "IntelliCook.RecipeSearch.Client";
 message SearchRecipesRequest {
     string username = 1;
     repeated string ingredients = 2;
-    optional uint32 page = 3;
-    optional uint32 per_page = 4;
-    optional bool include_detail = 5;
+    optional string extra_terms = 3;
+    optional uint32 page = 4;
+    optional uint32 per_page = 5;
+    optional bool include_detail = 6;
 }
 
 message SearchRecipesResponse {
