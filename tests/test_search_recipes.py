@@ -21,6 +21,7 @@ def test_search_recipes_success(
 ):
     username = "test_username"
     ingredients = ["apple", "banana"]
+    extra_terms = "extra_terms"
     page = 1
     per_page = 3
     results = [
@@ -80,6 +81,7 @@ def test_search_recipes_success(
     request = SearchRecipesRequest(
         username=username,
         ingredients=ingredients,
+        extra_terms=extra_terms,
         page=page,
         per_page=per_page,
     )
@@ -97,6 +99,7 @@ def test_search_recipes_success(
     mock_search.assert_called_once_with(
         ingredients=ingredients,
         username=username,
+        extra_terms=extra_terms,
         page=page,
         per_page=per_page,
         include_detail=False,
@@ -130,11 +133,13 @@ def test_search_recipes_empty_ingredients(
 ):
     username = "test_username"
     ingredients = []
+    extra_terms = "extra_terms"
     page = 1
     per_page = 3
     request = SearchRecipesRequest(
         username=username,
         ingredients=ingredients,
+        extra_terms=extra_terms,
         page=page,
         per_page=per_page,
     )
@@ -157,6 +162,7 @@ def test_search_recipes_include_detail(
 ):
     username = "test_username"
     ingredients = ["apple", "banana"]
+    extra_terms = "extra_terms"
     page = 1
     per_page = 3
     results = [
@@ -254,6 +260,7 @@ def test_search_recipes_include_detail(
     request = SearchRecipesRequest(
         username=username,
         ingredients=ingredients,
+        extra_terms=extra_terms,
         page=page,
         per_page=per_page,
         include_detail=True,
@@ -272,6 +279,7 @@ def test_search_recipes_include_detail(
     mock_search.assert_called_once_with(
         ingredients=ingredients,
         username=username,
+        extra_terms=extra_terms,
         page=page,
         per_page=per_page,
         include_detail=True,
@@ -392,6 +400,7 @@ def test_search_recipes_page_and_per_page_null(
     mock_search.assert_called_once_with(
         ingredients=ingredients,
         username=username,
+        extra_terms=None,
         page=1,
         per_page=configs.domain_default_search_per_page,
         include_detail=False,
