@@ -1,5 +1,8 @@
 syntax = "proto3";
 
+import "protos/search_recipes.proto";
+import "protos/set_user_profile.proto";
+
 option csharp_namespace = "IntelliCook.RecipeSearch.Client";
 
 message ChatByRecipeRequest {
@@ -11,6 +14,7 @@ message ChatByRecipeRequest {
 
 message ChatByRecipeResponse {
     ChatByRecipeMessage message = 1;
+    optional ChatByRecipeFunctionCall function_call = 2;
 }
 
 message ChatByRecipeStreamResponse {
@@ -36,4 +40,11 @@ message ChatByRecipeStreamHeader {
 
 message ChatByRecipeStreamContent {
     string text = 1;
+}
+
+message ChatByRecipeFunctionCall {
+    oneof function_call {
+        SetUserProfileRequest set_user_profile = 1;
+        SearchRecipesRequest search_recipes = 2;
+    }
 }
