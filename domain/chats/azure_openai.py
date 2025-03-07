@@ -2,7 +2,7 @@ import json
 import logging
 from dataclasses import dataclass
 from enum import Enum, StrEnum, auto
-from typing import Dict, Iterable, Optional
+from typing import Dict, Iterable, Optional, Union
 
 import openai
 from openai.types.chat import (
@@ -10,13 +10,22 @@ from openai.types.chat import (
 )
 from openai.types.chat import ChatCompletionMessage as OpenAICompletionMessage
 from openai.types.chat import (
+    ChatCompletionMessageToolCall as OpenAIChatCompletionMessageToolCall,
+)
+from openai.types.chat import (
     ChatCompletionSystemMessageParam as OpenAISystemMessageParam,
+)
+from openai.types.chat import (
+    ChatCompletionToolParam as OpenAIChatCompletionToolParam,
 )
 from openai.types.chat import (
     ChatCompletionUserMessageParam as OpenAIUserMessageParam,
 )
 from openai.types.chat.chat_completion_chunk import (
     ChoiceDelta as OpenAIStreamChoiceDelta,
+)
+from openai.types.shared.function_definition import (
+    FunctionDefinition as OpenAIFunctionDefinition,
 )
 
 from configs.azure import configs
@@ -40,18 +49,30 @@ class AzureOpenAIChat(BaseChat):
         INTRO = auto()
         USER = auto()
         RECIPE = auto()
+        FUNCTION_CALL = auto()
         END = auto()
+        FUNCTION_CALL_END = auto()
 
     SYSTEM_PROMPT_ORDER = [
         SystemPromptKey.INTRO,
         SystemPromptKey.USER,
         SystemPromptKey.RECIPE,
+        SystemPromptKey.FUNCTION_CALL,
         SystemPromptKey.END,
+    ]
+
+    SYSTEM_FUNCTION_CALL_PROMPT_ORDER = [
+        SystemPromptKey.INTRO,
+        SystemPromptKey.USER,
+        SystemPromptKey.RECIPE,
+        SystemPromptKey.FUNCTION_CALL_END,
     ]
 
     SYSTEM_PROMPT_FORMATS = {
         SystemPromptKey.INTRO: (
             "You are a cooking assistant who helps users with their queries."
+            " Talk and act like a normal human with a friendly and helpful"
+            " tone, but remember that you are a cooking assistant AI."
         ),
         SystemPromptKey.USER: (
             "You are chatting with the user who's name is {name}."
@@ -60,17 +81,105 @@ class AzureOpenAIChat(BaseChat):
             "You are chatting with the user about a recipe. The recipe is"
             " {title}. The recipe's details are {json}."
         ),
+        SystemPromptKey.FUNCTION_CALL: (
+            "You may ask whether the user want to use any of the following"
+            " functions that you can provide: set or update user profile,"
+            " serach recipes. Do not ask about functions if the user's query"
+            " is not related to any function."
+        ),
         SystemPromptKey.END: (
             "You will only talk about things related to the above recipe or"
             " cooking in general. If the user tries to talk about something"
             " else, remind them that you are a cooking assistant and that you"
             " can only help with cooking-related queries."
         ),
+        SystemPromptKey.FUNCTION_CALL_END: (
+            "You should decide which function to use based on the user's"
+            " latest message, only use the function if the user explicitly"
+            " requested it, explicitly stated that they want to do what the"
+            " function does, or directly responded to your request of using"
+            " certain function call. Do not use any function if the user's"
+            " query is not related to any function. You do not need to provide"
+            " a response message."
+        ),
+    }
+
+    FUNCTION_CALLS = {
+        models.ChatResponseFunctionCallModel.SET_USER_PROFILE: (
+            OpenAIFunctionDefinition(
+                name="set_user_profile",
+                description="Set or update the user profile.",
+                strict=True,
+                parameters={
+                    "type": "object",
+                    "additionalProperties": False,
+                    "properties": {
+                        "veggie_identity": {
+                            "type": "string",
+                            "enum": [
+                                "none",
+                                "vegetarian",
+                                "vegan",
+                            ],
+                            "description": (
+                                "The vegetarian/vegan identity of the user"
+                            ),
+                        },
+                        "prefer": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "description": (
+                                "List of ingredients or foods that the user"
+                                " prefers"
+                            ),
+                        },
+                        "dislike": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "description": (
+                                "List of ingredients or foods that the user"
+                                " dislikes"
+                            ),
+                        },
+                    },
+                    "required": ["veggie_identity", "prefer", "dislike"],
+                },
+            ),
+        ),
+        models.ChatResponseFunctionCallModel.SEARCH_RECIPE: (
+            OpenAIFunctionDefinition(
+                name="search_recipe",
+                description="Search for recipes.",
+                strict=True,
+                parameters={
+                    "type": "object",
+                    "additionalProperties": False,
+                    "properties": {
+                        "ingredients": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "description": (
+                                "List of ingredients to search for in recipes"
+                            ),
+                        },
+                        "extra_terms": {
+                            "type": "string",
+                            "description": (
+                                "Additional search terms/words/sentences to"
+                                " refine recipe search"
+                            ),
+                        },
+                    },
+                    "required": ["ingredients", "extra_terms"],
+                },
+            ),
+        ),
     }
 
     logger: logging.Logger
     configs: Configs
     system_prompts: Dict[SystemPromptKey, Optional[str]]
+    system_function_call_prompt: Dict[SystemPromptKey, Optional[str]]
     client: openai.AzureOpenAI
 
     def __init__(self, init_configs: Configs):
@@ -81,9 +190,22 @@ class AzureOpenAIChat(BaseChat):
         self.system_prompts[self.SystemPromptKey.INTRO] = (
             self.SYSTEM_PROMPT_FORMATS[self.SystemPromptKey.INTRO]
         )
+        self.system_prompts[self.SystemPromptKey.FUNCTION_CALL] = (
+            self.SYSTEM_PROMPT_FORMATS[self.SystemPromptKey.FUNCTION_CALL]
+        )
         self.system_prompts[self.SystemPromptKey.END] = (
             self.SYSTEM_PROMPT_FORMATS[self.SystemPromptKey.END]
         )
+
+        self.system_function_call_prompts = {
+            key: None for key in self.SystemPromptKey
+        }
+        self.system_function_call_prompts[self.SystemPromptKey.INTRO] = (
+            self.SYSTEM_PROMPT_FORMATS[self.SystemPromptKey.INTRO]
+        )
+        self.system_function_call_prompts[
+            self.SystemPromptKey.FUNCTION_CALL_END
+        ] = self.SYSTEM_PROMPT_FORMATS[self.SystemPromptKey.FUNCTION_CALL_END]
 
         self.client = openai.AzureOpenAI(
             api_version=self.configs.api_version,
@@ -104,15 +226,37 @@ class AzureOpenAIChat(BaseChat):
             if (prompt := self.system_prompts[key])
         )
 
-    def get_system_payload(self) -> OpenAISystemMessageParam:
+    def get_system_function_call_prompt(self) -> str:
+        """Get the system function call prompt.
+
+        Returns:
+            str: The system function call prompt.
+        """
+        return " ".join(
+            prompt
+            for key in self.SYSTEM_FUNCTION_CALL_PROMPT_ORDER
+            if (prompt := self.system_function_call_prompts[key])
+        )
+
+    def get_system_payload(
+        self, function_call: bool = False
+    ) -> OpenAISystemMessageParam:
         """Get the OpenAI system message.
+
+        Arguments:
+            function_call (bool): Whether the system message is for a function
+                call. Defaults to False.
 
         Returns:
             OpenAISystemMessageParam: The system message.
         """
         return OpenAISystemMessageParam(
             role="system",
-            content=self.get_system_prompt(),
+            content=(
+                self.get_system_prompt()
+                if not function_call
+                else self.get_system_function_call_prompt()
+            ),
         )
 
     def set_user(self, user: str):
@@ -122,6 +266,11 @@ class AzureOpenAIChat(BaseChat):
             user (str): The user to prepare.
         """
         self.system_prompts[self.SystemPromptKey.USER] = (
+            self.SYSTEM_PROMPT_FORMATS[self.SystemPromptKey.USER].format(
+                name=user
+            )
+        )
+        self.system_function_call_prompts[self.SystemPromptKey.USER] = (
             self.SYSTEM_PROMPT_FORMATS[self.SystemPromptKey.USER].format(
                 name=user
             )
@@ -138,10 +287,15 @@ class AzureOpenAIChat(BaseChat):
                 title=recipe.title, json=json.dumps(recipe.as_dict())
             )
         )
+        self.system_function_call_prompts[self.SystemPromptKey.RECIPE] = (
+            self.SYSTEM_PROMPT_FORMATS[self.SystemPromptKey.RECIPE].format(
+                title=recipe.title, json=json.dumps(recipe.as_dict())
+            )
+        )
 
     def chat(
         self, messages: Iterable[models.ChatMessageModel]
-    ) -> models.ChatMessageModel:
+    ) -> models.ChatResponseModel:
         """Chat with the model.
 
         Arguments:
@@ -149,8 +303,60 @@ class AzureOpenAIChat(BaseChat):
                 with.
 
         Returns:
-            models.ChatMessageModel: The response message.
+            models.ChatResponseModel: The response.
         """
+        function_call_response = self.client.chat.completions.create(
+            model=self.configs.model,
+            messages=[
+                self.get_system_payload(function_call=True),
+                *(
+                    self._message_model_to_openai_message_param(message)
+                    for message in messages
+                ),
+            ],
+            tools=[
+                OpenAIChatCompletionToolParam(
+                    function=function,
+                    type="function",
+                )
+                for function in self.FUNCTION_CALLS.values()
+            ],
+            tool_choice="auto",
+        )
+
+        self.logger.debug(f"Function call response: {function_call_response}")
+
+        if not function_call_response.choices:
+            raise Exception("Function call response choices is empty")
+
+        function_call_choice = function_call_response.choices[0]
+
+        if function_call_choice.finish_reason not in (
+            "length",
+            "stop",
+            "tool_calls",
+        ):
+            raise Exception(
+                "Invalid function call finish reason:"
+                f" {function_call_choice.finish_reason}"
+            )
+
+        tool_calls = function_call_choice.message.tool_calls
+
+        if tool_calls:
+            tool_call = tool_calls[0]
+
+            return models.ChatResponseModel(
+                message=models.ChatMessageModel(
+                    role=models.ChatRoleModel.ASSISTANT,
+                    text=(
+                        "I can help you with it. Are the following options"
+                        " okay?"
+                    ),
+                ),
+                function_call=self._openai_function_call_to_model(tool_call),
+            )
+
         response = self.client.chat.completions.create(
             model=self.configs.model,
             messages=[
@@ -176,7 +382,9 @@ class AzureOpenAIChat(BaseChat):
             response.choices[0].message
         )
 
-        return response_message
+        return models.ChatResponseModel(
+            message=response_message,
+        )
 
     def chat_stream(
         self, messages: Iterable[models.ChatMessageModel]
@@ -274,7 +482,7 @@ class AzureOpenAIChat(BaseChat):
         identity = choice.message.parsed
 
         return {
-            None: (models.UserProfileModelVeggieIdentity.NONE),
+            None: models.UserProfileModelVeggieIdentity.NONE,
             RecipeVeggieIdentity.NON_VEGETARIAN: (
                 models.UserProfileModelVeggieIdentity.NONE
             ),
@@ -357,3 +565,42 @@ class AzureOpenAIChat(BaseChat):
             role=("user" if is_user else "assistant"),
             content=message.text,
         )
+
+    def _openai_function_call_to_model(
+        self,
+        call: OpenAIChatCompletionMessageToolCall,
+    ) -> Union[
+        models.ChatSetUserProfileFunctionCallModel,
+        models.ChatSearchRecipeFunctionCallModel,
+    ]:
+        """Convert OpenAI function arguments to function args model.
+
+        Arguments:
+            call (OpenAIChatCompletionMessageToolCall): The function call.
+
+        Returns:
+            Union[
+                models.ChatSetUserProfileFunctionArgsModel,
+                models.ChatSearchRecipeFunctionArgsModel,
+            ]: The function arguments model.
+        """
+        args = json.loads(call.function.arguments)
+
+        if call.function.name == "set_user_profile":
+            return models.ChatSetUserProfileFunctionCallModel(
+                veggie_identity=(
+                    models.UserProfileModelVeggieIdentity[
+                        args["veggie_identity"]
+                    ]
+                ),
+                prefer=args["prefer"],
+                dislike=args["dislike"],
+            )
+
+        if call.function.name == "search_recipe":
+            return models.ChatSearchRecipeFunctionCallModel(
+                ingredients=args["ingredients"],
+                extra_terms=args["extra_terms"],
+            )
+
+        raise Exception(f"Invalid function name: {call.function.name}")

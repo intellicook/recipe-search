@@ -1,3 +1,5 @@
+from protos import search_recipes_pb2 as _search_recipes_pb2
+from protos import set_user_profile_pb2 as _set_user_profile_pb2
 from google.protobuf.internal import containers as _containers
 from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
@@ -26,10 +28,12 @@ class ChatByRecipeRequest(_message.Message):
     def __init__(self, id: _Optional[int] = ..., username: _Optional[str] = ..., name: _Optional[str] = ..., messages: _Optional[_Iterable[_Union[ChatByRecipeMessage, _Mapping]]] = ...) -> None: ...
 
 class ChatByRecipeResponse(_message.Message):
-    __slots__ = ("message",)
+    __slots__ = ("message", "function_call")
     MESSAGE_FIELD_NUMBER: _ClassVar[int]
+    FUNCTION_CALL_FIELD_NUMBER: _ClassVar[int]
     message: ChatByRecipeMessage
-    def __init__(self, message: _Optional[_Union[ChatByRecipeMessage, _Mapping]] = ...) -> None: ...
+    function_call: ChatByRecipeFunctionCall
+    def __init__(self, message: _Optional[_Union[ChatByRecipeMessage, _Mapping]] = ..., function_call: _Optional[_Union[ChatByRecipeFunctionCall, _Mapping]] = ...) -> None: ...
 
 class ChatByRecipeStreamResponse(_message.Message):
     __slots__ = ("header", "content")
@@ -58,3 +62,11 @@ class ChatByRecipeStreamContent(_message.Message):
     TEXT_FIELD_NUMBER: _ClassVar[int]
     text: str
     def __init__(self, text: _Optional[str] = ...) -> None: ...
+
+class ChatByRecipeFunctionCall(_message.Message):
+    __slots__ = ("set_user_profile", "search_recipes")
+    SET_USER_PROFILE_FIELD_NUMBER: _ClassVar[int]
+    SEARCH_RECIPES_FIELD_NUMBER: _ClassVar[int]
+    set_user_profile: _set_user_profile_pb2.SetUserProfileRequest
+    search_recipes: _search_recipes_pb2.SearchRecipesRequest
+    def __init__(self, set_user_profile: _Optional[_Union[_set_user_profile_pb2.SetUserProfileRequest, _Mapping]] = ..., search_recipes: _Optional[_Union[_search_recipes_pb2.SearchRecipesRequest, _Mapping]] = ...) -> None: ...

@@ -13,6 +13,7 @@ from protos.add_recipes_pb2 import (
     AddRecipesResponseRecipe,
 )
 from protos.chat_by_recipe_pb2 import (
+    ChatByRecipeFunctionCall,
     ChatByRecipeMessage,
     ChatByRecipeRequest,
     ChatByRecipeResponse,
@@ -318,12 +319,17 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
             for message in request.messages
         ]
 
-        message = controllers.chat_by_recipe(request.name, recipe, messages)
+        response = controllers.chat_by_recipe(request.name, recipe, messages)
 
         return ChatByRecipeResponse(
             message=ChatByRecipeMessage(
-                role=message.role.to_proto(),
-                text=message.text,
+                role=response.message.role.to_proto(),
+                text=response.message.text,
+            ),
+            function_call=(
+                ChatByRecipeFunctionCall(**response.function_call.to_proto())
+                if response.function_call is not None
+                else None
             ),
         )
 

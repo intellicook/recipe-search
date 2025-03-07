@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import StrEnum
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from sqlalchemy import MetaData, PickleType
 from sqlalchemy.ext.mutable import MutableList
@@ -8,7 +8,11 @@ from sqlalchemy.orm import Mapped, declarative_base, mapped_column
 
 from protos.chat_by_recipe_pb2 import ChatByRecipeRole
 from protos.recipe_nutrition_pb2 import RecipeNutritionValue
-from protos.search_recipes_pb2 import SearchRecipesMatchField
+from protos.search_recipes_pb2 import (
+    SearchRecipesMatchField,
+    SearchRecipesRequest,
+)
+from protos.set_user_profile_pb2 import SetUserProfileRequest
 from protos.user_profile_veggie_identity_pb2 import UserProfileVeggieIdentity
 
 Base = declarative_base(metadata=MetaData(schema="public"))
@@ -360,6 +364,101 @@ class ChatMessageModel:
 
     def __repr__(self) -> str:
         return f"ChatMessage(role={self.role}, text={self.text})"
+
+
+class ChatResponseFunctionCallModel(StrEnum):
+    """Chat function call model"""
+
+    SET_USER_PROFILE = "set_user_profile"
+    SEARCH_RECIPE = "search_recipe"
+
+
+@dataclass
+class ChatSetUserProfileFunctionCallModel:
+    """Chat set user profile function arguments model"""
+
+    veggie_identity: UserProfileModelVeggieIdentity
+    prefer: List[str]
+    dislike: List[str]
+
+    def __repr__(self) -> str:
+        return (
+            "ChatSetUserProfileFunctionArgs("
+            f"veggie_identity={self.veggie_identity},"
+            f" prefer={self.prefer}, dislike={self.dislike})"
+        )
+
+    @classmethod
+    def from_proto(
+        cls, request: SetUserProfileRequest
+    ) -> "ChatSetUserProfileFunctionCallModel":
+        """Create a function arguments from a proto object.
+
+        Arguments:
+            request (SetUserProfileRequest): The proto object.
+
+        Returns:
+            ChatSetUserProfileFunctionCallModel: The function arguments.
+        """
+        return cls(
+            veggie_identity=UserProfileModelVeggieIdentity.from_proto(
+                request.veggie_identity
+            ),
+            prefer=request.prefer,
+            dislike=request.dislike,
+        )
+
+
+@dataclass
+class ChatSearchRecipeFunctionCallModel:
+    """Chat search recipe function arguments model"""
+
+    ingredients: List[str]
+    extra_terms: Optional[str] = None
+
+    def __repr__(self) -> str:
+        return (
+            "ChatSearchRecipeFunctionArgs("
+            f"ingredients={self.ingredients},"
+            f" extra_terms={self.extra_terms})"
+        )
+
+    @classmethod
+    def from_proto(
+        cls, request: SearchRecipesRequest
+    ) -> "ChatSearchRecipeFunctionCallModel":
+        """Create a function arguments from a proto object.
+
+        Arguments:
+            request (SearchRecipesRequest): The proto object.
+
+        Returns:
+            ChatSearchRecipeFunctionCallModel: The function arguments.
+        """
+        return cls(
+            ingredients=request.ingredients,
+            extra_terms=request.extra_terms,
+        )
+
+
+@dataclass
+class ChatResponseModel:
+    """Chat response model"""
+
+    message: ChatMessageModel
+    function_call: Optional[
+        Union[
+            ChatSetUserProfileFunctionCallModel,
+            ChatSearchRecipeFunctionCallModel,
+        ]
+    ] = None
+
+    def __repr__(self) -> str:
+        return (
+            "ChatResponse("
+            f"message={self.message},"
+            f" function_call={self.function_call})"
+        )
 
 
 @dataclass

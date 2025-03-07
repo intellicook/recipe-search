@@ -33,7 +33,7 @@ def chat_by_recipe(
     name: str,
     recipe: models.RecipeModel,
     messages: Iterable[models.ChatMessageModel],
-) -> models.ChatMessageModel:
+) -> models.ChatResponseModel:
     pass
 
 
