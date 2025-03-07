@@ -163,7 +163,7 @@ def chat_by_recipe(
     name: str,
     recipe: models.RecipeModel,
     messages: Iterable[models.ChatMessageModel],
-) -> models.ChatMessageModel:
+) -> models.ChatResponseModel:
     """Chat with the model by recipe.
 
     Arguments:
@@ -173,7 +173,7 @@ def chat_by_recipe(
             with.
 
     Returns:
-        models.ChatMessageModel: The response message.
+        models.ChatResponseModel: The response.
     """
     logger.debug(f"Chatting with {name} by recipe {recipe.title}")
 

@@ -78,11 +78,13 @@ def test_chat_by_recipe_success(mocker: pytest_mock.MockerFixture):
     )
     mock_chat = mocker.patch(
         "domain.controllers.chat_by_recipe",
-        return_value=models.ChatMessageModel(
-            role=models.ChatRoleModel.from_proto(
-                expected_response.message.role
+        return_value=models.ChatResponseModel(
+            message=models.ChatMessageModel(
+                role=models.ChatRoleModel.from_proto(
+                    expected_response.message.role
+                ),
+                text=expected_response.message.text,
             ),
-            text=expected_response.message.text,
         ),
     )
 
