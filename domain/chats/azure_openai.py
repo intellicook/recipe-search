@@ -25,7 +25,7 @@ from openai.types.chat.chat_completion_chunk import (
     ChoiceDelta as OpenAIStreamChoiceDelta,
 )
 from openai.types.shared.function_definition import (
-    FunctionDefinition as OpenAIFunctionDefinition,
+    FunctionDefinition as OpenAIFuncDef,
 )
 
 from configs.azure import configs
@@ -84,8 +84,8 @@ class AzureOpenAIChat(BaseChat):
         SystemPromptKey.FUNCTION_CALL: (
             "You may ask whether the user want to use any of the following"
             " functions that you can provide: set or update user profile,"
-            " serach recipes. Do not ask about functions if the user's query"
-            " is not related to any function."
+            " serach recipes. Only ask if the user's latest message is related"
+            " to any of the functions."
         ),
         SystemPromptKey.END: (
             "You will only talk about things related to the above recipe or"
@@ -105,74 +105,70 @@ class AzureOpenAIChat(BaseChat):
     }
 
     FUNCTION_CALLS = {
-        models.ChatResponseFunctionCallModel.SET_USER_PROFILE: (
-            OpenAIFunctionDefinition(
-                name="set_user_profile",
-                description="Set or update the user profile.",
-                strict=True,
-                parameters={
-                    "type": "object",
-                    "additionalProperties": False,
-                    "properties": {
-                        "veggie_identity": {
-                            "type": "string",
-                            "enum": [
-                                "none",
-                                "vegetarian",
-                                "vegan",
-                            ],
-                            "description": (
-                                "The vegetarian/vegan identity of the user"
-                            ),
-                        },
-                        "prefer": {
-                            "type": "array",
-                            "items": {"type": "string"},
-                            "description": (
-                                "List of ingredients or foods that the user"
-                                " prefers"
-                            ),
-                        },
-                        "dislike": {
-                            "type": "array",
-                            "items": {"type": "string"},
-                            "description": (
-                                "List of ingredients or foods that the user"
-                                " dislikes"
-                            ),
-                        },
+        models.ChatResponseFunctionCallModel.SET_USER_PROFILE: OpenAIFuncDef(
+            name="set_user_profile",
+            description="Set or update the user profile.",
+            strict=True,
+            parameters={
+                "type": "object",
+                "additionalProperties": False,
+                "properties": {
+                    "veggie_identity": {
+                        "type": "string",
+                        "enum": [
+                            "none",
+                            "vegetarian",
+                            "vegan",
+                        ],
+                        "description": (
+                            "The vegetarian/vegan identity of the user"
+                        ),
                     },
-                    "required": ["veggie_identity", "prefer", "dislike"],
+                    "prefer": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": (
+                            "List of ingredients or foods that the user"
+                            " prefers"
+                        ),
+                    },
+                    "dislike": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": (
+                            "List of ingredients or foods that the user"
+                            " dislikes"
+                        ),
+                    },
                 },
-            ),
+                "required": ["veggie_identity", "prefer", "dislike"],
+            },
         ),
-        models.ChatResponseFunctionCallModel.SEARCH_RECIPE: (
-            OpenAIFunctionDefinition(
-                name="search_recipe",
-                description="Search for recipes.",
-                strict=True,
-                parameters={
-                    "type": "object",
-                    "additionalProperties": False,
-                    "properties": {
-                        "ingredients": {
-                            "type": "array",
-                            "items": {"type": "string"},
-                            "description": (
-                                "List of ingredients to search for in recipes"
-                            ),
-                        },
-                        "extra_terms": {
-                            "type": "string",
-                            "description": (
-                                "Additional search terms/words/sentences to"
-                                " refine recipe search"
-                            ),
-                        },
+        models.ChatResponseFunctionCallModel.SEARCH_RECIPES: OpenAIFuncDef(
+            name="search_recipes",
+            description="Search for recipes.",
+            strict=True,
+            parameters={
+                "type": "object",
+                "additionalProperties": False,
+                "properties": {
+                    "ingredients": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": (
+                            "List of ingredients to search for in recipes"
+                        ),
                     },
-                    "required": ["ingredients", "extra_terms"],
+                    "extra_terms": {
+                        "type": "string",
+                        "description": (
+                            "Additional search terms/words/sentences to"
+                            " refine recipe search"
+                        ),
+                    },
                 },
-            ),
+                "required": ["ingredients", "extra_terms"],
+            },
         ),
     }
 
@@ -586,7 +582,10 @@ class AzureOpenAIChat(BaseChat):
         """
         args = json.loads(call.function.arguments)
 
-        if call.function.name == "set_user_profile":
+        if (
+            call.function.name
+            == models.ChatResponseFunctionCallModel.SET_USER_PROFILE
+        ):
             return models.ChatSetUserProfileFunctionCallModel(
                 veggie_identity=(
                     models.UserProfileModelVeggieIdentity[
@@ -597,7 +596,10 @@ class AzureOpenAIChat(BaseChat):
                 dislike=args["dislike"],
             )
 
-        if call.function.name == "search_recipe":
+        if (
+            call.function.name
+            == models.ChatResponseFunctionCallModel.SEARCH_RECIPES
+        ):
             return models.ChatSearchRecipeFunctionCallModel(
                 ingredients=args["ingredients"],
                 extra_terms=args["extra_terms"],

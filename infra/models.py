@@ -370,7 +370,7 @@ class ChatResponseFunctionCallModel(StrEnum):
     """Chat function call model"""
 
     SET_USER_PROFILE = "set_user_profile"
-    SEARCH_RECIPE = "search_recipe"
+    SEARCH_RECIPES = "search_recipes"
 
 
 @dataclass
@@ -408,6 +408,22 @@ class ChatSetUserProfileFunctionCallModel:
             dislike=request.dislike,
         )
 
+    def to_proto(self) -> Dict[str, SetUserProfileRequest]:
+        """Convert the function arguments to a proto object.
+
+        Returns:
+            Dict[str, SetUserProfileRequest]: The proto object.
+        """
+        return {
+            ChatResponseFunctionCallModel.SET_USER_PROFILE: (
+                SetUserProfileRequest(
+                    veggie_identity=self.veggie_identity.to_proto(),
+                    prefer=self.prefer,
+                    dislike=self.dislike,
+                )
+            )
+        }
+
 
 @dataclass
 class ChatSearchRecipeFunctionCallModel:
@@ -439,6 +455,19 @@ class ChatSearchRecipeFunctionCallModel:
             ingredients=request.ingredients,
             extra_terms=request.extra_terms,
         )
+
+    def to_proto(self) -> Dict[str, SearchRecipesRequest]:
+        """Convert the function arguments to a proto object.
+
+        Returns:
+            Dict[str, SearchRecipesRequest]: The proto object.
+        """
+        return {
+            ChatResponseFunctionCallModel.SEARCH_RECIPES: SearchRecipesRequest(
+                ingredients=self.ingredients,
+                extra_terms=self.extra_terms,
+            )
+        }
 
 
 @dataclass
