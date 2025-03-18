@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Iterable
+from typing import Iterable, Optional
 
 from infra import models
 
@@ -8,7 +8,7 @@ class BaseChat(ABC):
     """Base class for chat models"""
 
     @abstractmethod
-    def set_user(self, user: str):
+    def set_user(self, user: str, username: Optional[str] = None):
         """Prepare the chat model for a user.
 
         Arguments:

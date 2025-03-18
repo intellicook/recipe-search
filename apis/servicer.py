@@ -319,7 +319,9 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
             for message in request.messages
         ]
 
-        response = controllers.chat_by_recipe(request.name, recipe, messages)
+        response = controllers.chat_by_recipe(
+            request.name, request.username, recipe, messages
+        )
 
         return ChatByRecipeResponse(
             message=ChatByRecipeMessage(
@@ -356,7 +358,7 @@ class RecipeSearchServicer(RecipeSearchServiceServicer):
         ]
 
         for message in controllers.chat_by_recipe_stream(
-            request.name, recipe, messages
+            request.name, request.username, recipe, messages
         ):
             if isinstance(message, models.ChatStreamHeaderModel):
                 yield ChatByRecipeStreamResponse(

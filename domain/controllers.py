@@ -161,6 +161,7 @@ def search_recipes(
 
 def chat_by_recipe(
     name: str,
+    username: str,
     recipe: models.RecipeModel,
     messages: Iterable[models.ChatMessageModel],
 ) -> models.ChatResponseModel:
@@ -168,6 +169,7 @@ def chat_by_recipe(
 
     Arguments:
         name (str): The name of the user.
+        username (str): The username of the user profile to use.
         recipe (models.RecipeModel): The recipe to chat with.
         messages (Iterable[models.ChatMessageModel]): The messages to chat
             with.
@@ -178,7 +180,7 @@ def chat_by_recipe(
     logger.debug(f"Chatting with {name} by recipe {recipe.title}")
 
     chat = chats.model()
-    chat.set_user(name)
+    chat.set_user(name, username)
     chat.set_recipe(recipe)
 
     messages = messages[-configs.domain_chat_message_limit :]
@@ -190,6 +192,7 @@ def chat_by_recipe(
 
 def chat_by_recipe_stream(
     name: str,
+    username: str,
     recipe: models.RecipeModel,
     messages: Iterable[models.ChatMessageModel],
 ) -> Iterable[models.ChatStreamModel]:
@@ -197,6 +200,7 @@ def chat_by_recipe_stream(
 
     Arguments:
         name (str): The name of the user.
+        username (str): The username of the user profile to use.
         recipe (models.RecipeModel): The recipe to chat with.
         messages (Iterable[models.ChatMessageModel]): The messages to chat
             with.
@@ -207,7 +211,7 @@ def chat_by_recipe_stream(
     logger.debug(f"Chatting with {name} by recipe {recipe.title}")
 
     chat = chats.model()
-    chat.set_user(name)
+    chat.set_user(name, username)
     chat.set_recipe(recipe)
 
     messages = messages[-configs.domain_chat_message_limit :]
