@@ -95,6 +95,7 @@ def test_chat_by_recipe_success(mocker: pytest_mock.MockerFixture):
 
     mock_chat.assert_called_once_with(
         name,
+        username,
         recipe,
         mocker.ANY,
     )
