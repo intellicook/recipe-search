@@ -395,8 +395,11 @@ class AzureOpenAIChat(BaseChat):
         class FunctionFormat(BaseModel):
             """The function to call."""
 
-            function: models.ChatResponseFunctionCallModel
-            """The function to use for user's query."""
+            function: Optional[models.ChatResponseFunctionCallModel]
+            """
+            The function to use for user's query,
+            or None if no function is required.
+            """
 
         function_enum_response = self.client.beta.chat.completions.parse(
             model=self.configs.model,
@@ -412,7 +415,7 @@ class AzureOpenAIChat(BaseChat):
         self.logger.debug(f"Function enum response: {function_enum_response}")
 
         function_enum = function_enum_response.choices[0].message
-        if function_enum.parsed:
+        if function_enum.parsed and function_enum.parsed.function is not None:
             function_schema = self.FUNCTION_CALLS[
                 function_enum.parsed.function
             ]
